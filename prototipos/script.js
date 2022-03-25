@@ -7,7 +7,13 @@ const v = {
             v.refs.set();
             v.sizings.get();
             v.grid.calcula_parametros();
-            v.grid.desenha_grid();
+            v.sizings.resize();
+            const grid1 = v.grid.calcula_grid(13, 0);
+            const grid2 = v.grid.calcula_grid(20, 13+0);
+            const grid3 = v.grid.calcula_grid(30, 20+13);
+            v.grid.desenha_grid(grid1, 'pink');
+            v.grid.desenha_grid(grid2, 'khaki');
+            v.grid.desenha_grid(grid3, 'dodgerblue');
 
         }
 
@@ -18,7 +24,7 @@ const v = {
         fixos: {
 
             l : 30,
-            gap : 6,
+            gap : 10,
             qde : 100
 
         },
@@ -44,6 +50,8 @@ const v = {
 
 
         ],
+
+        svg : null,
 
         set : () => {
 
@@ -80,12 +88,32 @@ const v = {
             v.sizings.valores.w = +window.getComputedStyle(svg).width.slice(0,-2);
             v.sizings.valores.h = +window.getComputedStyle(svg).height.slice(0,-2);
 
+        },
+
+        resize : () => {
+
+            const ncol = v.params.calculados.ncol;
+            const { l, gap } = v.params.fixos;
+
+            const new_w = ncol * ( gap + l ) + gap;
+
+            v.sizings.valores.w = new_w;
+
+            v.sizings.valores.h = new_w;
+
+            const svg = v.refs.svg;
+
+            svg.style.width = new_w + 'px';
+            svg.style.height = new_w + 'px';
+
         }
 
 
     },
 
     grid : {
+
+        array : [],
 
         calcula_parametros : () => {
 
@@ -102,13 +130,14 @@ const v = {
 
         },
 
-        desenha_grid : () => {
+        calcula_grid : (qde, n_inicial) => {
 
+            //const grid = v.grid.array;
             const grid = [];
 
             const ncol = v.params.calculados.ncol;
 
-            for (let n = 0; n < v.params.fixos.qde; n++) {
+            for (let n = n_inicial; n < qde + n_inicial; n++) {
 
                 const j = Math.floor( n / ncol);
 
@@ -130,8 +159,36 @@ const v = {
 
             }
 
-            console.log(grid);
+            return grid;
 
+            //console.log(grid);
+
+
+        },
+
+        desenha_grid : (array, cor) => {
+
+            const svg = v.refs.svg;
+            const { w, h } = v.sizings.valores;
+            const { l, gap } = v.params.fixos;
+
+            array.forEach(el => {
+
+                const cell = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+
+                const { i, j, impar, index, index_ } = el;
+
+                //svg.preprend(cell);
+                svg.appendChild(cell);
+
+                cell.setAttribute('x', gap + (gap + l) * i );
+                cell.setAttribute('y', h - (gap + l) * ( j +1 ) );
+                cell.setAttribute('width', l);
+                cell.setAttribute('height', l);
+                cell.setAttribute('fill', cor);
+
+
+            })
 
         }
 
