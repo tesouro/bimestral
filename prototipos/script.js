@@ -6,6 +6,8 @@ const v = {
 
             v.refs.set();
             v.sizings.get();
+            v.grid.calcula_parametros();
+            v.grid.desenha_grid();
 
         }
 
@@ -16,7 +18,8 @@ const v = {
         fixos: {
 
             l : 30,
-            gap : 6
+            gap : 6,
+            qde : 100
 
         },
 
@@ -79,6 +82,58 @@ const v = {
 
         }
 
+
+    },
+
+    grid : {
+
+        calcula_parametros : () => {
+
+            const { w, h } = v.sizings.valores;
+            const { l, gap } = v.params.fixos;
+
+            const ncol = Math.floor( ( w - gap ) / ( l + gap ) );
+
+            v.params.calculados.ncol = ncol;
+
+            const nrow = ncol;
+
+            console.log(ncol, ncol * (l+gap) + gap);
+
+        },
+
+        desenha_grid : () => {
+
+            const grid = [];
+
+            const ncol = v.params.calculados.ncol;
+
+            for (let n = 0; n < v.params.fixos.qde; n++) {
+
+                const j = Math.floor( n / ncol);
+
+                const linha_impar = j % 2 != 0;
+
+                const elemento = {
+
+                    i : n % ncol,
+                    j : Math.floor( n / ncol),
+                    impar : linha_impar,
+                    index : n,
+                    index_ : linha_impar ? 
+                      n :
+                      ( ncol * ( 2*j + 1) - 1) - n
+
+                }
+
+                grid.push(elemento);
+
+            }
+
+            console.log(grid);
+
+
+        }
 
     }
 
