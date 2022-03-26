@@ -21,6 +21,8 @@ const v = {
 
             console.log(result);
 
+            v.contornos.desenha_pontos(result);
+
         }
 
     },
@@ -204,17 +206,13 @@ const v = {
 
         calcula_subgrid : (array) => {
 
-            const svg = v.refs.svg;
-            const { w, h } = v.sizings.valores;
-            const { l, gap } = v.params.fixos;
-
             const lista_pontos = [];
             const lista_segmentos = [];
             const lista_segmentos_internos = []; // os repetidos
 
             array.forEach(el => {
 
-                const { i, j, impar, index, index_ } = el;
+                const { i, j } = el;
 
                 // pontos
 
@@ -269,6 +267,26 @@ const v = {
                 segmentos_a_excluir : lista_segmentos_internos
 
             })
+
+        },
+
+        desenha_pontos : (dados_contorno) => {
+
+            const pontos = dados_contorno.pontos;
+
+            const svg = v.refs.svg;
+            const { w, h } = v.sizings.valores;
+            const { l, gap } = v.params.fixos;
+
+            pontos.forEach(p => {
+
+                const [i, j] = p.split(',').map(value => +value);
+
+                console.log(p, i, j);
+
+            })
+
+
 
         }
 
