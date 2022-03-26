@@ -23,7 +23,8 @@ const v = {
 
             //v.contornos.desenha_segmentos(result, 'segmentos');
             //v.contornos.desenha_segmentos(result, 'segmentos_a_excluir');
-            v.contornos.desenha_contorno(result);
+            //v.contornos.desenha_contorno(result);
+            v.contornos.desenha_contorno_path(result);
             v.contornos.desenha_pontos(result);
 
         }
@@ -431,6 +432,73 @@ const v = {
                 line.setAttribute('stroke', 'goldenrod' );
 
             });
+
+        },
+
+        desenha_contorno_path : (dados_contorno) => {
+
+            const segmentos_totais = dados_contorno.segmentos;
+            const segmentos_a_excluir = dados_contorno.segmentos_a_excluir;
+
+            const segmentos = segmentos_totais.filter(segmento => segmentos_a_excluir.indexOf(segmento) == -1);
+
+            let d = '';
+
+            const svg = v.refs.svg;
+            const { w, h } = v.sizings.valores;
+            const { l, gap } = v.params.fixos;
+
+            segmentos.forEach(s => {
+
+                //recupera os pontos
+
+                const [p1, p2] = s.split('/');
+
+                console.log(s, p1, p2);
+
+                const points = [p1, p2];
+
+                const coords = [
+                    
+                    {
+                        x : null,
+                        y : null
+                    },
+
+                    {
+                        x : null,
+                        y : null
+                    }
+
+                ];
+
+                points.forEach( (p,p_i) => {
+
+                    const [i, j] = p.split(',').map(value => +value);
+
+                    coords[p_i].x = ( gap + (gap + l) * i ) - gap / 2;
+                    coords[p_i].y = ( h - (gap + l) * ( j +1 ) ) + ( l + gap/2 );
+
+                })
+
+                //agora vou ter: coords = [ {x1,y1}, {x2,y2} ]
+
+                d += `M ${coords[0].x} ${coords[0].y} L ${coords[1].x} ${coords[1].y} `
+
+
+            });
+
+            d += 'Z';
+
+            console.log(d);
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+            svg.appendChild(path);
+
+            path.setAttribute('d', d );
+            path.setAttribute('stroke', 'goldenrod' );
+
 
         }
 
