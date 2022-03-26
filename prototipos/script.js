@@ -8,12 +8,18 @@ const v = {
             v.sizings.get();
             v.grid.calcula_parametros();
             v.sizings.resize();
+
             const grid1 = v.grid.calcula_grid(13, 0);
             const grid2 = v.grid.calcula_grid(20, 13+0);
             const grid3 = v.grid.calcula_grid(30, 20+13);
+
             v.grid.desenha_grid(grid1, 'pink');
             v.grid.desenha_grid(grid2, 'khaki');
             v.grid.desenha_grid(grid3, 'dodgerblue');
+
+            const result = v.contornos.calcula_subgrid(grid2);
+
+            console.log(result);
 
         }
 
@@ -187,6 +193,80 @@ const v = {
                 cell.setAttribute('height', l);
                 cell.setAttribute('fill', cor);
 
+
+            })
+
+        }
+
+    },
+
+    contornos : {
+
+        calcula_subgrid : (array) => {
+
+            const svg = v.refs.svg;
+            const { w, h } = v.sizings.valores;
+            const { l, gap } = v.params.fixos;
+
+            const lista_pontos = [];
+            const lista_segmentos = [];
+            const lista_segmentos_internos = []; // os repetidos
+
+            array.forEach(el => {
+
+                const { i, j, impar, index, index_ } = el;
+
+                // pontos
+
+                const pontos = [
+                    `${i}, ${j}`,
+                    `${i}, ${j+1}`,
+                    `${i+1}, ${j}`,
+                    `${i+1}, ${j+1}`
+                ];
+
+                pontos.forEach(p => {
+
+                    if ( lista_pontos.indexOf(p) == -1 ) {
+
+                        lista_pontos.push(p);
+
+                    }
+
+                })
+
+                // segmentos
+
+                const segmentos = [   
+
+                    `${i}, ${j} / ${i+1}, ${j}`,
+                    `${i+1}, ${j} / ${i+1}, ${j+1}`,
+                    `${i}, ${j+1} / ${i+1}, ${j+1}`,
+                    `${i}, ${j} / ${i+1}, ${j}`
+
+                ];
+
+                segmentos.forEach(s => {
+
+                    if ( lista_segmentos.indexOf(s) === -1 ) {
+
+                        lista_segmentos.push(s);
+
+                    } else {
+
+                        lista_segmentos_internos.push(s);
+
+                    }
+
+                })
+
+            })
+
+            return ({
+
+                pontos              : lista_pontos,
+                segmentos           : lista_segmentos,
+                segmentos_a_excluir : lista_segmentos_internos
 
             })
 
