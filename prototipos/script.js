@@ -280,9 +280,25 @@ const v = {
 
             pontos.forEach(p => {
 
+                //recupera as coordenadas
+
                 const [i, j] = p.split(',').map(value => +value);
 
-                console.log(p, i, j);
+                //console.log(p, i, j);
+
+                const x = ( gap + (gap + l) * i ) - gap / 2;
+                const y = ( h - (gap + l) * ( j +1 ) ) + ( l + gap/2 );
+
+                const point = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+
+                //svg.preprend(cell);
+                svg.appendChild(point);
+
+                point.setAttribute('cx', x );
+                point.setAttribute('cy', y );
+                point.setAttribute('r', 2);
+                point.setAttribute('fill', 'firebrick');
+
 
             })
 
