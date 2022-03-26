@@ -21,6 +21,8 @@ const v = {
 
             console.log(result);
 
+            v.contornos.desenha_segmentos(result, 'segmentos');
+            v.contornos.desenha_segmentos(result, 'segmentos_a_excluir');
             v.contornos.desenha_pontos(result);
 
         }
@@ -240,7 +242,7 @@ const v = {
                     `${i}, ${j} / ${i+1}, ${j}`,
                     `${i+1}, ${j} / ${i+1}, ${j+1}`,
                     `${i}, ${j+1} / ${i+1}, ${j+1}`,
-                    `${i}, ${j} / ${i+1}, ${j}`
+                    `${i}, ${j} / ${i}, ${j+1}`
 
                 ];
 
@@ -297,10 +299,72 @@ const v = {
                 point.setAttribute('cx', x );
                 point.setAttribute('cy', y );
                 point.setAttribute('r', 2);
-                point.setAttribute('fill', 'firebrick');
+                point.setAttribute('fill', '#333');
 
 
-            })
+            });
+
+        },
+
+        desenha_segmentos : (dados_contorno, tipo) => {
+
+            const segmentos = dados_contorno[tipo];
+
+            const svg = v.refs.svg;
+            const { w, h } = v.sizings.valores;
+            const { l, gap } = v.params.fixos;
+
+            segmentos.forEach(s => {
+
+                //recupera os pontos
+
+                const [p1, p2] = s.split('/');
+
+                console.log(s, p1, p2);
+
+                const points = [p1, p2];
+
+                const coords = [
+                    
+                    {
+                        x : null,
+                        y : null
+                    },
+
+                    {
+                        x : null,
+                        y : null
+                    }
+
+                ];
+
+                points.forEach( (p,p_i) => {
+
+                    const [i, j] = p.split(',').map(value => +value);
+
+                    coords[p_i].x = ( gap + (gap + l) * i ) - gap / 2;
+                    coords[p_i].y = ( h - (gap + l) * ( j +1 ) ) + ( l + gap/2 );
+
+                })
+
+                //agora vou ter: coords = [ {x1,y1}, {x2,y2} ]
+
+                console.log(coords);
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+
+                //svg.preprend(cell);
+                svg.appendChild(line);
+
+                line.setAttribute('x1', coords[0].x );
+                line.setAttribute('y1', coords[0].y );
+
+                line.setAttribute('x2', coords[1].x );
+                line.setAttribute('y2', coords[1].y );
+
+                line.setAttribute('stroke', tipo == 'segmentos' ? 'forestgreen' : 'red' );
+
+            });
 
 
 
