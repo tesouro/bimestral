@@ -21,7 +21,7 @@ const v = {
 
             console.log(result);
 
-            //v.contornos.desenha_segmentos(result, 'segmentos');
+            v.contornos.desenha_segmentos(result, 'segmentos');
             //v.contornos.desenha_segmentos(result, 'segmentos_a_excluir');
             //v.contornos.desenha_contorno(result);
             v.contornos.desenha_contorno_path(result);
