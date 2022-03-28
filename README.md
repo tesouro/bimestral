@@ -15,4 +15,6 @@ Vamos precisar de muitas cores, então vale dar uma olhada nesse texto da Lisa:
 
 https://blog.datawrapper.de/10-ways-to-use-fewer-colors-in-your-data-visualizations/
 
+https://github.com/veltman/flubber
+
 
