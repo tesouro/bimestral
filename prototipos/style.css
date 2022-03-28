@@ -2,6 +2,16 @@
     box-sizing: border-box;
 }
 
+:root {
+
+    /* vão ser atualizados pelo JS
+
+    --gap: 0;
+    --l: 0;
+
+    */
+}
+
 body {
 
     height: 100vh;

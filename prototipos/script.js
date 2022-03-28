@@ -9,6 +9,8 @@ const v = {
             v.grid.calcula_parametros();
             v.sizings.resize();
 
+            v.params.set_css();
+
             const grid1 = v.grid.calcula_grid(13, 0);
             const grid2 = v.grid.calcula_grid(20, 13+0);
             const grid3 = v.grid.calcula_grid(30, 20+13);
@@ -17,7 +19,7 @@ const v = {
             v.grid.desenha_grid(grid2, 'khaki');
             v.grid.desenha_grid(grid3, 'dodgerblue');
 
-            const result = v.contornos.calcula_subgrid(grid2);
+            const result = v.contornos.calcula_subgrid(grid3);
 
             //console.log(result);
 
@@ -52,6 +54,20 @@ const v = {
 
             ncol : null,
             nrow : null
+
+        },
+
+        set_css : () => {
+
+            const params = v.params.fixos;
+
+            const variaveis = ['l', 'gap'];
+
+            variaveis.forEach(variavel => {
+                
+                document.documentElement.style.setProperty(`--${variavel}`, params[variavel] + 'px');
+
+            })
 
         }
 
