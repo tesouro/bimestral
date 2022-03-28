@@ -19,13 +19,16 @@ const v = {
 
             const result = v.contornos.calcula_subgrid(grid2);
 
-            console.log(result);
+            //console.log(result);
 
-            v.contornos.desenha_segmentos(result, 'segmentos');
+            //v.contornos.desenha_segmentos(result, 'segmentos');
             //v.contornos.desenha_segmentos(result, 'segmentos_a_excluir');
             //v.contornos.desenha_contorno(result);
             v.contornos.desenha_contorno_path(result);
             v.contornos.desenha_pontos(result);
+
+            v.contornos.calcula_path(result);
+
 
         }
 
@@ -138,7 +141,7 @@ const v = {
 
             const nrow = ncol;
 
-            console.log(ncol, ncol * (l+gap) + gap);
+            //console.log(ncol, ncol * (l+gap) + gap);
 
         },
 
@@ -322,8 +325,6 @@ const v = {
 
                 const [p1, p2] = s.split('/');
 
-                console.log(s, p1, p2);
-
                 const points = [p1, p2];
 
                 const coords = [
@@ -351,7 +352,7 @@ const v = {
 
                 //agora vou ter: coords = [ {x1,y1}, {x2,y2} ]
 
-                console.log(coords);
+                //console.log(coords);
 
                 const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
 
@@ -367,6 +368,72 @@ const v = {
                 line.setAttribute('stroke', tipo == 'segmentos' ? 'forestgreen' : 'red' );
 
             });
+
+        },
+
+        calcula_path : (dados_contorno) => {
+
+            const segmentos_totais = dados_contorno.segmentos;
+            const segmentos_a_excluir = dados_contorno.segmentos_a_excluir;
+
+            const segmentos = segmentos_totais.filter(segmento => segmentos_a_excluir.indexOf(segmento) == -1);
+            // segmentos aqui está como algo assim: ['4, 1 / 5, 1', '4, 1 / 4, 2', ... ]
+            // estão como texto para podermos filtrar
+
+            console.log(segmentos);
+
+            const coords_segmentos = segmentos.map(segmento => segmento.split('/').map(d => d.trim()));
+            // vai ficar assim: : [ ['4, 1', '5, 1'], ['4, 1', '4, 2'], ... ]
+            // console.log(coords_segmentos);
+
+            // vamos começar pegando o primeiro segmento da lista
+            let primeiro_segmento = coords_segmentos[0];
+            console.log(primeiro_segmento);
+
+            // aí vamos manter uma lista dos segmentos que ainda não foram selecionados
+            let segmentos_restantes = coords_segmentos.slice(1);
+
+            console.log([...segmentos_restantes]);
+
+            let primeiro_ponto = primeiro_segmento[0];
+
+            console.log(primeiro_ponto);
+
+            // vamos criar uma lista com os pontos na ordem, e incluuir esse primeiro ponto
+            const segmentos_ordenados = [];
+            segmentos_ordenados.push(primeiro_ponto);
+
+            // e também o segundo ponto do primeiro segmento. 
+            let proximo_ponto = primeiro_segmento[1];
+            segmentos_ordenados.push(proximo_ponto);
+
+            console.log(proximo_ponto);
+
+            
+
+            let ctrl = 0;
+            while (segmentos_restantes.length > 0 & ctrl < 100) {
+
+                // Esse vai ser o próximo ponto, então vamos procurar qual o segmento que o contém
+                let proximo_segmento = segmentos_restantes.filter(s => s.includes(proximo_ponto))[0];
+                // índice desse próximo segmento
+                const indice_proximo_segmento = segmentos_restantes.indexOf(proximo_segmento)
+
+                // o proximo ponto vai ser o outro ponto desse próximo segmento, e por aí vai.
+                proximo_ponto = proximo_segmento.filter(d => d != proximo_ponto)[0];
+                segmentos_ordenados.push(proximo_ponto);
+
+                console.log(ctrl, segmentos_restantes.length, proximo_segmento, indice_proximo_segmento, proximo_ponto);
+                ctrl++
+
+                // mas antes precisamos excluir o segmento atual da lista
+                segmentos_restantes.splice(indice_proximo_segmento, 1);
+
+                console.log([...segmentos_restantes]);
+
+            }
+
+            console.log(segmentos_ordenados);
 
         },
 
@@ -387,7 +454,7 @@ const v = {
 
                 const [p1, p2] = s.split('/');
 
-                console.log(s, p1, p2);
+                //console.log(s, p1, p2);
 
                 const points = [p1, p2];
 
@@ -415,8 +482,6 @@ const v = {
                 })
 
                 //agora vou ter: coords = [ {x1,y1}, {x2,y2} ]
-
-                console.log(coords);
 
                 const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
 
@@ -454,7 +519,7 @@ const v = {
 
                 const [p1, p2] = s.split('/');
 
-                console.log(s, p1, p2);
+                //console.log(s, p1, p2);
 
                 const points = [p1, p2];
 
@@ -490,7 +555,7 @@ const v = {
 
             d += 'Z';
 
-            console.log(d);
+            //console.log(d);
 
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
