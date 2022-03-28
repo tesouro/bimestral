@@ -25,6 +25,10 @@ svg {
 
 }
 
+path {
+    fill : none;
+}
+
 /*
 rect {
 

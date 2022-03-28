@@ -24,11 +24,15 @@ const v = {
             //v.contornos.desenha_segmentos(result, 'segmentos');
             //v.contornos.desenha_segmentos(result, 'segmentos_a_excluir');
             //v.contornos.desenha_contorno(result);
-            v.contornos.desenha_contorno_path(result);
+            //v.contornos.desenha_contorno_path(result);
             v.contornos.desenha_pontos(result);
 
-            v.contornos.calcula_path(result);
+            const lista_pontos = v.contornos.calcula_pontos_contorno_ordenados(result);
+            const path = v.contornos.calcula_path(lista_pontos);
+            console.log(path);
+            v.contornos.desenha_path(path, 'desp');
 
+            v.bolhas.converte_para_bolhas('desp');
 
         }
 
@@ -371,7 +375,7 @@ const v = {
 
         },
 
-        calcula_path : (dados_contorno) => {
+        calcula_pontos_contorno_ordenados : (dados_contorno) => {
 
             const segmentos_totais = dados_contorno.segmentos;
             const segmentos_a_excluir = dados_contorno.segmentos_a_excluir;
@@ -380,36 +384,24 @@ const v = {
             // segmentos aqui está como algo assim: ['4, 1 / 5, 1', '4, 1 / 4, 2', ... ]
             // estão como texto para podermos filtrar
 
-            console.log(segmentos);
-
             const coords_segmentos = segmentos.map(segmento => segmento.split('/').map(d => d.trim()));
             // vai ficar assim: : [ ['4, 1', '5, 1'], ['4, 1', '4, 2'], ... ]
-            // console.log(coords_segmentos);
 
             // vamos começar pegando o primeiro segmento da lista
             let primeiro_segmento = coords_segmentos[0];
-            console.log(primeiro_segmento);
 
             // aí vamos manter uma lista dos segmentos que ainda não foram selecionados
             let segmentos_restantes = coords_segmentos.slice(1);
 
-            console.log([...segmentos_restantes]);
-
             let primeiro_ponto = primeiro_segmento[0];
 
-            console.log(primeiro_ponto);
-
             // vamos criar uma lista com os pontos na ordem, e incluuir esse primeiro ponto
-            const segmentos_ordenados = [];
-            segmentos_ordenados.push(primeiro_ponto);
+            const pontos_ordenados = [];
+            pontos_ordenados.push(primeiro_ponto);
 
             // e também o segundo ponto do primeiro segmento. 
             let proximo_ponto = primeiro_segmento[1];
-            segmentos_ordenados.push(proximo_ponto);
-
-            console.log(proximo_ponto);
-
-            
+            pontos_ordenados.push(proximo_ponto);
 
             let ctrl = 0;
             while (segmentos_restantes.length > 0 & ctrl < 100) {
@@ -421,19 +413,61 @@ const v = {
 
                 // o proximo ponto vai ser o outro ponto desse próximo segmento, e por aí vai.
                 proximo_ponto = proximo_segmento.filter(d => d != proximo_ponto)[0];
-                segmentos_ordenados.push(proximo_ponto);
+                pontos_ordenados.push(proximo_ponto);
 
-                console.log(ctrl, segmentos_restantes.length, proximo_segmento, indice_proximo_segmento, proximo_ponto);
+                //console.log(ctrl, segmentos_restantes.length, proximo_segmento, indice_proximo_segmento, proximo_ponto);
                 ctrl++
 
                 // mas antes precisamos excluir o segmento atual da lista
                 segmentos_restantes.splice(indice_proximo_segmento, 1);
 
-                console.log([...segmentos_restantes]);
+                //console.log([...segmentos_restantes]);
 
             }
 
-            console.log(segmentos_ordenados);
+            return pontos_ordenados
+
+        },
+
+        calcula_path : (pontos_ordenados) => {
+
+            const { w, h } = v.sizings.valores;
+            const { l, gap } = v.params.fixos;
+
+            let d = '';
+
+            console.log(pontos_ordenados);
+
+
+            pontos_ordenados.forEach( (ponto, indice) => {
+
+                const [i, j] = ponto.split(',').map(d => +d.trim());
+                console.log(ponto, i,j)
+
+                const x = ( gap + (gap + l) * i ) - gap / 2;
+                const y = ( h - (gap + l) * ( j +1 ) ) + ( l + gap/2 );
+
+                const comando = indice == 0 ? 'M' : 'L';
+                // para o primeiro elemento, movemos a 'caneta' até lá, com 'M'. Para os demais, desenhamos linhas até o pont, com 'L'.
+
+                d += `${comando}${x},${y} `;
+                
+            })
+
+            return d;
+
+        },
+
+        desenha_path : (d, id) => {
+
+            const svg = v.refs.svg;
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+            svg.appendChild(path);
+
+            path.setAttribute('d', d );
+            path.setAttribute('stroke', 'blue' );
+            path.setAttribute('data-id', id);
 
         },
 
@@ -564,6 +598,46 @@ const v = {
             path.setAttribute('d', d );
             path.setAttribute('stroke', 'goldenrod' );
 
+
+        }
+
+    },
+
+    bolhas : {
+
+        converte_para_bolhas: (id) => {
+
+            const elem = document.querySelector(`path[data-id="${id}"]`);
+            const d = elem.getAttribute('d');
+
+            const bbox = elem.getBBox();
+
+            const x_center = bbox.x + bbox.width/2;
+            const y_center = bbox.y + bbox.height/2;
+
+            d3.select(`path[data-id="${id}"]`)
+              .transition()
+              .duration(2000)
+              .attrTween('d', () => flubber.toCircle(d, x_center, y_center, 50, {maxSegmentLength: 1}))
+            ;
+
+        },
+
+        converte_de_bolhas: (id) => {
+
+            const elem = document.querySelector(`path[data-id="${id}"]`);
+            const d = elem.getAttribute('d');
+
+            const bbox = elem.getBBox();
+
+            const x_center = bbox.x + bbox.width/2;
+            const y_center = bbox.y + bbox.height/2;
+
+            d3.select(`path[data-id="${id}"]`)
+              .transition()
+              .duration(2000)
+              .attrTween('d', () => flubber.fromCircle(x_center, y_center, 50, d, {maxSegmentLength: 1}))
+            ;
 
         }
 
