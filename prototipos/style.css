@@ -27,6 +27,10 @@ svg {
 
 path {
     fill : none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 4px;
+    stroke: khaki;
 }
 
 /*

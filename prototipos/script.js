@@ -32,7 +32,7 @@ const v = {
             console.log(path);
             v.contornos.desenha_path(path, 'desp');
 
-            v.bolhas.converte_para_bolhas('desp');
+            //v.bolhas.converte_para_bolhas('desp');
 
         }
 
@@ -466,7 +466,7 @@ const v = {
             svg.appendChild(path);
 
             path.setAttribute('d', d );
-            path.setAttribute('stroke', 'blue' );
+            //path.setAttribute('stroke', 'blue' );
             path.setAttribute('data-id', id);
 
         },
