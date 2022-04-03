@@ -1,0 +1,52 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+
+    /* vão ser atualizados pelo JS
+
+    --gap: 0;
+    --l: 0;
+
+    */
+}
+
+body {
+
+    height: 100vh;
+    display: grid;
+    place-items: center;
+
+}
+
+.wrapper {
+
+    border: 5px dashed #333;
+    border-radius: 20px;
+    padding: 1rem;
+
+}
+
+svg {
+
+    width: 400px;
+    height: 400px;
+
+}
+
+path {
+    fill : url(#Pattern);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 4px;
+    stroke: khaki;
+}
+
+/*
+rect {
+
+    fill: pink;
+
+}
+*/
