@@ -27,7 +27,7 @@ const v = {
             //v.contornos.desenha_segmentos(result, 'segmentos_a_excluir');
             //v.contornos.desenha_contorno(result);
             //v.contornos.desenha_contorno_path(result);
-            v.contornos.desenha_pontos(result);
+            //v.contornos.desenha_pontos(result);
 
             const lista_pontos = v.contornos.calcula_pontos_contorno_ordenados(result);
             const path = v.contornos.calcula_path(lista_pontos);

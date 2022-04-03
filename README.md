@@ -18,3 +18,34 @@ https://blog.datawrapper.de/10-ways-to-use-fewer-colors-in-your-data-visualizati
 https://github.com/veltman/flubber
 
 
+## Patterns
+
+Uma ideia: para não ter que desenhar os milhares de rects e estrangular a memória do browser, posso preencher as formas com um padrão de quadradinhos!
+
+Para l = 30 e um gap de 10 entre os quadrados, usaria algo assim:
+
+```html
+<defs>             
+    <pattern id="Pattern" x="5" y="5" width="40" height="40" patternUnits="userSpaceOnUse">
+        <rect x="5" y="5" width="30" height="30" fill="hotpink"/>
+    </pattern>
+</defs>
+```
+
+x = x0 = gap/2.
+width = gap/2 + l + gap/2
+no rect:
+x = gap/2.
+width = l.
+
+E, no CSS do path: 
+
+```css
+path {
+    fill: url(#Pattern);
+}
+```
+
+Aí depois eu cobriria os paths da despesa e receita total com os paths dos agrupamentos.
+
+
