@@ -20,6 +20,7 @@ const v = {
             v.grid.desenha_grid(grid3, 'dodgerblue');
 
             const result = v.contornos.calcula_subgrid(grid3);
+            const result2 = v.contornos.calcula_subgrid(grid2);
 
             //console.log(result);
 
@@ -33,6 +34,11 @@ const v = {
             const path = v.contornos.calcula_path(lista_pontos);
             console.log(path);
             v.contornos.desenha_path(path, 'desp');
+
+            const lista_pontos2 = v.contornos.calcula_pontos_contorno_ordenados(result2);
+            const path2 = v.contornos.calcula_path(lista_pontos2);
+            console.log(path2);
+            v.contornos.desenha_path(path2, 'desp2');
 
             //v.bolhas.converte_para_bolhas('desp');
 
@@ -313,7 +319,7 @@ const v = {
 
                 //console.log(p, i, j);
 
-                const x = ( gap + (gap + l) * i ) - gap / 2;
+                const x = ( gap + (gap + l) * i ) - gap/2;
                 const y = ( h - (gap + l) * ( j +1 ) ) + ( l + gap/2 );
 
                 const point = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -614,6 +620,25 @@ const v = {
             path.setAttribute('d', d );
             path.setAttribute('stroke', 'goldenrod' );
 
+
+        },
+
+        update_dimensoes_pattern : () => {
+
+            const pat = document.querySelector('#Pattern');
+            const rect_pat = document.querySelector('#Pattern >  rect');
+
+            const { l, gap } = v.params.fixos;
+
+            pat.setAttribute('x', gap/2);
+            pat.setAttribute('y', gap/2);
+            pat.setAttribute('width', gap + l);
+            pat.setAttribute('height', gap + l);
+
+            rect_pat.setAttribute('x', gap/2);
+            rect_pat.setAttribute('y', gap/2);
+            rect_pat.setAttribute('width', l);
+            rect_pat.setAttribute('height', l);
 
         }
 
