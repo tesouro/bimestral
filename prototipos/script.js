@@ -11,15 +11,15 @@ const v = {
 
             v.params.set_css();
 
-            const grid1 = v.grid.calcula_grid(13, 0);
-            const grid2 = v.grid.calcula_grid(40, 13+0);
-            const grid3 = v.grid.calcula_grid(56, 40+13);
+            const grid1 = v.grid.calcula_grid(190, 0);
+            const grid2 = v.grid.calcula_grid(45, 190+0);
+            //const grid3 = v.grid.calcula_grid(6, 10+13);
 
             v.grid.desenha_grid(grid1, 'pink');
             v.grid.desenha_grid(grid2, 'khaki');
-            v.grid.desenha_grid(grid3, 'dodgerblue');
+            //v.grid.desenha_grid(grid3, 'dodgerblue');
 
-            const result = v.contornos.calcula_subgrid(grid3);
+            const result = v.contornos.calcula_subgrid(grid1);
             const result2 = v.contornos.calcula_subgrid(grid2);
 
             //console.log(result);
@@ -40,6 +40,8 @@ const v = {
             console.log(path2);
             v.contornos.desenha_path(path2, 'desp2');
 
+            v.contornos.update_dimensoes_pattern();
+
             //v.bolhas.converte_para_bolhas('desp');
 
         }
@@ -50,9 +52,9 @@ const v = {
 
         fixos: {
 
-            l : 8,
-            gap : 2,
-            qde : 100
+            l : 20,
+            gap : 4,
+            qde : 2000
 
         },
 
@@ -428,7 +430,7 @@ const v = {
             pontos_ordenados.push(proximo_ponto);
 
             let ctrl = 0;
-            while (segmentos_restantes.length > 0 & ctrl < 100) {
+            while (segmentos_restantes.length > 0 & ctrl < 10000) {
 
                 // Esse vai ser o próximo ponto, então vamos procurar qual o segmento que o contém
                 let proximo_segmento = segmentos_restantes.filter(s => s.includes(proximo_ponto))[0];
@@ -458,6 +460,8 @@ const v = {
             const { w, h } = v.sizings.valores;
             const { l, gap } = v.params.fixos;
 
+            const dist = gap / 2;
+
             let d = '';
 
             console.log(pontos_ordenados);
@@ -468,8 +472,8 @@ const v = {
                 const [i, j] = ponto.split(',').map(d => +d.trim());
                 console.log(ponto, i,j)
 
-                const x = ( gap + (gap + l) * i ) - gap / 2;
-                const y = ( h - (gap + l) * ( j +1 ) ) + ( l + gap/2 );
+                const x = ( gap + (gap + l) * i ) - dist;
+                const y = ( h - (gap + l) * ( j +1 ) ) + ( l + dist );
 
                 const comando = indice == 0 ? 'M' : 'L';
                 // para o primeiro elemento, movemos a 'caneta' até lá, com 'M'. Para os demais, desenhamos linhas até o pont, com 'L'.
