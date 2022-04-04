@@ -4,6 +4,10 @@
 
 :root {
 
+    --amarelo-tesouro: rgb(255,213,0);
+    --verde-tesouro: rgb(50,156,50);
+    --azul-tesouro: rgb(0,74,147);
+
     /* vão ser atualizados pelo JS
 
     --gap: 0;
@@ -17,6 +21,7 @@ body {
     height: 100vh;
     display: grid;
     place-items: center;
+    background-color: var(--verde-tesouro);
 
 }
 
