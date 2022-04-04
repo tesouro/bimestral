@@ -12,8 +12,8 @@ const v = {
             v.params.set_css();
 
             const grid1 = v.grid.calcula_grid(13, 0);
-            const grid2 = v.grid.calcula_grid(20, 13+0);
-            const grid3 = v.grid.calcula_grid(30, 20+13);
+            const grid2 = v.grid.calcula_grid(40, 13+0);
+            const grid3 = v.grid.calcula_grid(56, 40+13);
 
             v.grid.desenha_grid(grid1, 'pink');
             v.grid.desenha_grid(grid2, 'khaki');
@@ -50,8 +50,8 @@ const v = {
 
         fixos: {
 
-            l : 30,
-            gap : 10,
+            l : 8,
+            gap : 2,
             qde : 100
 
         },
@@ -186,7 +186,7 @@ const v = {
 
                 const elemento = {
 
-                    i : n % ncol,
+                    i : linha_impar ? ncol - 1 - n % ncol : n % ncol,
                     j : Math.floor( n / ncol),
                     impar : linha_impar,
                     index : n,
@@ -200,9 +200,11 @@ const v = {
 
             }
 
+            console.log(grid);
+
             return grid;
 
-            //console.log(grid);
+            
 
 
         },
