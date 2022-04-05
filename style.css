@@ -1,0 +1,92 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+
+    --amarelo-tesouro: rgb(255,213,0);
+    --verde-tesouro: rgb(50,156,50);
+    --azul-tesouro: rgb(0,74,147);
+
+    /* vão ser atualizados pelo JS
+
+    --gap: 0;
+    --l: 0;
+
+    */
+}
+
+body {
+
+    /*background-color: var(--verde-tesouro);*/
+
+    font-family: Rubik;
+    margin: 0;
+
+}
+
+.abertura {
+
+    height: 100vh;
+    width: 100vw;
+    background-color: whitesmoke;
+
+}
+
+.abertura-inner {
+
+    max-width: 600px;
+    margin: 3rem auto;
+
+}
+
+.wrapper {
+
+    border: 5px dashed #333;
+    border-radius: 20px;
+    padding: 1rem;
+    max-width: 1000px;
+    margin: 5vh auto;
+    height: 90vh;
+
+}
+
+.svg-container {
+    width: 100%;
+    height: 100%;
+}
+
+svg {
+
+    width: 100%;
+    height: 100%;
+
+}
+
+path {
+    fill : transparent;/*url(#pattern-receita);*/
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 4px;
+    stroke: var(--amarelo-tesouro);
+}
+
+path[data-id="despesas"] {
+    stroke: var(--verde-tesouro);
+}
+
+[data-tipo="reavaliacao"] {
+    stroke-dasharray: 10px 5px;
+}
+
+#pattern-receita > rect {
+    fill: var(--amarelo-tesouro);
+}
+
+/*
+rect {
+
+    fill: pink;
+
+}
+*/
