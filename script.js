@@ -29,10 +29,37 @@ const v = {
 
             }
 
-            desenha_shape(2030, 0, 'receitas', 'loa');
-            desenha_shape(2118, 0, 'receitas', 'reavaliacao');
+            function get_path(valor, posicao_inicial) {
+
+                const grid = v.grid.calcula_grid(valor, posicao_inicial);
+                const subgrid = v.contornos.calcula_subgrid(grid);
+                const lista_pontos = v.contornos.calcula_pontos_contorno_ordenados(subgrid);
+                const path = v.contornos.calcula_path(lista_pontos);
+
+                return path;
+
+
+            }
+
+
+
+            //desenha_shape(2030, 0, 'receitas', 'loa');
+            //desenha_shape(2118, 0, 'receitas', 'reavaliacao');
+
+            const path_loa = get_path(1720, 0);
+            const path_reaval = get_path(1753, 0);
+
+            const interpolator = flubber.interpolate(path_loa, path_reaval);
+
             desenha_shape(1720, 0, 'despesas', 'loa');
             desenha_shape(1753, 0, 'despesas', 'reavaliacao');
+
+            d3.select('[data-tipo="loa"]')
+              .transition().delay(2000)
+              .duration(2000)
+              .attrTween('d', () => interpolator);
+
+            d3.select('[data-tipo="reavaliacao"]').attr('d', interpolator(.5));
 
             v.grid.calcula_deslocamento();
 
