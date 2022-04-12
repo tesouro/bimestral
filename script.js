@@ -776,17 +776,18 @@ class GrandeNumero {
     valor_reav;
     tamanho;
     posicao_inicial;
+
     d_loa;
     d_reav;
-    interpolator;
+
+    interpolator_para_reav;
+    interpolator_para_loa;
 
     elemento; // definido no desenha_forma()
     d3_ref;
     x_centro; // definidos pelo calcula_deslocamentos(), usado no move_para()
     x_direita;
     x_esquerda;
-
-
 
     constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial) {
 
@@ -799,7 +800,8 @@ class GrandeNumero {
         this.d_loa = this.#gera_atributo_d_path(valor_loa, posicao_inicial);
         this.d_reav = this.#gera_atributo_d_path(valor_reav, posicao_inicial);
 
-        this.interpolator = flubber.interpolate(this.d_loa, this.d_reav);
+        this.interpolator_para_reav = flubber.interpolate(this.d_loa,  this.d_reav);
+        this.interpolator_para_loa  = flubber.interpolate(this.d_reav, this.d_loa);
 
         this.#desenha_forma();
         this.#calcula_deslocamentos();
@@ -1075,6 +1077,19 @@ class GrandeNumero {
 
         if (esconde) this.elemento.classList.add('escondido');
         else this.elemento.classList.remove('escondido');
+
+    }
+
+    morfa_para(direcao) { // loa ou reav
+
+        const interpolator = this['interpolator_para_' + direcao]
+
+        this.d3_ref
+          .transition()
+          .delay(2000)
+          .duration(2000)
+          .attrTween('d', () => interpolator)
+        ;
 
     }
 
