@@ -781,6 +781,7 @@ class GrandeNumero {
     interpolator;
 
     elemento; // definido no desenha_forma()
+    d3_ref;
     x_centro; // definidos pelo calcula_deslocamentos(), usado no move_para()
     x_direita;
     x_esquerda;
@@ -795,14 +796,17 @@ class GrandeNumero {
         this.valor_reav = valor_reav;
         this.posicao_inicial = posicao_inicial;
 
-        this.d_loa = this.gera_atributo_d_path(valor_loa, posicao_inicial);
-        this.d_reav = this.gera_atributo_d_path(valor_reav, posicao_inicial);
+        this.d_loa = this.#gera_atributo_d_path(valor_loa, posicao_inicial);
+        this.d_reav = this.#gera_atributo_d_path(valor_reav, posicao_inicial);
 
         this.interpolator = flubber.interpolate(this.d_loa, this.d_reav);
 
+        this.#desenha_forma();
+        this.#calcula_deslocamentos();
+
     }
 
-    gera_atributo_d_path(qde, posicao_inicial) {
+    #gera_atributo_d_path(qde, posicao_inicial) {
 
         const grid = calcula_grid(qde, posicao_inicial);
         const subgrid = calcula_subgrid(grid);
@@ -1001,7 +1005,7 @@ class GrandeNumero {
 
     }
 
-    desenha_forma() {
+    #desenha_forma() {
 
         let [atributo_d, nome, tipo] = [this.d_loa, this.nome, this.tipo];
 
@@ -1019,6 +1023,7 @@ class GrandeNumero {
         path.setAttribute('data-tipo', tipo);
 
         this.elemento = path;
+        this.d3_ref = d3.select(path);
 
         function teste() {
             console.log(this);
@@ -1028,7 +1033,7 @@ class GrandeNumero {
 
     }
 
-    calcula_deslocamentos() {
+    #calcula_deslocamentos() {
 
         if (this.elemento) {
 
