@@ -46,6 +46,8 @@ const v = {
             //desenha_shape(2030, 0, 'receitas', 'loa');
             //desenha_shape(2118, 0, 'receitas', 'reavaliacao');
 
+            /* novo
+
             const path_loa = get_path(1720, 0);
             const path_reaval = get_path(1753, 0);
 
@@ -62,6 +64,8 @@ const v = {
             d3.select('[data-tipo="reavaliacao"]').attr('d', interpolator(.5));
 
             v.grid.calcula_deslocamento();
+
+            * * * * */
 
 
             //const result = v.contornos.calcula_subgrid(receitas);
@@ -762,7 +766,7 @@ const v = {
 
 }
 
-//v.control.init();
+v.control.init();
 
 class GrandeNumero {
 
@@ -774,7 +778,14 @@ class GrandeNumero {
     posicao_inicial;
     d_loa;
     d_reav;
-    elemento;
+    interpolator;
+
+    elemento; // definido no desenha_forma()
+    x_centro; // definidos pelo calcula_deslocamentos(), usado no move_para()
+    x_direita;
+    x_esquerda;
+
+
 
     constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial) {
 
@@ -786,6 +797,8 @@ class GrandeNumero {
 
         this.d_loa = this.gera_atributo_d_path(valor_loa, posicao_inicial);
         this.d_reav = this.gera_atributo_d_path(valor_reav, posicao_inicial);
+
+        this.interpolator = flubber.interpolate(this.d_loa, this.d_reav);
 
     }
 
@@ -988,7 +1001,9 @@ class GrandeNumero {
 
     }
 
-    desenha_forma(atributo_d, nome, tipo) {
+    desenha_forma() {
+
+        let [atributo_d, nome, tipo] = [this.d_loa, this.nome, this.tipo];
 
         const svg = v.refs.svg;
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -996,20 +1011,70 @@ class GrandeNumero {
         svg.appendChild(path);
 
         path.setAttribute('d', atributo_d);
+        path.classList.add('grande-numero');
+        path.classList.add('escondido');
+
         //path.setAttribute('stroke', 'blue' );
         path.setAttribute('data-nome', nome);
         path.setAttribute('data-tipo', tipo);
 
         this.elemento = path;
 
+        function teste() {
+            console.log(this);
+        }
+
+        teste();
+
     }
 
-    
+    calcula_deslocamentos() {
 
+        if (this.elemento) {
 
+            const path = this.elemento;
 
+            const W = path.getBBox().width;
+            console.log(W);
+            const { w , h } = v.sizings.valores;
+            
+            this.x_direita = w - W - 4;
+            this.x_centro = ( w - W ) / 2;
+            this.x_esquerda = 0;
 
+        } else {
 
+            console.log('primeiro crie a forma, Zé');
+
+        }
+
+    }
+
+    move_para(onde) { // centro, esquerda, direita
+
+        if (this.elemento) {
+
+            const x = this['x_' + onde];
+
+            this.elemento.style.transform = `translateX(${x}px)`;
+
+        } else {
+
+            console.log('Você nem desenhou ainda! Como quer mover?!');
+
+        }
+
+    }
+
+    esconde(esconde = true) { // true, false
+
+        if (esconde) this.elemento.classList.add('escondido');
+        else this.elemento.classList.remove('escondido');
+
+    }
 
 }
+
+const rec = new GrandeNumero('receita', 'receita', 1644, 1686, 0);
+const desp = new GrandeNumero('despesa', 'despesa', 1720, 1753, 0);
 

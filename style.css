@@ -64,11 +64,19 @@ svg {
 }
 
 path {
-    fill : transparent;/*url(#pattern-receita);*/
+    fill : url(#pattern-receita);/*transparent;*/
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 4px;
     stroke: var(--amarelo-tesouro);
+}
+
+path.grande-numero {
+    transition: transform .3s, opacity .3s;
+}
+
+path.grande-numero.escondido  {
+    opacity: 0;
 }
 
 path[data-id="despesas"] {
