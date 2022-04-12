@@ -11,8 +11,8 @@ const v = {
 
             v.params.set_css();
 
-            const receitas = v.grid.calcula_grid(2031, 0);
-            const receitas_aval = v.grid.calcula_grid(2118, 0);
+            //const receitas = v.grid.calcula_grid(2031, 0);
+            //const receitas_aval = v.grid.calcula_grid(2118, 0);
             //const grid3 = v.grid.calcula_grid(6, 10+13);
 
             //v.grid.desenha_grid(grid1, 'pink');
@@ -277,9 +277,6 @@ const v = {
             console.log(grid);
 
             return grid;
-
-            
-
 
         },
 
@@ -765,4 +762,254 @@ const v = {
 
 }
 
-v.control.init();
+//v.control.init();
+
+class GrandeNumero {
+
+    nome;
+    tipo;
+    valor_loa;
+    valor_reav;
+    tamanho;
+    posicao_inicial;
+    d_loa;
+    d_reav;
+    elemento;
+
+    constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial) {
+
+        this.nome = nome;
+        this.tipo = tipo;
+        this.valor_loa = valor_loa;
+        this.valor_reav = valor_reav;
+        this.posicao_inicial = posicao_inicial;
+
+        this.d_loa = this.gera_atributo_d_path(valor_loa, posicao_inicial);
+        this.d_reav = this.gera_atributo_d_path(valor_reav, posicao_inicial);
+
+    }
+
+    gera_atributo_d_path(qde, posicao_inicial) {
+
+        const grid = calcula_grid(qde, posicao_inicial);
+        const subgrid = calcula_subgrid(grid);
+        const lista_pontos = calcula_pontos_contorno_ordenados(subgrid);
+        const d = calcula_atributo_d(lista_pontos);
+
+        return d;
+
+        // definições das funções
+
+        function calcula_grid(qde, n_inicial) {
+
+            //const grid = v.grid.array;
+            const grid = [];
+    
+            const ncol = v.params.calculados.ncol;
+    
+            for (let n = n_inicial; n < qde + n_inicial; n++) {
+    
+                const j = Math.floor( n / ncol);
+    
+                const linha_impar = j % 2 != 0;
+    
+                const elemento = {
+    
+                    i : linha_impar ? ncol - 1 - n % ncol : n % ncol,
+                    j : Math.floor( n / ncol),
+                    impar : linha_impar,
+                    index : n,
+                    index_ : linha_impar ? 
+                      n :
+                      ( ncol * ( 2*j + 1) - 1) - n
+    
+                }
+    
+                grid.push(elemento);
+    
+            }
+    
+            console.log(grid);
+    
+            return grid;
+    
+        }
+    
+        function calcula_subgrid(array) {
+    
+            const lista_pontos = [];
+            const lista_segmentos = [];
+            const lista_segmentos_internos = []; // os repetidos
+    
+            array.forEach(el => {
+    
+                const { i, j } = el;
+    
+                // pontos
+    
+                const pontos = [
+                    `${i}, ${j}`,
+                    `${i}, ${j+1}`,
+                    `${i+1}, ${j}`,
+                    `${i+1}, ${j+1}`
+                ];
+    
+                pontos.forEach(p => {
+    
+                    if ( lista_pontos.indexOf(p) == -1 ) {
+    
+                        lista_pontos.push(p);
+    
+                    }
+    
+                })
+    
+                // segmentos
+    
+                const segmentos = [   
+    
+                    `${i}, ${j} / ${i+1}, ${j}`,
+                    `${i+1}, ${j} / ${i+1}, ${j+1}`,
+                    `${i}, ${j+1} / ${i+1}, ${j+1}`,
+                    `${i}, ${j} / ${i}, ${j+1}`
+    
+                ];
+    
+                segmentos.forEach(s => {
+    
+                    if ( lista_segmentos.indexOf(s) === -1 ) {
+    
+                        lista_segmentos.push(s);
+    
+                    } else {
+    
+                        lista_segmentos_internos.push(s);
+    
+                    }
+    
+                })
+    
+            })
+    
+            return ({
+    
+                pontos              : lista_pontos,
+                segmentos           : lista_segmentos,
+                segmentos_a_excluir : lista_segmentos_internos
+    
+            })
+    
+        }
+
+        function calcula_pontos_contorno_ordenados(dados_contorno) {
+
+            const segmentos_totais = dados_contorno.segmentos;
+            const segmentos_a_excluir = dados_contorno.segmentos_a_excluir;
+
+            const segmentos = segmentos_totais.filter(segmento => segmentos_a_excluir.indexOf(segmento) == -1);
+            // segmentos aqui está como algo assim: ['4, 1 / 5, 1', '4, 1 / 4, 2', ... ]
+            // estão como texto para podermos filtrar
+
+            const coords_segmentos = segmentos.map(segmento => segmento.split('/').map(d => d.trim()));
+            // vai ficar assim: : [ ['4, 1', '5, 1'], ['4, 1', '4, 2'], ... ]
+
+            // vamos começar pegando o primeiro segmento da lista
+            let primeiro_segmento = coords_segmentos[0];
+
+            // aí vamos manter uma lista dos segmentos que ainda não foram selecionados
+            let segmentos_restantes = coords_segmentos.slice(1);
+
+            let primeiro_ponto = primeiro_segmento[0];
+
+            // vamos criar uma lista com os pontos na ordem, e incluuir esse primeiro ponto
+            const pontos_ordenados = [];
+            pontos_ordenados.push(primeiro_ponto);
+
+            // e também o segundo ponto do primeiro segmento. 
+            let proximo_ponto = primeiro_segmento[1];
+            pontos_ordenados.push(proximo_ponto);
+
+            let ctrl = 0;
+            while (segmentos_restantes.length > 0 & ctrl < 10000) {
+
+                // Esse vai ser o próximo ponto, então vamos procurar qual o segmento que o contém
+                let proximo_segmento = segmentos_restantes.filter(s => s.includes(proximo_ponto))[0];
+                // índice desse próximo segmento
+                const indice_proximo_segmento = segmentos_restantes.indexOf(proximo_segmento)
+
+                // o proximo ponto vai ser o outro ponto desse próximo segmento, e por aí vai.
+                proximo_ponto = proximo_segmento.filter(d => d != proximo_ponto)[0];
+                pontos_ordenados.push(proximo_ponto);
+
+                //console.log(ctrl, segmentos_restantes.length, proximo_segmento, indice_proximo_segmento, proximo_ponto);
+                ctrl++
+
+                // mas antes precisamos excluir o segmento atual da lista
+                segmentos_restantes.splice(indice_proximo_segmento, 1);
+
+                //console.log([...segmentos_restantes]);
+
+            }
+
+            return pontos_ordenados
+
+        }
+
+        function calcula_atributo_d (pontos_ordenados) {
+
+            const { w, h } = v.sizings.valores;
+            const { l, gap } = v.params.fixos;
+
+            const dist = gap / 2;
+
+            let d = '';
+
+            console.log(pontos_ordenados);
+
+
+            pontos_ordenados.forEach( (ponto, indice) => {
+
+                const [i, j] = ponto.split(',').map(d => +d.trim());
+                console.log(ponto, i,j)
+
+                const x = ( gap + (gap + l) * i ) - dist;
+                const y = ( h - (gap + l) * ( j +1 ) ) + ( l + dist );
+
+                const comando = indice == 0 ? 'M' : 'L';
+                // para o primeiro elemento, movemos a 'caneta' até lá, com 'M'. Para os demais, desenhamos linhas até o pont, com 'L'.
+
+                d += `${comando}${x},${y} `;
+                
+            })
+
+            return d;
+
+        }
+
+    }
+
+    desenha_forma(atributo_d, nome, tipo) {
+
+        const svg = v.refs.svg;
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+        svg.appendChild(path);
+
+        path.setAttribute('d', atributo_d);
+        //path.setAttribute('stroke', 'blue' );
+        path.setAttribute('data-nome', nome);
+        path.setAttribute('data-tipo', tipo);
+
+        this.elemento = path;
+
+    }
+
+    
+
+
+
+
+
+
+}
+
