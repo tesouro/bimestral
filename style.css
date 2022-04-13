@@ -68,7 +68,6 @@ path {
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 4px;
-    stroke: var(--amarelo-tesouro);
 }
 
 path.grande-numero {
@@ -79,7 +78,11 @@ path.grande-numero.escondido  {
     opacity: 0;
 }
 
-path[data-id="despesas"] {
+path[data-nome="receita"] {
+    stroke: var(--amarelo-tesouro);
+}
+
+path[data-nome="despesa"] {
     stroke: var(--verde-tesouro);
 }
 
