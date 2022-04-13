@@ -22,7 +22,7 @@ const v = {
 
         fixos: {
 
-            l : 8,
+            l : 6,
             gap : 2,
             qde : 2000
 
@@ -274,8 +274,8 @@ class GrandeNumero {
         this.valor_reav = valor_reav;
         this.posicao_inicial = posicao_inicial;
 
-        this.d_loa = this.#gera_atributo_d_path(valor_loa, posicao_inicial);
-        this.d_reav = this.#gera_atributo_d_path(valor_reav, posicao_inicial);
+        this.d_loa = this.gera_atributo_d_path(valor_loa, posicao_inicial);
+        this.d_reav = this.gera_atributo_d_path(valor_reav, posicao_inicial);
 
         this.interpolator_para_reav = flubber.interpolate(this.d_loa,  this.d_reav);
         this.interpolator_para_loa  = flubber.interpolate(this.d_reav, this.d_loa);
@@ -286,7 +286,8 @@ class GrandeNumero {
 
     }
 
-    #gera_atributo_d_path(qde, posicao_inicial) {
+    // não posso deixar particular porque a classe derivada dessa precisa acessar esse método
+    gera_atributo_d_path(qde, posicao_inicial) {
 
         const grid = calcula_grid(qde, posicao_inicial);
         const subgrid = calcula_subgrid(grid);
@@ -604,10 +605,57 @@ class GrandeNumero {
 
 }
 
-const rec = new GrandeNumero('receita', 'receita', 2031, 2118, 0);
+class GrandeReceita extends GrandeNumero {
+
+    valor_liq_loa;
+    valor_liq_reav;
+
+    d_liq_loa;
+    d_liq_reav;
+
+    interpolator_para_liq_loa;
+
+
+    constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial, valor_liq_loa, valor_liq_reav) {
+
+        super(nome, tipo, valor_loa, valor_reav, posicao_inicial);
+
+        this.valor_liq_loa = valor_liq_loa;
+        this.valor_liq_reav = valor_liq_reav;
+
+        this.d_liq_loa = this.gera_atributo_d_path(valor_liq_loa, posicao_inicial);
+        this.d_liq_reav = this.gera_atributo_d_path(valor_liq_reav, posicao_inicial);
+
+        // primeiro vou morfar do bruto loa para o liquido loa (com um método que vou criar aqui: morfa_para_liquido). 
+        
+        //aí só vou lidar com valores líquidos depois disso, de forma que os morfa_para() vão ser entre o valor liquido loa e o valor líquido reav.
+
+        this.interpolator_para_liq_loa = flubber.interpolate(this.d_loa,  this.d_liq_loa);
+        
+        this.interpolator_para_reav = flubber.interpolate(this.d_liq_loa,  this.d_liq_reav);
+        this.interpolator_para_loa  = flubber.interpolate(this.d_liq_reav, this.d_liq_loa);
+
+    }
+
+    morfa_para_liquido() { 
+
+        const interpolator = this.interpolator_para_liq_loa;
+
+        this.d3_ref
+          .transition()
+          .delay(2000)
+          .duration(2000)
+          .attrTween('d', () => interpolator)
+        ;
+
+    }
+
+}
+
+const rec = new GrandeReceita('receita', 'receita', 2031, 2118, 0, 1644, 1686);
 const desp = new GrandeNumero('despesa', 'despesa', 1720, 1753, 0);
 
-const rec_liquida = new GrandeNumero('receita-liquida', 'receita', 1644, 1686, 0);
+//const rec_liquida = new GrandeNumero('receita-liquida', 'receita', 1644, 1686, 0);
 const transf = new GrandeNumero('transferencias', 'receita', 386, 431, 1644);
 
 //const resultado = new GrandeNumero('')

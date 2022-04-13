@@ -86,8 +86,8 @@ path[data-nome="despesa"] {
     stroke: var(--verde-tesouro);
 }
 
-[data-tipo="reavaliacao"] {
-    stroke-dasharray: 10px 5px;
+path[data-nome="transferencias"] {
+    stroke: firebrick;
 }
 
 #pattern-receita > rect {
@@ -96,6 +96,10 @@ path[data-nome="despesa"] {
 
 #pattern-despesa > rect {
     fill: var(--verde-tesouro);
+}
+
+#pattern-transferencias > rect {
+    fill: firebrick;
 }
 
 /*
