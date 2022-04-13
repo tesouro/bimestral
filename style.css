@@ -64,7 +64,7 @@ svg {
 }
 
 path {
-    fill : url(#pattern-receita);/*transparent;*/
+    /*fill : url(#pattern-receita);/*transparent;*/
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 4px;
@@ -89,6 +89,10 @@ path[data-id="despesas"] {
 
 #pattern-receita > rect {
     fill: var(--amarelo-tesouro);
+}
+
+#pattern-despesa > rect {
+    fill: var(--verde-tesouro);
 }
 
 /*
