@@ -49,3 +49,8 @@ path {
 Aí depois eu cobriria os paths da despesa e receita total com os paths dos agrupamentos.
 
 
+
+
+os objetos são criados.
+obj.esconde(false) faz eles aparecerem
+obj.move_para('centro' | 'esquerda' | 'direita')
