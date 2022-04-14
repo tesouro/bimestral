@@ -83,6 +83,12 @@ path[data-nome="despesa"] {stroke: var(--verde-tesouro);}
 path[data-nome="transferencias"] {stroke: firebrick;}
 path[data-nome="resultado"] {stroke: var(--azul-tesouro);}
 
+path.item {
+
+    stroke: white;
+    fill: rebeccapurple;
+}
+
 #pattern-receita > rect { fill: var(--amarelo-tesouro); }
 #pattern-despesa > rect { fill: var(--verde-tesouro); }
 #pattern-transferencias > rect { fill: firebrick; }

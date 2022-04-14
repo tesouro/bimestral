@@ -267,6 +267,9 @@ class GrandeNumero {
     x_direita;
     x_esquerda;
 
+    cx;
+    cy;
+
     constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial, X0) {
 
         this.nome = nome;
@@ -512,13 +515,18 @@ class GrandeNumero {
 
             const path = this.elemento;
 
-            const W = path.getBBox().width;
-            console.log(W);
+            const bbox = path.getBBox()
+
+            const W = bbox.width;
+
             const { w , h } = v.sizings.valores;
             
             this.x_direita = w - W - 4;
             this.x_centro = ( w - W ) / 2;
             this.x_esquerda = 0;
+
+            this.cx = bbox.x + bbox.width/2;
+            this.cy = bbox.y + bbox.height/2;
 
         } else {
 
@@ -644,6 +652,68 @@ class GrandeReceita extends GrandeNumero {
 
 }
 
+class Forma extends GrandeNumero {
+
+    r_loa;
+    r_reav;
+
+    constructor(nome, tipo, classificador, valor_loa, valor_reav, posicao_inicial, X0) {
+
+        super(nome, tipo, valor_loa, valor_reav, posicao_inicial, X0);
+
+        this.elemento.setAttribute('data-classificador', classificador);
+        this.elemento.classList.add('item');
+
+        this.r_loa = scale_r(valor_loa);
+        this.r_reav = scale_r(valor_reav);
+
+    }
+
+    morfa_para_circulo() {
+
+        this.d3_ref
+          .transition()
+          .duration(2000)
+          .attrTween('d', () => flubber.toCircle(
+              this.d_reav, 
+              this.cx, 
+              this.cy, 
+              this.r_reav, 
+
+              {maxSegmentLength: 1}
+            ))
+        ;
+
+    }
+
+    morfa_para_forma() {
+
+        this.d3_ref
+          .transition()
+          .duration(2000)
+          .attrTween('d', () => flubber.fromCircle(
+              this.cx, 
+              this.cy, 
+              this.r_reav, 
+              this.d_reav, 
+              {maxSegmentLength: 1}
+            ))
+      ;
+
+    }
+
+}
+
+
+
+const maior_valor = 778;
+
+const scale_r = d3.scaleSqrt()
+  .domain([0, maior_valor])
+  .range([1, 30])
+;
+
+
 
 const desp = new GrandeNumero('despesa', 'despesa', 1720, 1753, 0, 0);
 const rec = new GrandeReceita('receita', 'receita', 2031, 2118, 0, 1644, 1686, 0);
@@ -654,4 +724,10 @@ const X0 = desp.deslocamento_canto;
 const transf = new GrandeNumero('transferencias', 'receita', 387, 431, 1644, 0);
 
 const resultado = new GrandeNumero('resultado', 'resultado', 76, 67, 1644, 0);
+
+const prev = new Forma('Benefícios Previdenciários', 'item-despesa', 'Despesas Obrigatórias', 778, 778, 0, X0);
+
+const pessoal = new Forma('Pessoal e Encargos Sociais', 'item-despesa', 'Despesas Obrigatórias', 336, 339, 778, X0);
+
+const abono = new Forma('Abono e Seguro Desemprego', 'item-despesa', 'Despesas Obrigatórias', 66, 64, 778+339, X0);
 
