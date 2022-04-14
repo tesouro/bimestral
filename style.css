@@ -68,6 +68,7 @@ path {
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 4px;
+    transition: stroke .3s;
 }
 
 path.grande-numero {
@@ -87,6 +88,10 @@ path.item {
 
     stroke: white;
     fill: rebeccapurple;
+}
+
+path.item.bolha {
+    stroke-width: 0;
 }
 
 #pattern-receita > rect { fill: var(--amarelo-tesouro); }
