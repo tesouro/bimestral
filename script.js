@@ -666,6 +666,12 @@ class Forma extends GrandeNumero {
     r_reav;
     forma_inicial;
 
+    // parametros da simulacao
+    x;
+    x0;
+    y;
+    y0;
+
     constructor(nome, tipo, classificador, valor_loa, valor_reav, posicao_inicial, X0, forma_inicial) {
 
         super(nome, tipo, valor_loa, valor_reav, posicao_inicial, X0, forma_inicial = 'reav');
@@ -675,6 +681,11 @@ class Forma extends GrandeNumero {
 
         this.r_loa = scale_r(valor_loa);
         this.r_reav = scale_r(valor_reav);
+
+        this.x = this.cx;
+        this.x0 = this.cx;
+        this.y = this.cy;
+        this.y0 = this.cy;
 
     }
 
@@ -738,7 +749,41 @@ const resultado = new GrandeNumero('resultado', 'resultado', 76, 67, 1644, 0);
 
 const prev = new Forma('Benefícios Previdenciários', 'item-despesa', 'Despesas Obrigatórias', 778, 778, 0, X0);
 
-const pessoal = new Forma('Pessoal e Encargos Sociais', 'item-despesa', 'Despesas Obrigatórias', 336, 339, 778, X0);
+const desp_pf = new Forma('Despesas do Poder Executivo Sujeitas à Programação Financeira', 'item-despesa', 'Despesas Obrigatórias', 354, 354, 778, X0);
 
-const abono = new Forma('Abono e Seguro Desemprego', 'item-despesa', 'Despesas Obrigatórias', 66, 64, 778+339, X0);
+const pessoal = new Forma('Pessoal e Encargos Sociais', 'item-despesa', 'Despesas Obrigatórias', 336, 339, 778 + 354, X0);
 
+const bpc = new Forma('Benefícios  de Prestação Continuada', 'item-despesa', 'Despesas Obrigatórias', 76, 76, 778 + 354 + 339, X0);
+
+const abono = new Forma('Abono e Seguro Desemprego', 'item-despesa', 'Despesas Obrigatórias', 66, 64, 778 + 354 + 339 + 76, X0);
+
+const itens = [prev, desp_pf, pessoal, bpc, abono];
+
+let delay = 5000;
+
+itens.forEach(item => item.esconde(false))
+
+setTimeout(itens.forEach(item => item.morfa_para_circulo()), 8000);
+
+
+
+// simulation
+
+const strength = 0.04;
+
+const sim = d3.forceSimulation()
+  .velocityDecay(0.2)
+  .force('x', d3.forceX().strength(strength).x(500))
+  .force('y', d3.forceY().strength(strength).y(300))
+  .force('collision', d3.forceCollide().strength(strength*1.5).radius(d => d.r))
+  .alphaMin(0.2)
+  .on('tick', () => {
+
+    itens.forEach(item => {
+        item.elemento.style.transform = `translate(${item.x - item.x0}px, ${item.y - item.y0}px)`;
+    })
+  })
+  .stop()
+;
+
+sim.nodes(itens);

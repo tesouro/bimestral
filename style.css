@@ -68,10 +68,9 @@ path {
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 4px;
-    transition: stroke .3s;
 }
 
-path.grande-numero {
+path.grande-numero:not(.item) {
     transition: transform .3s, opacity .3s;
 }
 
@@ -88,6 +87,7 @@ path.item {
 
     stroke: white;
     fill: rebeccapurple;
+    transition: stroke-width .3s, opacity .3s;
 }
 
 path.item.bolha {
