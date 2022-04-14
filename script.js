@@ -327,7 +327,7 @@ class GrandeNumero {
     
             }
     
-            console.log(grid);
+            //console.log(grid);
     
             return grid;
     
@@ -652,11 +652,12 @@ class GrandeReceita extends GrandeNumero {
 
 }
 
-const rec = new GrandeReceita('receita', 'receita', 2031, 2118, 0, 1644, 1686);
+
 const desp = new GrandeNumero('despesa', 'despesa', 1720, 1753, 0);
+const rec = new GrandeReceita('receita', 'receita', 2031, 2118, 0, 1644, 1686);
 
 //const rec_liquida = new GrandeNumero('receita-liquida', 'receita', 1644, 1686, 0);
-const transf = new GrandeNumero('transferencias', 'receita', 386, 431, 1644);
+const transf = new GrandeNumero('transferencias', 'receita', 387, 431, 1644);
 
-//const resultado = new GrandeNumero('')
+const resultado = new GrandeNumero('resultado', 'resultado', 76, 67, 1644);
 
