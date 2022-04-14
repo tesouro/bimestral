@@ -111,8 +111,13 @@ const v = {
 
             const svg = v.refs.svg;
 
-            v.sizings.valores.w = +window.getComputedStyle(svg).width.slice(0,-2);
-            v.sizings.valores.h = +window.getComputedStyle(svg).height.slice(0,-2);
+            const w = +window.getComputedStyle(svg).width.slice(0,-2);
+            const h = +window.getComputedStyle(svg).height.slice(0,-2);
+
+            v.sizings.valores.w = w;
+            v.sizings.valores.h = h;
+            
+            svg.setAttribute('viewBox', `${0} ${0} ${w} ${h}`)
 
             console.log(v.sizings.valores);
 
@@ -131,8 +136,8 @@ const v = {
 
             const svg = v.refs.svg;
 
-            svg.style.width = new_w + 'px';
-            svg.style.height = new_w + 'px';
+            //svg.style.width = new_w + 'px';
+            //svg.style.height = new_w + 'px';
 
         }
 
