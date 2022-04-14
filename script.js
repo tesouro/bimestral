@@ -253,6 +253,7 @@ class GrandeNumero {
     valor_reav;
     tamanho;
     posicao_inicial;
+    X0;
 
     d_loa;
     d_reav;
@@ -266,7 +267,7 @@ class GrandeNumero {
     x_direita;
     x_esquerda;
 
-    constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial) {
+    constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial, X0) {
 
         this.nome = nome;
         this.tipo = tipo;
@@ -274,8 +275,8 @@ class GrandeNumero {
         this.valor_reav = valor_reav;
         this.posicao_inicial = posicao_inicial;
 
-        this.d_loa = this.gera_atributo_d_path(valor_loa, posicao_inicial);
-        this.d_reav = this.gera_atributo_d_path(valor_reav, posicao_inicial);
+        this.d_loa = this.gera_atributo_d_path(valor_loa, posicao_inicial, X0);
+        this.d_reav = this.gera_atributo_d_path(valor_reav, posicao_inicial, X0);
 
         this.interpolator_para_reav = flubber.interpolate(this.d_loa,  this.d_reav);
         this.interpolator_para_loa  = flubber.interpolate(this.d_reav, this.d_loa);
@@ -287,12 +288,12 @@ class GrandeNumero {
     }
 
     // não posso deixar particular porque a classe derivada dessa precisa acessar esse método
-    gera_atributo_d_path(qde, posicao_inicial) {
+    gera_atributo_d_path(qde, posicao_inicial, X0 = 0) {
 
         const grid = calcula_grid(qde, posicao_inicial);
         const subgrid = calcula_subgrid(grid);
         const lista_pontos = calcula_pontos_contorno_ordenados(subgrid);
-        const d = calcula_atributo_d(lista_pontos);
+        const d = calcula_atributo_d(lista_pontos, X0);
 
         return d;
 
@@ -453,7 +454,7 @@ class GrandeNumero {
 
         }
 
-        function calcula_atributo_d (pontos_ordenados) {
+        function calcula_atributo_d (pontos_ordenados, X0) {
 
             const { w, h } = v.sizings.valores;
             const { l, gap } = v.params.fixos;
@@ -462,15 +463,12 @@ class GrandeNumero {
 
             let d = '';
 
-            console.log(pontos_ordenados);
-
-
             pontos_ordenados.forEach( (ponto, indice) => {
 
                 const [i, j] = ponto.split(',').map(d => +d.trim());
-                console.log(ponto, i,j)
+                //console.log(ponto, i,j)
 
-                const x = ( gap + (gap + l) * i ) - dist;
+                const x = X0 + ( gap + (gap + l) * i ) - dist;
                 const y = ( h - (gap + l) * ( j +1 ) ) + ( l + dist );
 
                 const comando = indice == 0 ? 'M' : 'L';
@@ -505,12 +503,6 @@ class GrandeNumero {
 
         this.elemento = path;
         this.d3_ref = d3.select(path);
-
-        function teste() {
-            console.log(this);
-        }
-
-        teste();
 
     }
 
@@ -616,15 +608,15 @@ class GrandeReceita extends GrandeNumero {
     interpolator_para_liq_loa;
 
 
-    constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial, valor_liq_loa, valor_liq_reav) {
+    constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial, valor_liq_loa, valor_liq_reav, X0) {
 
-        super(nome, tipo, valor_loa, valor_reav, posicao_inicial);
+        super(nome, tipo, valor_loa, valor_reav, posicao_inicial, X0);
 
         this.valor_liq_loa = valor_liq_loa;
         this.valor_liq_reav = valor_liq_reav;
 
-        this.d_liq_loa = this.gera_atributo_d_path(valor_liq_loa, posicao_inicial);
-        this.d_liq_reav = this.gera_atributo_d_path(valor_liq_reav, posicao_inicial);
+        this.d_liq_loa = this.gera_atributo_d_path(valor_liq_loa, posicao_inicial, X0);
+        this.d_liq_reav = this.gera_atributo_d_path(valor_liq_reav, posicao_inicial, X0);
 
         // primeiro vou morfar do bruto loa para o liquido loa (com um método que vou criar aqui: morfa_para_liquido). 
         
@@ -653,11 +645,13 @@ class GrandeReceita extends GrandeNumero {
 }
 
 
-const desp = new GrandeNumero('despesa', 'despesa', 1720, 1753, 0);
-const rec = new GrandeReceita('receita', 'receita', 2031, 2118, 0, 1644, 1686);
+const desp = new GrandeNumero('despesa', 'despesa', 1720, 1753, 0, 0);
+const rec = new GrandeReceita('receita', 'receita', 2031, 2118, 0, 1644, 1686, 0);
+
+const X0 = desp.deslocamento_canto;
 
 //const rec_liquida = new GrandeNumero('receita-liquida', 'receita', 1644, 1686, 0);
-const transf = new GrandeNumero('transferencias', 'receita', 387, 431, 1644);
+const transf = new GrandeNumero('transferencias', 'receita', 387, 431, 1644, 0);
 
-const resultado = new GrandeNumero('resultado', 'resultado', 76, 67, 1644);
+const resultado = new GrandeNumero('resultado', 'resultado', 76, 67, 1644, 0);
 
