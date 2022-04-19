@@ -761,7 +761,48 @@ const itens = [prev, desp_pf, pessoal, bpc, abono];
 
 let delay = 5000;
 
-itens.forEach(item => item.esconde(false))
+console.log('pode começar');
+
+class MenuControle {
+
+    ref;
+    elemento;
+    nome_data_attr;
+
+    constructor(ref, nome_data_attr) {
+
+        this.ref = ref;
+        this.nome_data_attr = nome_data_attr;
+        this.elemento = document.querySelector(ref);
+        this.monitora();
+
+    }
+
+    monitora() {
+        this.elemento.addEventListener('click', e => this.atua(e, this.nome_data_attr));
+    }
+
+    atua (e, nome_data_attr) {
+
+        if (e.target.tagName != 'BUTTON') {
+            console.log('nào é botão');
+            return
+        }
+
+        else {
+
+            const acao = e.target.dataset[nome_data_attr];
+            console.log(acao);
+        }
+
+    }
+
+}
+
+const menu_controle = new MenuControle('.controle', 'acao');
+
+
+/*itens.forEach(item => item.esconde(false))
 
 setTimeout(itens.forEach(item => item.morfa_para_circulo()), 8000);
 
@@ -786,4 +827,4 @@ const sim = d3.forceSimulation()
   .stop()
 ;
 
-sim.nodes(itens);
+sim.nodes(itens);*/
