@@ -257,9 +257,10 @@ class GrandeNumero {
     valor_loa;
     valor_reav;
     tamanho;
-    posicao_inicial;
+    posicao_inicial_loa;
+    posicao_inicial_reav;
     X0;
-    forma_inicial; 
+    forma_inicial;
 
     d_loa;
     d_reav;
@@ -276,18 +277,21 @@ class GrandeNumero {
     cx;
     cy;
 
-    constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial, X0, forma_inicial = 'loa') {
+    bbox;
+
+    constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial_loa, posicao_inicial_reav, X0, forma_inicial = 'loa') {
 
         this.nome = nome;
         this.tipo = tipo;
         this.valor_loa = valor_loa;
         this.valor_reav = valor_reav;
-        this.posicao_inicial = posicao_inicial;
+        this.posicao_inicial_loa = posicao_inicial_loa;
+        this.posicao_inicial_reav = posicao_inicial_reav;
         this.forma_inicial = forma_inicial;
 
 
-        this.d_loa = this.gera_atributo_d_path(valor_loa, posicao_inicial, X0);
-        this.d_reav = this.gera_atributo_d_path(valor_reav, posicao_inicial, X0);
+        this.d_loa = this.gera_atributo_d_path(valor_loa, posicao_inicial_loa, X0);
+        this.d_reav = this.gera_atributo_d_path(valor_reav, posicao_inicial_reav, X0);
 
         this.interpolator_para_reav = flubber.interpolate(this.d_loa,  this.d_reav);
         this.interpolator_para_loa  = flubber.interpolate(this.d_reav, this.d_loa);
@@ -523,7 +527,8 @@ class GrandeNumero {
 
             const path = this.elemento;
 
-            const bbox = path.getBBox()
+            const bbox = path.getBBox();
+            this.bbox = bbox;
 
             const W = bbox.width;
 
@@ -604,8 +609,8 @@ class GrandeNumero {
 
         this.d3_ref
           .transition()
-          .delay(2000)
-          .duration(2000)
+          .delay(0)
+          .duration(1000)
           .attrTween('d', () => interpolator)
         ;
 
@@ -624,15 +629,15 @@ class GrandeReceita extends GrandeNumero {
     interpolator_para_liq_loa;
 
 
-    constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial, valor_liq_loa, valor_liq_reav, X0, forma_inicial) {
+    constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial_loa, posicao_inicial_reav, valor_liq_loa, valor_liq_reav, X0, forma_inicial) {
 
-        super(nome, tipo, valor_loa, valor_reav, posicao_inicial, X0, forma_inicial = 'loa');
+        super(nome, tipo, valor_loa, valor_reav, posicao_inicial_loa, posicao_inicial_reav, X0, forma_inicial = 'loa');
 
         this.valor_liq_loa = valor_liq_loa;
         this.valor_liq_reav = valor_liq_reav;
 
-        this.d_liq_loa = this.gera_atributo_d_path(valor_liq_loa, posicao_inicial, X0);
-        this.d_liq_reav = this.gera_atributo_d_path(valor_liq_reav, posicao_inicial, X0);
+        this.d_liq_loa = this.gera_atributo_d_path(valor_liq_loa, posicao_inicial_loa, X0);
+        this.d_liq_reav = this.gera_atributo_d_path(valor_liq_reav, posicao_inicial_reav, X0);
 
         // primeiro vou morfar do bruto loa para o liquido loa (com um método que vou criar aqui: morfa_para_liquido). 
         
@@ -651,8 +656,8 @@ class GrandeReceita extends GrandeNumero {
 
         this.d3_ref
           .transition()
-          .delay(2000)
-          .duration(2000)
+          .delay(0)
+          .duration(1000)
           .attrTween('d', () => interpolator)
         ;
 
@@ -672,9 +677,9 @@ class Forma extends GrandeNumero {
     y;
     y0;
 
-    constructor(nome, tipo, classificador, valor_loa, valor_reav, posicao_inicial, X0, forma_inicial) {
+    constructor(nome, tipo, classificador, valor_loa, valor_reav, posicao_inicial_loa, posicao_inicial_reav, X0, forma_inicial) {
 
-        super(nome, tipo, valor_loa, valor_reav, posicao_inicial, X0, forma_inicial = 'reav');
+        super(nome, tipo, valor_loa, valor_reav, posicao_inicial_loa, posicao_inicial_reav, X0, forma_inicial = 'reav');
 
         this.elemento.setAttribute('data-classificador', classificador);
         this.elemento.classList.add('item');
@@ -737,25 +742,25 @@ const scale_r = d3.scaleSqrt()
 
 
 
-const desp = new GrandeNumero('despesa', 'despesa', 1720, 1753, 0, 0);
-const rec = new GrandeReceita('receita', 'receita', 2031, 2118, 0, 1644, 1686, 0);
+const desp = new GrandeNumero('despesa', 'despesa', 1720, 1753, 0, 0, 0);
+const rec = new GrandeReceita('receita', 'receita', 2031, 2118, 0, 0, 1644, 1686, 0);
 
 const X0 = desp.x_direita;
 
 //const rec_liquida = new GrandeNumero('receita-liquida', 'receita', 1644, 1686, 0);
-const transf = new GrandeNumero('transferencias', 'receita', 387, 431, 1644, 0);
+const transf = new GrandeNumero('transferencias', 'receita', 387, 431, 1644, 1686, 0);
 
-const resultado = new GrandeNumero('resultado', 'resultado', 76, 67, 1644, 0);
+const resultado = new GrandeNumero('resultado', 'resultado', 76, 67, 1644, 1686, 0);
 
-const prev = new Forma('Benefícios Previdenciários', 'item-despesa', 'Despesas Obrigatórias', 778, 778, 0, X0);
+const prev = new Forma('Benefícios Previdenciários', 'item-despesa', 'Despesas Obrigatórias', 778, 778, 0, 0, X0);
 
 const desp_pf = new Forma('Despesas do Poder Executivo Sujeitas à Programação Financeira', 'item-despesa', 'Despesas Obrigatórias', 354, 354, 778, X0);
 
-const pessoal = new Forma('Pessoal e Encargos Sociais', 'item-despesa', 'Despesas Obrigatórias', 336, 339, 778 + 354, X0);
+const pessoal = new Forma('Pessoal e Encargos Sociais', 'item-despesa', 'Despesas Obrigatórias', 336, 339, 778 + 354, 778 + 354, X0);
 
-const bpc = new Forma('Benefícios  de Prestação Continuada', 'item-despesa', 'Despesas Obrigatórias', 76, 76, 778 + 354 + 339, X0);
+const bpc = new Forma('Benefícios  de Prestação Continuada', 'item-despesa', 'Despesas Obrigatórias', 76, 76, 778 + 354 + 339, 778 + 354 + 339, X0);
 
-const abono = new Forma('Abono e Seguro Desemprego', 'item-despesa', 'Despesas Obrigatórias', 66, 64, 778 + 354 + 339 + 76, X0);
+const abono = new Forma('Abono e Seguro Desemprego', 'item-despesa', 'Despesas Obrigatórias', 66, 64, 778 + 354 + 339 + 76, 778 + 354 + 339 + 76, X0);
 
 const itens = [prev, desp_pf, pessoal, bpc, abono];
 
@@ -793,12 +798,68 @@ class MenuControle {
 
             const acao = e.target.dataset[nome_data_attr];
             console.log(acao);
+            acoes[acao]();        
         }
 
     }
 
 }
 
+const acoes = {
+
+    'rec' : () => {
+        rec.esconde(false);
+    },
+
+    'transf' : () => {
+        transf.esconde(false);
+    },
+
+    'rec-liq' : () => {
+        rec.morfa_para_liquido();
+        setTimeout(() => transf.esconde(true), 1000);
+    },
+
+    'rec-desp' : () => {
+        desp.esconde(false);
+    },
+
+    'resultado' : () => {
+        desp.move_para('centro');
+        rec.move_para('centro');
+        setTimeout(() => resultado.esconde(false), 1000);
+    },
+
+    'reav' : () => {
+        desp.move_para('direita');
+        rec.move_para('esquerda');
+        resultado.esconde(true);
+        setTimeout(() => rec.morfa_para('reav'), 2000);
+        setTimeout(() => desp.morfa_para('reav'), 4000);
+        setTimeout(() => {
+
+            desp.move_para('centro');
+            rec.move_para('centro');
+            resultado.morfa_para('reav');
+
+        }, 6000);
+        setTimeout(() => {
+
+            desp.move_para('centro');
+            rec.move_para('centro');
+            resultado.esconde(false);
+
+        }, 8000);
+
+    }
+
+
+}
+
+// init
+
+desp.move_para('direita');
+resultado.move_para('centro');
 const menu_controle = new MenuControle('.controle', 'acao');
 
 
