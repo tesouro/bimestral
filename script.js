@@ -863,9 +863,9 @@ resultado.move_para('centro');
 const menu_controle = new MenuControle('.controle', 'acao');
 
 
-/*itens.forEach(item => item.esconde(false))
+itens.forEach(item => item.esconde(false))
 
-setTimeout(itens.forEach(item => item.morfa_para_circulo()), 8000);
+/*setTimeout(itens.forEach(item => item.morfa_para_circulo()), 8000);*/
 
 
 
@@ -873,19 +873,22 @@ setTimeout(itens.forEach(item => item.morfa_para_circulo()), 8000);
 
 const strength = 0.04;
 
+let flag = false;
+
 const sim = d3.forceSimulation()
   .velocityDecay(0.2)
   .force('x', d3.forceX().strength(strength).x(500))
   .force('y', d3.forceY().strength(strength).y(300))
-  .force('collision', d3.forceCollide().strength(strength*1.5).radius(d => d.r))
+  .force('collision', d3.forceCollide().strength(strength*2).radius(d => d.r_reav + 2))
   .alphaMin(0.2)
   .on('tick', () => {
 
     itens.forEach(item => {
         item.elemento.style.transform = `translate(${item.x - item.x0}px, ${item.y - item.y0}px)`;
     })
+
   })
   .stop()
 ;
 
-sim.nodes(itens);*/
+sim.nodes(itens);
