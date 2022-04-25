@@ -95,7 +95,7 @@ discr <- list(
 
 # output - grandes números ------------------------------------------------
 
-output <- list(
+grandes_numeros <- list(
   receita = receita,
   despesas = despesa,
   transferencias = transferencias,
@@ -103,6 +103,47 @@ output <- list(
   discricionarias = discr
 )
 
+
+
+
+
+# despesas - detalhados ---------------------------------------------------
+
+desp_det_raw <- read_excel('planilhas-bimestral-2022-1bim.xlsx', sheet = '5', skip = 4)
+
+desp_det <- desp_det_raw[!is.na(desp_det_raw[,2]),] %>%
+  select(c("Descrição", termo_loa, termo_reav)) %>%
+  filter(!(`Descrição` %in% c('Total', 'Despesas do Poder Executivo Sujeitas à Programação Financeira'))) %>%
+  filter(!!sym(termo_reav) > 0) %>%
+  mutate(
+    nome = ifelse(!!sym(termo_reav) < 1000, "Demais", `Descrição`)
+  )
+
+desp_det_export <- desp_det %>%
+  select(-`Descrição`) %>%
+  group_by(nome) %>%
+  summarise(across(where(is.numeric), sum)) %>%
+  mutate(
+    valor_quadradinhos_reav = round(!!sym(termo_reav)/1000, 0),
+    valor_quadradinhos_loa = round(!!sym(termo_loa)/1000, 0)
+  ) %>%
+  arrange(valor_quadradinhos_reav) %>%
+  mutate(
+    posicao_inicial_loa = 0 + cumsum(lag(valor_quadradinhos_loa,1, default = 0)),
+    posicao_inicial_reav = 0 + cumsum(lag(valor_quadradinhos_reav,1, default = 0)),
+    categoria = "itens-despesa"
+  ) %>%
+  rename(
+    loa = !!sym(termo_loa),
+    reav = !!sym(termo_reav))
+    
+
+
+# export de novo ----------------------------------------------------------
+
+output <- list(
+  grandes_numeros = grandes_numeros,
+  itens_despesas = desp_det_export
+)
+
 jsonlite::write_json(output, 'output.json', auto_unbox = TRUE)
-
-
