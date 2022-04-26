@@ -82,8 +82,8 @@ resultado <- list(
   nome = 'resultado',
   categoria = 'grande-numero',
   
-  posicao_inicial_loa = grandes_numeros[[get_posicao(termo_despesa), termo_loa]],
-  posicao_inicial_reav = grandes_numeros[[get_posicao(termo_despesa), termo_reav]],
+  posicao_inicial_loa = grandes_numeros[[get_posicao(termo_receita_liquida), termo_loa]],
+  posicao_inicial_reav = grandes_numeros[[get_posicao(termo_receita_liquida), termo_reav]],
   
   loa = -grandes_numeros[[get_posicao(termo_resultado), termo_loa]],
   reav = -grandes_numeros[[get_posicao(termo_resultado), termo_reav]]
@@ -116,7 +116,7 @@ discr <- list(
 
 grandes_numeros <- list(
   receita = receita,
-  despesas = despesa,
+  despesa = despesa,
   transferencias = transferencias,
   resultado = resultado
   #obrigatorias = obrig,
