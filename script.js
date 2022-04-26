@@ -206,43 +206,111 @@ const v = {
 
 }
 
-v.control.init();
+//v.control.init();
 
 class Chart {
 
-    lista = [
+    // referencias para os elementos
+    elemento;
+    container;
 
-        {
-            nome: 'svg',
-            ref : 'svg',
-            multiplo: false
-        },
+    // dimensoes do grafico
+    w;
+    h;
 
-        {
-            nome: 'container',
-            ref : '.wrapper',
-            multiplo: false
-        },
-
-
-    ]
+    // parâmetros
+    l = 6;
+    gap = 2;
+    ncol;
 
     constructor() {
+
         this.set_refs();
+        this.get_sizes();
+        this.set_viewbox();
+        this.calcula_parametros();
+        this.set_css();
 
     }
 
-
     set_refs() {
 
-        const nomes = this.lista;
+        const nomes = [
+
+            {
+                nome: 'elemento',
+                ref : 'svg',
+                multiplo: false
+            },
+    
+            {
+                nome: 'container',
+                ref : '.wrapper',
+                multiplo: false
+            },
+    
+    
+        ];
 
         nomes.forEach(ref => {
 
-            this.lista[ref.nome] = ref.multiplo ?
+            this[ref.nome] = ref.multiplo ?
               document.querySelectorAll(ref.ref) :
               document.querySelector(ref.ref)
             ;
+
+        })
+
+    }
+
+    get_sizes() {
+
+
+        // o container do gráfico está definido com unidades relativas
+        // o css faz com que o svg tenha 100% das dimensões do container
+        // então aqui simplesmente capturamos as dimensões efetivas em pixel
+
+        const w = +window.getComputedStyle(this.elemento).width.slice(0,-2);
+        const h = +window.getComputedStyle(this.elemento).height.slice(0,-2);
+
+        this.w = w;
+        this.h = h;
+
+    }
+
+    set_viewbox() {
+
+        // importante setar o viewBox para o gráfico ficar "responsivo"
+        
+        this.elemento.setAttribute('viewBox', `${0} ${0} ${this.w} ${this.h}`)
+
+    }
+
+    calcula_parametros() {
+
+        const { w , h, l, gap } = this ;
+
+        console.log(w , h, l, gap);
+
+        const [ W , H ] = [380 , 600];
+
+        const ncol = Math.floor( ( W - gap ) / ( l + gap ) );
+
+        this.ncol = ncol;
+
+        const nrow = ncol;
+
+        console.log(ncol);
+
+    }
+
+    set_css() {
+
+        const variaveis = ['l', 'gap'];
+
+        variaveis.forEach(variavel => {
+            
+            document.documentElement.style.setProperty(`--${variavel}`, this[variavel] + 'px');
 
         })
 
@@ -259,7 +327,7 @@ class GrandeNumero {
     tamanho;
     posicao_inicial_loa;
     posicao_inicial_reav;
-    X0;
+    X0; // posicao X inicial
     forma_inicial;
 
     d_loa;
@@ -319,7 +387,7 @@ class GrandeNumero {
             //const grid = v.grid.array;
             const grid = [];
     
-            const ncol = v.params.calculados.ncol;
+            const ncol = chart.ncol;
     
             for (let n = n_inicial; n < qde + n_inicial; n++) {
     
@@ -471,8 +539,8 @@ class GrandeNumero {
 
         function calcula_atributo_d (pontos_ordenados, X0) {
 
-            const { w, h } = v.sizings.valores;
-            const { l, gap } = v.params.fixos;
+            const { w, h, l, gap } = chart;
+            console.log(w,h,l,gap);
 
             const dist = gap / 2;
 
@@ -503,7 +571,7 @@ class GrandeNumero {
 
         let [atributo_d, nome, tipo] = [this['d_' + path_inicial], this.nome, this.tipo];
 
-        const svg = v.refs.svg;
+        const svg = chart.elemento;
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 
         svg.appendChild(path);
@@ -532,7 +600,7 @@ class GrandeNumero {
 
             const W = bbox.width;
 
-            const { w , h } = v.sizings.valores;
+            const { w , h } = chart
             
             this.x_direita = w - W - 4;
             this.x_centro = ( w - W ) / 2;
@@ -551,9 +619,9 @@ class GrandeNumero {
 
     cria_pattern() {
 
-        const { l, gap } = v.params.fixos;
+        const { l, gap } = chart;
 
-        const svg = v.refs.svg;
+        const svg = chart.elemento;
 
         const defs = svg.querySelector('defs');
 
@@ -730,6 +798,8 @@ class Forma extends GrandeNumero {
     }
 
 }
+
+const chart = new Chart;
 
 
 
