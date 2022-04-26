@@ -1,3 +1,4 @@
+/*
 const v = {
 
     control : {
@@ -205,7 +206,7 @@ const v = {
     }
 
 }
-
+*/
 //v.control.init();
 
 class Chart {
@@ -223,12 +224,12 @@ class Chart {
     gap = 2;
     ncol;
 
-    constructor() {
+    constructor(max_valor) {
 
         this.set_refs();
         this.get_sizes();
         this.set_viewbox();
-        this.calcula_parametros();
+        this.calcula_parametros(max_valor);
         this.set_css();
 
     }
@@ -286,13 +287,20 @@ class Chart {
 
     }
 
-    calcula_parametros() {
+    calcula_parametros(max_valor) {
 
         const { w , h, l, gap } = this ;
 
         console.log(w , h, l, gap);
 
-        const [ W , H ] = [380 , 600];
+        const [ W , H ] = [0.4 * w , 0.7 * h];
+
+        const area = W * H;
+
+        const area_quadradinho = Math.floor(area / max_valor);
+
+        console.log(area_quadradinho);
+
 
         const ncol = Math.floor( ( W - gap ) / ( l + gap ) );
 
@@ -799,7 +807,97 @@ class Forma extends GrandeNumero {
 
 }
 
-const chart = new Chart;
+class Dados {
+
+    file;
+    raw;
+
+    constructor(file) {
+        this.file = file;
+        this.read();
+    }
+
+
+    read() {
+
+        fetch(this.file)
+          .then(response => response.json())
+          .then(data => {
+              console.log(data);
+              this.raw = data;
+              this.tratamento_dados();
+
+          })
+
+    }
+
+    tratamento_dados() {
+
+        this.monta_grandes_numeros();
+    }
+
+    monta_grandes_numeros() {
+
+        const grandes_numeros = Object.keys(GN);
+
+        grandes_numeros.forEach(nome => {
+
+            const d = this.raw.grandes_numeros[nome];
+
+            console.log(nome, d);
+
+            GN[nome] = nome == "receita" ?
+
+              new GrandeReceita(
+                  nome = nome,
+                  d.categoria,
+                  d.bruta.loa,
+                  d.bruta.reav,
+                  d.posicao_inicial_loa,
+                  d.posicao_inicial_reav,
+                  d.liquida.loa,
+                  d.liquida.reav,
+                  0
+              ) 
+              
+              :
+
+              new GrandeNumero(
+                  nome,
+                  d.categoria,
+                  d.loa,
+                  d.reav,
+                  d.posicao_inicial_loa,
+                  d.posicao_inicial_reav,
+                  0
+              )
+            ;
+
+        })
+
+        console.log('done');
+
+    }
+
+}
+
+const GN = {
+    despesa : null,
+    receita : null,
+    transferencias : null,
+    resultado : null
+}
+
+const dados = new Dados('output.json');
+
+// inicio
+const max_valor = 2118;
+const chart = new Chart(max_valor);
+
+
+
+// Constroi grandes numeros
+
 
 
 
@@ -811,7 +909,7 @@ const scale_r = d3.scaleSqrt()
 ;
 
 
-
+/*
 const desp = new GrandeNumero('despesa', 'despesa', 1720, 1753, 0, 0, 0);
 const rec = new GrandeReceita('receita', 'receita', 2031, 2118, 0, 0, 1644, 1686, 0);
 
@@ -941,6 +1039,8 @@ itens.forEach(item => item.esconde(false))
 
 // simulation
 
+/*
+
 const strength = 0.04;
 
 let flag = false;
@@ -961,4 +1061,4 @@ const sim = d3.forceSimulation()
   .stop()
 ;
 
-sim.nodes(itens);
+sim.nodes(itens);*/
