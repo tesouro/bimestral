@@ -266,7 +266,6 @@ class Chart {
 
     get_sizes() {
 
-
         // o container do gráfico está definido com unidades relativas
         // o css faz com que o svg tenha 100% das dimensões do container
         // então aqui simplesmente capturamos as dimensões efetivas em pixel
@@ -293,18 +292,22 @@ class Chart {
 
         console.log(w , h, l, gap);
 
-        const [ W , H ] = [0.4 * w , 0.7 * h];
+        const [ W , H ] = [0.4 * w , 0.8 * h];
 
         const area = W * H;
 
-        const area_quadradinho = Math.floor(area / max_valor);
+        const area_quadradinho = area / max_valor;
 
-        console.log(area_quadradinho);
+        const lado_quadradinho = Math.floor(Math.sqrt(area_quadradinho));
 
+        let new_l = lado_quadradinho - gap;
 
-        const ncol = Math.floor( ( W - gap ) / ( l + gap ) );
+        console.log(area_quadradinho, Math.sqrt(area_quadradinho));
+
+        const ncol = Math.floor( ( W - gap ) / ( new_l + gap ) );
 
         this.ncol = ncol;
+        this.l = new_l;
 
         const nrow = ncol;
 
