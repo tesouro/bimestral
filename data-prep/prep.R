@@ -119,7 +119,7 @@ desp_det <- desp_det_raw[!is.na(desp_det_raw[,2]),] %>%
     nome = ifelse(!!sym(termo_reav) < 1000, "Demais", `Descrição`)
   )
 
-desp_det_export <- desp_det %>%
+desp_det_pre <- desp_det %>%
   select(-`Descrição`) %>%
   group_by(nome) %>%
   summarise(across(where(is.numeric), sum)) %>%
@@ -137,7 +137,10 @@ desp_det_export <- desp_det %>%
     loa = !!sym(termo_loa),
     reav = !!sym(termo_reav))
     
-
+desp_det_pre$percent_reav <- desp_det_pre$reav / sum(desp_det_pre$reav)
+desp_det_export <- desp_det_pre %>%
+  arrange(-percent_reav) %>%
+  mutate(percent_reav_cum = cumsum(percent_reav))
 
 # export de novo ----------------------------------------------------------
 
