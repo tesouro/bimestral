@@ -828,15 +828,19 @@ class Dados {
           .then(data => {
               console.log(data);
               this.raw = data;
-              this.tratamento_dados();
+              this.init();
 
           })
 
     }
 
-    tratamento_dados() {
+    init() {
 
         this.monta_grandes_numeros();
+
+        GN.despesa.move_para('direita');
+        GN.resultado.move_para('centro');
+
     }
 
     monta_grandes_numeros() {
@@ -937,6 +941,8 @@ const itens = [prev, desp_pf, pessoal, bpc, abono];
 
 let delay = 5000;
 
+*/
+
 console.log('pode começar');
 
 class MenuControle {
@@ -979,46 +985,46 @@ class MenuControle {
 const acoes = {
 
     'rec' : () => {
-        rec.esconde(false);
+        GN.receita.esconde(false);
     },
 
     'transf' : () => {
-        transf.esconde(false);
+        GN.transferencias.esconde(false);
     },
 
     'rec-liq' : () => {
-        rec.morfa_para_liquido();
-        setTimeout(() => transf.esconde(true), 1000);
+        GN.receita.morfa_para_liquido();
+        setTimeout(() => GN.transferencias.esconde(true), 1000);
     },
 
     'rec-desp' : () => {
-        desp.esconde(false);
+        GN.despesa.esconde(false);
     },
 
     'resultado' : () => {
-        desp.move_para('centro');
-        rec.move_para('centro');
-        setTimeout(() => resultado.esconde(false), 1000);
+        GN.despesa.move_para('centro');
+        GN.receita.move_para('centro');
+        setTimeout(() => GN.resultado.esconde(false), 1000);
     },
 
     'reav' : () => {
-        desp.move_para('direita');
-        rec.move_para('esquerda');
-        resultado.esconde(true);
-        setTimeout(() => rec.morfa_para('reav'), 2000);
-        setTimeout(() => desp.morfa_para('reav'), 4000);
+        GN.despesa.move_para('direita');
+        GN.receita.move_para('esquerda');
+        GN.resultado.esconde(true);
+        setTimeout(() => GN.receita.morfa_para('reav'), 2000);
+        setTimeout(() => GN.despesa.morfa_para('reav'), 4000);
         setTimeout(() => {
 
-            desp.move_para('centro');
-            rec.move_para('centro');
-            resultado.morfa_para('reav');
+            GN.despesa.move_para('centro');
+            GN.receita.move_para('centro');
+            GN.resultado.morfa_para('reav');
 
         }, 6000);
         setTimeout(() => {
 
-            desp.move_para('centro');
-            rec.move_para('centro');
-            resultado.esconde(false);
+            GN.despesa.move_para('centro');
+            GN.receita.move_para('centro');
+            GN.resultado.esconde(false);
 
         }, 8000);
 
@@ -1028,13 +1034,10 @@ const acoes = {
 }
 
 // init
-
-desp.move_para('direita');
-resultado.move_para('centro');
 const menu_controle = new MenuControle('.controle', 'acao');
 
 
-itens.forEach(item => item.esconde(false))
+//itens.forEach(item => item.esconde(false))
 
 /*setTimeout(itens.forEach(item => item.morfa_para_circulo()), 8000);*/
 
