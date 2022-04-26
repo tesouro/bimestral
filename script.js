@@ -551,7 +551,7 @@ class GrandeNumero {
         function calcula_atributo_d (pontos_ordenados, X0) {
 
             const { w, h, l, gap } = chart;
-            console.log(w,h,l,gap);
+            //console.log(w,h,l,gap);
 
             const dist = gap / 2;
 
@@ -609,7 +609,9 @@ class GrandeNumero {
             const bbox = path.getBBox();
             this.bbox = bbox;
 
-            const W = bbox.width;
+            const W = chart.ncol * (chart.gap + chart.l);//bbox.width;
+            // pode acontecer de a forma não ocupar toda a largura disponível, e aí o width do bbox vai ficar "subestimado".
+            console.log(W, 'a largura');
 
             const { w , h } = chart
             
