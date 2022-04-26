@@ -5,7 +5,8 @@ library(jsonlite)
 grandes_numeros_raw <- read_excel('planilhas-bimestral-2022-1bim.xlsx', sheet = '1', skip = 2)
 
 grandes_numeros <- grandes_numeros_raw %>%
-  filter(!is.na(`Discriminação`))
+  filter(!is.na(`Discriminação`)) %>%
+  mutate(across(where(is.numeric), ~round(./1000, 0)))
 
 
 # termos de interesse -----------------------------------------------------
@@ -19,6 +20,7 @@ termo_receita_liquida <- "3. Receita Líquida (1) - (2)"
 
 termo_despesa <- "4. Despesas Primárias"
 termo_transf <- "2. Transferências por Repartição de Receita"
+termo_resultado <- "5. Resultado Primário (3) - (4)"
 
 termo_obrig <- "Obrigatórias"
 termo_discr <- "Discricionárias do Poder Executivo"
@@ -39,6 +41,9 @@ receita <- list(
   nome = 'receita',
   categoria = 'grande-numero',
   
+  posicao_inicial_loa = 0,
+  posicao_inicial_reav = 0,
+  
   bruta = list(
     loa = grandes_numeros[[get_posicao(termo_receita_bruta), termo_loa]],
     reav = grandes_numeros[[get_posicao(termo_receita_bruta), termo_reav]]
@@ -55,6 +60,9 @@ despesa <- list(
   nome = 'despesa',
   categoria = 'grande-numero',
   
+  posicao_inicial_loa = 0,
+  posicao_inicial_reav = 0,
+  
   loa = grandes_numeros[[get_posicao(termo_despesa), termo_loa]],
   reav = grandes_numeros[[get_posicao(termo_despesa), termo_reav]]
 )
@@ -68,6 +76,17 @@ transferencias <- list(
   
   loa = grandes_numeros[[get_posicao(termo_transf), termo_loa]],
   reav = grandes_numeros[[get_posicao(termo_transf), termo_reav]]
+)
+
+resultado <- list(
+  nome = 'resultado',
+  categoria = 'grande-numero',
+  
+  posicao_inicial_loa = grandes_numeros[[get_posicao(termo_despesa), termo_loa]],
+  posicao_inicial_reav = grandes_numeros[[get_posicao(termo_despesa), termo_reav]],
+  
+  loa = -grandes_numeros[[get_posicao(termo_resultado), termo_loa]],
+  reav = -grandes_numeros[[get_posicao(termo_resultado), termo_reav]]
 )
 
 obrig <- list(
@@ -99,8 +118,9 @@ grandes_numeros <- list(
   receita = receita,
   despesas = despesa,
   transferencias = transferencias,
-  obrigatorias = obrig,
-  discricionarias = discr
+  resultado = resultado
+  #obrigatorias = obrig,
+  #discricionarias = discr
 )
 
 
@@ -149,4 +169,4 @@ output <- list(
   itens_despesas = desp_det_export
 )
 
-jsonlite::write_json(output, 'output.json', auto_unbox = TRUE)
+jsonlite::write_json(output, '../output.json', auto_unbox = TRUE)
