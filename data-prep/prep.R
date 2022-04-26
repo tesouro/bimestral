@@ -74,7 +74,7 @@ transferencias <- list(
   posicao_inicial_loa = grandes_numeros[[get_posicao(termo_receita_liquida), termo_loa]],
   posicao_inicial_reav = grandes_numeros[[get_posicao(termo_receita_liquida), termo_reav]],
   
-  loa = grandes_numeros[[get_posicao(termo_transf), termo_loa]],
+  loa = grandes_numeros[[get_posicao(termo_transf), termo_loa]] + 1,
   reav = grandes_numeros[[get_posicao(termo_transf), termo_reav]]
 )
 
