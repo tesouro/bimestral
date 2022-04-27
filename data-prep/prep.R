@@ -147,18 +147,18 @@ desp_det_pre <- desp_det %>%
     valor_quadradinhos_reav = round(!!sym(termo_reav)/1000, 0),
     valor_quadradinhos_loa = round(!!sym(termo_loa)/1000, 0)
   ) %>%
-  arrange(valor_quadradinhos_reav) %>%
-  mutate(
-    posicao_inicial_loa = 0 + cumsum(lag(valor_quadradinhos_loa,1, default = 0)),
-    posicao_inicial_reav = 0 + cumsum(lag(valor_quadradinhos_reav,1, default = 0)),
-    categoria = "itens-despesa"
-  ) %>%
   rename(
     loa = !!sym(termo_loa),
     reav = !!sym(termo_reav))
     
 desp_det_pre$percent_reav <- desp_det_pre$reav / sum(desp_det_pre$reav)
 desp_det_export <- desp_det_pre %>%
+  arrange(-valor_quadradinhos_reav) %>%
+  mutate(
+    posicao_inicial_loa = 0 + cumsum(lag(valor_quadradinhos_loa,1, default = 0)),
+    posicao_inicial_reav = 0 + cumsum(lag(valor_quadradinhos_reav,1, default = 0)),
+    categoria = "itens-despesa"
+  ) %>%
   arrange(-percent_reav) %>%
   mutate(percent_reav_cum = cumsum(percent_reav))
 
