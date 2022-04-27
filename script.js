@@ -549,13 +549,20 @@ class Forma extends GrandeNumero {
 
     constructor(nome, tipo, classificador, valor_loa, valor_reav, posicao_inicial_loa, posicao_inicial_reav, X0, forma_inicial) {
 
-        super(nome, tipo, valor_loa, valor_reav, posicao_inicial_loa, posicao_inicial_reav, X0, forma_inicial = 'reav');
+        let vlr_quadradinhos_loa = Math.round(valor_loa/1000);
+        const vlr_quadradinhos_reav = Math.round(valor_reav/1000);
+
+        if (vlr_quadradinhos_loa == 0) vlr_quadradinhos_loa = 1;
+
+        super(nome, tipo, vlr_quadradinhos_loa, vlr_quadradinhos_reav, posicao_inicial_loa, posicao_inicial_reav, X0, forma_inicial = 'reav');
 
         this.elemento.setAttribute('data-classificador', classificador);
+        this.elemento.setAttribute('data-valor-tooltip-loa', valor_loa);
+        this.elemento.setAttribute('data-valor-tooltip-reav', valor_reav);
         this.elemento.classList.add('item');
 
-        this.r_loa = scale_r(valor_loa);
-        this.r_reav = scale_r(valor_reav);
+        this.r_loa = scale_r(vlr_quadradinhos_loa);
+        this.r_reav = scale_r(vlr_quadradinhos_reav);
 
         this.x = this.cx;
         this.x0 = this.cx;
@@ -569,7 +576,7 @@ class Forma extends GrandeNumero {
         this.d3_ref
           .classed('bolha', true)
           .transition()
-          .duration(2000)
+          .duration(1000)
           .attrTween('d', () => flubber.toCircle(
               this.d_reav, 
               this.cx, 
@@ -587,7 +594,7 @@ class Forma extends GrandeNumero {
         this.d3_ref
         .classed('bolha', false)
           .transition()
-          .duration(2000)
+          .duration(1000)
           .attrTween('d', () => flubber.fromCircle(
               this.cx, 
               this.cy, 
@@ -619,65 +626,15 @@ class Dados {
           .then(data => {
               console.log(data);
               this.raw = data;
-              this.init();
+              init();
 
           })
 
     }
 
-    init() {
-
-        this.monta_grandes_numeros();
-
-        GN.despesa.move_para('direita');
-        GN.resultado.move_para('centro');
-
-    }
-
-    monta_grandes_numeros() {
-
-        const grandes_numeros = Object.keys(GN);
-
-        grandes_numeros.forEach(nome => {
-
-            const d = this.raw.grandes_numeros[nome];
-
-            console.log(nome, d);
-
-            GN[nome] = nome == "receita" ?
-
-              new GrandeReceita(
-                  nome = nome,
-                  d.categoria,
-                  d.bruta.loa,
-                  d.bruta.reav,
-                  d.posicao_inicial_loa,
-                  d.posicao_inicial_reav,
-                  d.liquida.loa,
-                  d.liquida.reav,
-                  0
-              ) 
-              
-              :
-
-              new GrandeNumero(
-                  nome,
-                  d.categoria,
-                  d.loa,
-                  d.reav,
-                  d.posicao_inicial_loa,
-                  d.posicao_inicial_reav,
-                  0
-              )
-            ;
-
-        })
-
-        console.log('done');
-
-    }
-
 }
+
+// definição das referências para os objetos
 
 const GN = {
     despesa : null,
@@ -686,15 +643,97 @@ const GN = {
     resultado : null
 }
 
-const dados = new Dados('output.json');
+const itens_despesa = [];
 
-// inicio
+// início (o construtor da classe dados vai chamar a função init)
 const max_valor = 2118;
 const chart = new Chart(max_valor);
+const dados = new Dados('output.json');
+
+function init() {
+
+    monta_grandes_numeros();
+
+    // pega a posição x direita dos grandes números, para construir as formas já nessa posição
+    const xDespesas = GN.despesa.x_direita;
+
+    monta_itens_despesa(xDespesas);
+
+    GN.despesa.move_para('direita');
+    GN.resultado.move_para('centro');
+
+}
+
+function monta_grandes_numeros() {
+
+    const grandes_numeros = Object.keys(GN);
+
+    grandes_numeros.forEach(nome => {
+
+        const d = dados.raw.grandes_numeros[nome];
+
+        console.log(nome, d);
+
+        GN[nome] = nome == "receita" ?
+
+            new GrandeReceita(
+                nome = nome,
+                d.categoria,
+                d.bruta.loa,
+                d.bruta.reav,
+                d.posicao_inicial_loa,
+                d.posicao_inicial_reav,
+                d.liquida.loa,
+                d.liquida.reav,
+                0
+            ) 
+            
+            :
+
+            new GrandeNumero(
+                nome,
+                d.categoria,
+                d.loa,
+                d.reav,
+                d.posicao_inicial_loa,
+                d.posicao_inicial_reav,
+                0
+            )
+        ;
+
+    })
+
+    console.log('done');
+
+}
+
+function monta_itens_despesa(xDespesas) {
+
+    console.log(dados);
+
+    const itens = dados.raw.itens_despesas;
+
+    itens.forEach(d => {
+
+        const forma = new Forma(
+            d.nome,
+            'item-despesa',
+            '',
+            d.loa,
+            d.reav,
+            d.posicao_inicial_loa,
+            d.posicao_inicial_reav,
+            xDespesas
+        )
+
+        itens_despesa.push(forma);
+
+        //const prev = new Forma('Benefícios Previdenciários', 'item-despesa', 'Despesas Obrigatórias', 778, 778, 0, 0, X0);
+
+    })
 
 
-
-// Constroi grandes numeros
+}
 
 
 
@@ -742,6 +781,56 @@ class MenuControle {
     elemento;
     nome_data_attr;
 
+    acoes = {
+
+        'rec' : () => {
+            GN.receita.esconde(false);
+        },
+    
+        'transf' : () => {
+            GN.transferencias.esconde(false);
+        },
+    
+        'rec-liq' : () => {
+            GN.receita.morfa_para_liquido();
+            setTimeout(() => GN.transferencias.esconde(true), 1000);
+        },
+    
+        'rec-desp' : () => {
+            GN.despesa.esconde(false);
+        },
+    
+        'resultado' : () => {
+            GN.despesa.move_para('centro');
+            GN.receita.move_para('centro');
+            setTimeout(() => GN.resultado.esconde(false), 1000);
+        },
+    
+        'reav' : () => {
+            GN.despesa.move_para('direita');
+            GN.receita.move_para('esquerda');
+            GN.resultado.esconde(true);
+            setTimeout(() => GN.receita.morfa_para('reav'), 2000);
+            setTimeout(() => GN.despesa.morfa_para('reav'), 4000);
+            setTimeout(() => {
+    
+                GN.despesa.move_para('centro');
+                GN.receita.move_para('centro');
+                GN.resultado.morfa_para('reav');
+    
+            }, 6000);
+            setTimeout(() => {
+    
+                GN.despesa.move_para('centro');
+                GN.receita.move_para('centro');
+                GN.resultado.esconde(false);
+    
+            }, 8000);
+    
+        }
+    
+    }
+
     constructor(ref, nome_data_attr) {
 
         this.ref = ref;
@@ -752,10 +841,10 @@ class MenuControle {
     }
 
     monitora() {
-        this.elemento.addEventListener('click', e => this.atua(e, this.nome_data_attr));
+        this.elemento.addEventListener('click', e => this.atua(e, this.nome_data_attr, this.acoes));
     }
 
-    atua (e, nome_data_attr) {
+    atua (e, nome_data_attr, acoes) {
 
         if (e.target.tagName != 'BUTTON') {
             console.log('nào é botão');
@@ -773,58 +862,8 @@ class MenuControle {
 
 }
 
-const acoes = {
-
-    'rec' : () => {
-        GN.receita.esconde(false);
-    },
-
-    'transf' : () => {
-        GN.transferencias.esconde(false);
-    },
-
-    'rec-liq' : () => {
-        GN.receita.morfa_para_liquido();
-        setTimeout(() => GN.transferencias.esconde(true), 1000);
-    },
-
-    'rec-desp' : () => {
-        GN.despesa.esconde(false);
-    },
-
-    'resultado' : () => {
-        GN.despesa.move_para('centro');
-        GN.receita.move_para('centro');
-        setTimeout(() => GN.resultado.esconde(false), 1000);
-    },
-
-    'reav' : () => {
-        GN.despesa.move_para('direita');
-        GN.receita.move_para('esquerda');
-        GN.resultado.esconde(true);
-        setTimeout(() => GN.receita.morfa_para('reav'), 2000);
-        setTimeout(() => GN.despesa.morfa_para('reav'), 4000);
-        setTimeout(() => {
-
-            GN.despesa.move_para('centro');
-            GN.receita.move_para('centro');
-            GN.resultado.morfa_para('reav');
-
-        }, 6000);
-        setTimeout(() => {
-
-            GN.despesa.move_para('centro');
-            GN.receita.move_para('centro');
-            GN.resultado.esconde(false);
-
-        }, 8000);
-
-    }
 
 
-}
-
-// init
 const menu_controle = new MenuControle('.controle', 'acao');
 
 
