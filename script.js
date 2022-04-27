@@ -1,3 +1,5 @@
+// definições das classes / protótipos dos objetos
+
 class Chart {
 
     // referencias para os elementos
@@ -11,7 +13,7 @@ class Chart {
     // parâmetros
     l = 6;
     gap = 2;
-    nrow;
+    ncol;
 
     constructor(max_valor) {
 
@@ -97,8 +99,6 @@ class Chart {
 
         this.ncol = ncol;
         this.l = new_l;
-
-        const nrow = ncol;
 
         console.log(ncol);
 
