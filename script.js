@@ -541,13 +541,17 @@ class Forma extends GrandeNumero {
     r_reav;
     forma_inicial;
 
+    // informações para texto
+    pct_reav;
+    pct_reav_cum;
+
     // parametros da simulacao
     x;
     x0;
     y;
     y0;
 
-    constructor(nome, tipo, classificador, valor_loa, valor_reav, posicao_inicial_loa, posicao_inicial_reav, X0, forma_inicial) {
+    constructor(nome, tipo, classificador, valor_loa, valor_reav, posicao_inicial_loa, posicao_inicial_reav, X0, pct_reav, pct_reav_cum, id, forma_inicial) {
 
         let vlr_quadradinhos_loa = Math.round(valor_loa/1000);
         const vlr_quadradinhos_reav = Math.round(valor_reav/1000);
@@ -556,9 +560,11 @@ class Forma extends GrandeNumero {
 
         super(nome, tipo, vlr_quadradinhos_loa, vlr_quadradinhos_reav, posicao_inicial_loa, posicao_inicial_reav, X0, forma_inicial = 'reav');
 
+        this.pct_reav = pct_reav;
+        this.pct_reav_cum = pct_reav_cum;
+
         this.elemento.setAttribute('data-classificador', classificador);
-        this.elemento.setAttribute('data-valor-tooltip-loa', valor_loa);
-        this.elemento.setAttribute('data-valor-tooltip-reav', valor_reav);
+        this.elemento.setAttribute('data-id', id); // esse id vai facilitar recuperar o objeto no tooltip
         this.elemento.classList.add('item');
 
         this.r_loa = scale_r(vlr_quadradinhos_loa);
@@ -670,6 +676,8 @@ function monta_grandes_numeros() {
 
     grandes_numeros.forEach(nome => {
 
+        // INTERFACE COM OS DADOS
+
         const d = dados.raw.grandes_numeros[nome];
 
         console.log(nome, d);
@@ -713,7 +721,9 @@ function monta_itens_despesa(xDespesas) {
 
     const itens = dados.raw.itens_despesas;
 
-    itens.forEach(d => {
+    itens.forEach((d,i) => {
+
+        // INTERFACE COM OS DADOS
 
         const forma = new Forma(
             d.nome,
@@ -723,7 +733,10 @@ function monta_itens_despesa(xDespesas) {
             d.reav,
             d.posicao_inicial_loa,
             d.posicao_inicial_reav,
-            xDespesas
+            xDespesas,
+            d.percent_reav,
+            d.percent_reav_cum,
+            i
         )
 
         itens_despesa.push(forma);
