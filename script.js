@@ -551,6 +551,10 @@ class Forma extends GrandeNumero {
     y;
     y0;
 
+    // para armazenar os pontos finais da simulação
+    xf;
+    yf;
+
     constructor(nome, tipo, classificador, valor_loa, valor_reav, posicao_inicial_loa, posicao_inicial_reav, X0, pct_reav, pct_reav_cum, id, forma_inicial) {
 
         let vlr_quadradinhos_loa = Math.round(valor_loa/1000);
@@ -598,7 +602,7 @@ class Forma extends GrandeNumero {
     morfa_para_forma() {
 
         this.d3_ref
-        .classed('bolha', false)
+          .classed('bolha', false)
           .transition()
           .duration(1000)
           .attrTween('d', () => flubber.fromCircle(
@@ -608,8 +612,18 @@ class Forma extends GrandeNumero {
               this.d_reav, 
               {maxSegmentLength: 1}
             ))
-      ;
+          .style('transform', 'translate(0,0)')
+        ;
 
+    }
+
+    translada_para_posicao_final() {
+        //this.elemento.style.transform = `translate(${this.xf}px, ${this.yf}px)`;
+        this.d3_ref
+          .transition()
+          .duration(1000)
+          .style('transform', `translate(${this.xf}px, ${this.yf}px)`)
+        ;
     }
 
 }
@@ -759,15 +773,21 @@ function prepara_simulacao(itens) {
 
     sim
       .velocityDecay(0.3)
-      .force('x', d3.forceX().strength(strength).x(500))
-      .force('y', d3.forceY().strength(strength).y(300))
-      .force('collision', d3.forceCollide().strength(strength*2.5).radius(d => d.r_reav + 3))
-      .alphaMin(0.2)
+      .force('x', d3.forceX().strength(strength).x(chart.w/2))
+      .force('y', d3.forceY().strength(strength).y(chart.h/6))
+      .force('collision', d3.forceCollide().strength(strength*2.5).radius(d => d.r_reav + 1))
+      //.alphaMin(0.2)
       .on('tick', () => {
           itens.forEach(item => {
-            item.elemento.style.transform = `translate(${item.x - item.x0}px, ${item.y - item.y0}px)`;
-          })
-      })
+
+              const xf = item.x - item.x0;
+              const yf = item.y - item.y0;
+              item.elemento.style.transform = `translate(${xf}px, ${yf}px)`;
+              item.xf = xf;
+              item.yf = yf;
+
+            })
+       })
       .stop()
     ;
 
