@@ -650,6 +650,7 @@ const GN = {
 }
 
 const itens_despesa = [];
+const sim = d3.forceSimulation()
 
 // início (o construtor da classe dados vai chamar a função init)
 const max_valor = 2118;
@@ -667,6 +668,8 @@ function init() {
 
     GN.despesa.move_para('direita');
     GN.resultado.move_para('centro');
+
+    prepara_simulacao(itens_despesa);
 
 }
 
@@ -748,14 +751,35 @@ function monta_itens_despesa(xDespesas) {
 
 }
 
+function prepara_simulacao(itens) {
 
+    const strength = 0.04;
 
+    let flag = false;
+
+    sim
+      .velocityDecay(0.3)
+      .force('x', d3.forceX().strength(strength).x(500))
+      .force('y', d3.forceY().strength(strength).y(300))
+      .force('collision', d3.forceCollide().strength(strength*2.5).radius(d => d.r_reav + 3))
+      .alphaMin(0.2)
+      .on('tick', () => {
+          itens.forEach(item => {
+            item.elemento.style.transform = `translate(${item.x - item.x0}px, ${item.y - item.y0}px)`;
+          })
+      })
+      .stop()
+    ;
+
+    sim.nodes(itens);
+
+}
 
 const maior_valor = 778;
 
 const scale_r = d3.scaleSqrt()
   .domain([0, maior_valor])
-  .range([1, 30])
+  .range([1, 50])
 ;
 
 
@@ -840,7 +864,31 @@ class MenuControle {
     
             }, 8000);
     
+        },
+
+        'desp' : () => {
+
+            GN.despesa.move_para('direita');
+            GN.receita.esconde(true);
+            GN.resultado.esconde(true);
+
+        },
+
+        'itens-desp' : () => {
+
+            itens_despesa.forEach(item => item.esconde(false));
+
+        },
+
+        'bolhas' : () => {
+
+            sim.restart().alpha(1);
+            itens_despesa.forEach(item => item.morfa_para_circulo());
+
+
         }
+
+
     
     }
 
@@ -886,28 +934,4 @@ const menu_controle = new MenuControle('.controle', 'acao');
 
 
 
-// simulation
 
-/*
-
-const strength = 0.04;
-
-let flag = false;
-
-const sim = d3.forceSimulation()
-  .velocityDecay(0.2)
-  .force('x', d3.forceX().strength(strength).x(500))
-  .force('y', d3.forceY().strength(strength).y(300))
-  .force('collision', d3.forceCollide().strength(strength*2).radius(d => d.r_reav + 2))
-  .alphaMin(0.2)
-  .on('tick', () => {
-
-    itens.forEach(item => {
-        item.elemento.style.transform = `translate(${item.x - item.x0}px, ${item.y - item.y0}px)`;
-    })
-
-  })
-  .stop()
-;
-
-sim.nodes(itens);*/
