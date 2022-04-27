@@ -1,3 +1,214 @@
+/*
+const v = {
+
+    control : {
+
+        init : () => {
+
+            v.refs.set();
+            v.sizings.get();
+            v.grid.calcula_parametros();
+            //v.sizings.resize();
+
+            v.params.set_css();
+
+            //v.contornos.update_dimensoes_pattern();
+
+
+        }
+
+    },
+
+    params : {
+
+        fixos: {
+
+            l : 6,
+            gap : 2,
+            qde : 2000
+
+        },
+
+        calculados : {
+
+            ncol : null,
+            nrow : null,
+            deslocamento_meio : null,
+            deslocamento_canto : null
+
+        },
+
+        set_css : () => {
+
+            const params = v.params.fixos;
+
+            const variaveis = ['l', 'gap'];
+
+            variaveis.forEach(variavel => {
+                
+                document.documentElement.style.setProperty(`--${variavel}`, params[variavel] + 'px');
+
+            })
+
+        }
+
+    },
+
+    dados :  {
+
+    },
+
+    refs : {
+
+        lista : [
+
+            {
+                nome: 'svg',
+                ref : 'svg',
+                multiplo: false
+            },
+
+            {
+                nome: 'container',
+                ref : '.wrapper',
+                multiplo: false
+            },
+
+
+        ],
+
+        svg : null,
+        container : null,
+
+        set : () => {
+
+            const nomes = v.refs.lista;
+
+            nomes.forEach(ref => {
+
+                v.refs[ref.nome] = ref.multiplo ?
+                  document.querySelectorAll(ref.ref) :
+                  document.querySelector(ref.ref)
+                ;
+
+            })
+
+        }
+
+        //
+
+    },
+
+    sizings : {
+
+        valores : {
+
+            w : null,
+            h : null
+
+        },
+
+        get : () => {
+
+            const svg = v.refs.svg;
+
+            const w = +window.getComputedStyle(svg).width.slice(0,-2);
+            const h = +window.getComputedStyle(svg).height.slice(0,-2);
+
+            v.sizings.valores.w = w;
+            v.sizings.valores.h = h;
+            
+            svg.setAttribute('viewBox', `${0} ${0} ${w} ${h}`)
+
+            console.log(v.sizings.valores);
+
+        },
+
+        resize : () => {
+
+            const ncol = v.params.calculados.ncol;
+            const { l, gap } = v.params.fixos;
+
+            const new_w = ncol * ( gap + l ) + gap;
+
+            v.sizings.valores.w = new_w;
+
+            v.sizings.valores.h = new_w;
+
+            const svg = v.refs.svg;
+
+            //svg.style.width = new_w + 'px';
+            //svg.style.height = new_w + 'px';
+
+        }
+
+
+    },
+
+    grid : {
+
+        calcula_parametros : () => {
+
+            const { w , h } = v.sizings.valores;
+            const [ W , H ] = [380 , 600];
+
+            const { l, gap } = v.params.fixos;
+
+            const ncol = Math.floor( ( W - gap ) / ( l + gap ) );
+
+            v.params.calculados.ncol = ncol;
+
+            const nrow = ncol;
+
+            console.log(ncol);
+
+        }
+    },
+
+    bolhas : {
+
+        converte_para_bolhas: (id) => {
+
+            const elem = document.querySelector(`path[data-id="${id}"]`);
+            const d = elem.getAttribute('d');
+
+            const bbox = elem.getBBox();
+
+            const x_center = bbox.x + bbox.width/2;
+            const y_center = bbox.y + bbox.height/2;
+
+            d3.select(`path[data-id="${id}"]`)
+              .transition()
+              .duration(2000)
+              .attrTween('d', () => flubber.toCircle(d, x_center, y_center, 50, {maxSegmentLength: 1}))
+            ;
+
+        },
+
+        converte_de_bolhas: (id) => {
+
+            const elem = document.querySelector(`path[data-id="${id}"]`);
+            const d = elem.getAttribute('d');
+
+            const bbox = elem.getBBox();
+
+            const x_center = bbox.x + bbox.width/2;
+            const y_center = bbox.y + bbox.height/2;
+
+            d3.select(`path[data-id="${id}"]`)
+              .transition()
+              .duration(2000)
+              .attrTween('d', () => flubber.fromCircle(x_center, y_center, 50, d, {maxSegmentLength: 1}))
+            ;
+
+        }
+
+    }
+
+}
+*/
+//v.control.init();
+
 class Chart {
 
     // referencias para os elementos
