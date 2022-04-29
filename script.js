@@ -537,8 +537,9 @@ class GrandeReceita extends GrandeNumero {
 
 class Forma extends GrandeNumero {
 
-    r_loa;
+    r_loa; // vao ser definidos posteriormente à carga de todos os dados / criação de todas as formas
     r_reav;
+
     forma_inicial;
 
     // informações para texto
@@ -572,7 +573,6 @@ class Forma extends GrandeNumero {
         this.pct_reav_cum = pct_reav_cum;
 
         this.var = valor_reav - valor_loa;
-        console.log(valor_reav, valor_loa, ((valor_reav - valor_loa) / valor_loa) - 1);
         this.varPct = (valor_loa == 0) ? 
           0 :
           ( (valor_reav - valor_loa) / valor_loa )
@@ -581,9 +581,6 @@ class Forma extends GrandeNumero {
         this.elemento.setAttribute('data-classificador', classificador);
         this.elemento.setAttribute('data-id', id); // esse id vai facilitar recuperar o objeto no tooltip
         this.elemento.classList.add('item');
-
-        this.r_loa = scale_r(vlr_quadradinhos_loa);
-        this.r_reav = scale_r(vlr_quadradinhos_reav);
 
         this.x = this.cx;
         this.x0 = this.cx;
@@ -704,6 +701,7 @@ function init() {
     monta_itens_despesa(xDespesas);
 
     monta_escalas();
+    define_raios();
 
     GN.despesa.move_para('direita');
     GN.resultado.move_para('centro');
@@ -798,7 +796,7 @@ function prepara_simulacao(itens) {
 
     sim
       .velocityDecay(0.3)
-      .force('x', d3.forceX().strength(strength).x(chart.w/2))
+      .force('x', d3.forceX().strength(strength).x(d => scales.xVar(d.var)))
       .force('y', d3.forceY().strength(strength).y(chart.h/6))
       .force('collision', d3.forceCollide().strength(strength*2.5).radius(d => d.r_reav + 1))
       //.alphaMin(0.2)
@@ -820,39 +818,76 @@ function prepara_simulacao(itens) {
 
 }
 
-function helper_pega_maximo(array, coluna) {
+function helper_pega_max_min(array, coluna, max = true) {
 
     return array
       .map(d => d[coluna])
       .reduce( (ant, atu) => {
-          if (atu > ant) return atu
-          else return ant
+          if (max) {
+
+            if (atu > ant) return atu
+            else return ant
+
+          } else {
+
+            if (atu < ant) return atu
+            else return ant
+
+          }
+
         })
 
 }
 
 function monta_escalas() {
 
-    const maior_variacao = helper_pega_maximo(itens_despesa, "var");
+    const maior_var = helper_pega_max_min(itens_despesa, "var", true);
+    const menor_var = helper_pega_max_min(itens_despesa, "var", false);
 
-    const maior_varPct = helper_pega_maximo(itens_despesa, "varPct");
+    const maior_varPct = helper_pega_max_min(itens_despesa, "varPct", true);
+    const menor_varPct = helper_pega_max_min(itens_despesa, "varPct", false);
 
-    const maior_loa = helper_pega_maximo(itens_despesa, "valor_loa");
-
-    const maior_reav = helper_pega_maximo(itens_despesa, "valor_reav");
-
+    const maior_loa = helper_pega_max_min(itens_despesa, "valor_loa", true);
+    const maior_reav = helper_pega_max_min(itens_despesa, "valor_reav", true);
     const maior_valor = Math.max(maior_loa, maior_reav);
 
-    console.log(maior_variacao, maior_varPct, maior_valor);
+    //console.log(maior_variacao, maior_varPct, maior_valor);
+
+    const margin = 50;
+
+    scales.xVar
+      .domain([menor_var, maior_var])
+      .range([margin, chart.w - margin])
+    ;
+
+    scales.xVarPct
+      .domain([menor_varPct, maior_varPct])
+      .range([margin, chart.w - margin])
+    ;
+
+    scales.r
+      .domain([0, maior_valor])
+      .range([1, 60])
+    ;
 
 }
 
+function define_raios() {
+
+    itens_despesa.forEach(item => {
+        item.r_loa = scales.r(item.valor_loa);
+        item.r_reav = scales.r(item.valor_reav);
+    })
+
+}
+
+/*
 const maior_valor = 778;
 
 const scale_r = d3.scaleSqrt()
   .domain([0, maior_valor])
   .range([1, 50])
-;
+;*/
 
 
 /*
