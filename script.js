@@ -564,18 +564,19 @@ class Forma extends GrandeNumero {
         let vlr_quadradinhos_loa = Math.round(valor_loa/1000);
         const vlr_quadradinhos_reav = Math.round(valor_reav/1000);
 
-        this.var = reav - loa;
-        this.varPct = (reav == 0 | loa == 0) ? 
-          0 :
-          (reav - loa) / loa - 1
-        ;
-
         if (vlr_quadradinhos_loa == 0) vlr_quadradinhos_loa = 1;
 
         super(nome, tipo, vlr_quadradinhos_loa, vlr_quadradinhos_reav, posicao_inicial_loa, posicao_inicial_reav, X0, forma_inicial = 'reav');
 
         this.pct_reav = pct_reav;
         this.pct_reav_cum = pct_reav_cum;
+
+        this.var = valor_reav - valor_loa;
+        console.log(valor_reav, valor_loa, ((valor_reav - valor_loa) / valor_loa) - 1);
+        this.varPct = (valor_loa == 0) ? 
+          0 :
+          ( (valor_reav - valor_loa) / valor_loa )
+        ;
 
         this.elemento.setAttribute('data-classificador', classificador);
         this.elemento.setAttribute('data-id', id); // esse id vai facilitar recuperar o objeto no tooltip
@@ -675,9 +676,20 @@ const GN = {
 
 const itens_despesa = [];
 
+// definições básicas
+
 const sim = d3.forceSimulation();
 
+const scales = {
+
+    xVar : d3.scaleLinear(),
+    xVarPct : d3.scaleLinear(),
+    r : d3.scaleSqrt()
+
+}
+
 // início (o construtor da classe dados vai chamar a função init)
+
 const max_valor = 2118;
 const chart = new Chart(max_valor);
 const dados = new Dados('output.json');
@@ -690,6 +702,8 @@ function init() {
     const xDespesas = GN.despesa.x_direita;
 
     monta_itens_despesa(xDespesas);
+
+    monta_escalas();
 
     GN.despesa.move_para('direita');
     GN.resultado.move_para('centro');
@@ -806,7 +820,32 @@ function prepara_simulacao(itens) {
 
 }
 
+function helper_pega_maximo(array, coluna) {
 
+    return array
+      .map(d => d[coluna])
+      .reduce( (ant, atu) => {
+          if (atu > ant) return atu
+          else return ant
+        })
+
+}
+
+function monta_escalas() {
+
+    const maior_variacao = helper_pega_maximo(itens_despesa, "var");
+
+    const maior_varPct = helper_pega_maximo(itens_despesa, "varPct");
+
+    const maior_loa = helper_pega_maximo(itens_despesa, "valor_loa");
+
+    const maior_reav = helper_pega_maximo(itens_despesa, "valor_reav");
+
+    const maior_valor = Math.max(maior_loa, maior_reav);
+
+    console.log(maior_variacao, maior_varPct, maior_valor);
+
+}
 
 const maior_valor = 778;
 
