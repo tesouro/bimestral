@@ -545,6 +545,10 @@ class Forma extends GrandeNumero {
     pct_reav;
     pct_reav_cum;
 
+    // informações para escala do bubble chart
+    var;
+    varPct;
+
     // parametros da simulacao
     x;
     x0;
@@ -559,6 +563,12 @@ class Forma extends GrandeNumero {
 
         let vlr_quadradinhos_loa = Math.round(valor_loa/1000);
         const vlr_quadradinhos_reav = Math.round(valor_reav/1000);
+
+        this.var = reav - loa;
+        this.varPct = (reav == 0 | loa == 0) ? 
+          0 :
+          (reav - loa) / loa - 1
+        ;
 
         if (vlr_quadradinhos_loa == 0) vlr_quadradinhos_loa = 1;
 
@@ -664,7 +674,8 @@ const GN = {
 }
 
 const itens_despesa = [];
-const sim = d3.forceSimulation()
+
+const sim = d3.forceSimulation();
 
 // início (o construtor da classe dados vai chamar a função init)
 const max_valor = 2118;
@@ -794,6 +805,8 @@ function prepara_simulacao(itens) {
     sim.nodes(itens);
 
 }
+
+
 
 const maior_valor = 778;
 
