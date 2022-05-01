@@ -843,6 +843,7 @@ function monta_escalas() {
 
     const maior_var = helper_pega_max_min(itens_despesa, "var", true);
     const menor_var = helper_pega_max_min(itens_despesa, "var", false);
+    const max_var = Math.max(Math.abs(maior_var), Math.abs(menor_var));
 
     const maior_varPct = helper_pega_max_min(itens_despesa, "varPct", true);
     const menor_varPct = helper_pega_max_min(itens_despesa, "varPct", false);
@@ -856,7 +857,7 @@ function monta_escalas() {
     const margin = 50;
 
     scales.xVar
-      .domain([menor_var, maior_var])
+      .domain([-max_var, max_var]) // para ter o ZERO no centro
       .range([margin, chart.w - margin])
     ;
 
