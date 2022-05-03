@@ -715,12 +715,14 @@ function init() {
     monta_itens_despesa(xDespesas);
 
     monta_escalas();
+    monta_eixos();
     define_raios();
 
     GN.despesa.move_para('direita');
     GN.resultado.move_para('centro');
 
     prepara_simulacao(itens_despesa);
+
 
 }
 
@@ -829,6 +831,22 @@ function prepara_simulacao(itens) {
     ;
 
     sim.nodes(itens);
+
+}
+
+function update_simulacao(tipo) {
+
+    // tipo: Var ou VarPct
+
+    const chave_var = tipo == "Var" ? 'var' : 'varPct';
+
+    const strength = 0.04;
+
+    const scale = scales['x' + tipo];
+ 
+    sim
+      .force('x', d3.forceX().strength(strength).x(d => scale(d[chave_var])))
+      .restart().alpha(.5);
 
 }
 
@@ -1028,7 +1046,14 @@ class MenuControle {
 
             sim.restart().alpha(1);
             itens_despesa.forEach(item => item.morfa_para_circulo());
+            update_eixo('xVar');
 
+        },
+
+        'bolhas-pct' : () => {
+
+            update_simulacao('VarPct')
+            update_eixo('xVarPct');
 
         }
 
