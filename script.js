@@ -861,6 +861,8 @@ function monta_escalas() {
 
     const maior_varPct = helper_pega_max_min(itens_despesa, "varPct", true);
     const menor_varPct = helper_pega_max_min(itens_despesa, "varPct", false);
+    const max_varPct = Math.max(Math.abs(maior_varPct), Math.abs(menor_varPct));
+
 
     const maior_loa = helper_pega_max_min(itens_despesa, "valor_loa", true);
     const maior_reav = helper_pega_max_min(itens_despesa, "valor_reav", true);
@@ -876,7 +878,7 @@ function monta_escalas() {
     ;
 
     scales.xVarPct
-      .domain([menor_varPct, maior_varPct])
+      .domain([-max_varPct, max_varPct])
       .range([margin, chart.w - margin])
     ;
 
