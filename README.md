@@ -54,3 +54,10 @@ Aí depois eu cobriria os paths da despesa e receita total com os paths dos agru
 os objetos são criados.
 obj.esconde(false) faz eles aparecerem
 obj.move_para('centro' | 'esquerda' | 'direita')
+
+
+
+# Fazer
+
+Melhorar objetos scales e eixos
+Parametrizar o strength (hoje está repetindo na função que seta a simulação e na que altera)
