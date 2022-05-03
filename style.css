@@ -99,6 +99,11 @@ path.item.bolha {
 #pattern-transferencias > rect { fill: firebrick; }
 #pattern-resultado > rect { fill: var(--azul-tesouro); }
 
+/* eixo */
+.axis path {
+    stroke-width: 1px;
+}
+
 /*
 rect {
 

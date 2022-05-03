@@ -15,6 +15,11 @@ class Chart {
     gap = 2;
     ncol;
 
+    // margins
+    margin = {
+        top: 20
+    };
+
     constructor(max_valor) {
 
         this.set_refs();
@@ -683,7 +688,16 @@ const scales = {
     xVarPct : d3.scaleLinear(),
     r : d3.scaleSqrt()
 
-}
+};
+
+const eixos = {
+
+    d3_ref : null,
+
+    xVar : null,
+    xVarPct : null
+};
+
 
 // início (o construtor da classe dados vai chamar a função init)
 
@@ -797,7 +811,7 @@ function prepara_simulacao(itens) {
     sim
       .velocityDecay(0.3)
       .force('x', d3.forceX().strength(strength).x(d => scales.xVar(d.var)))
-      .force('y', d3.forceY().strength(strength).y(chart.h/6))
+      .force('y', d3.forceY().strength(strength).y(chart.h/6 + chart.margin.top))
       .force('collision', d3.forceCollide().strength(strength*2.5).radius(d => d.r_reav + 1))
       //.alphaMin(0.2)
       .on('tick', () => {
@@ -871,6 +885,26 @@ function monta_escalas() {
       .range([1, 60])
     ;
 
+}
+
+function monta_eixos() {
+
+    const formatPercent = d3.format(".0%");
+
+    eixos.xVar = d3.axisTop(scales.xVar)
+    eixos.xVarPct = d3.axisTop(scales.xVarPct).tickFormat(formatPercent);
+
+    // não tá legal isso. mas o prazo tampouco tá legal.
+    eixos.d3_ref = d3.select('svg')
+      .append('g')
+      .classed('axis', true)
+      .attr('transform', `translate(0,${chart.margin.top})`)
+    ;
+
+}
+
+function update_eixo(eixo) {
+    eixos.d3_ref.transition().duration(1000).call(eixos[eixo]);
 }
 
 function define_raios() {
