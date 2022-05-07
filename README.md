@@ -61,3 +61,39 @@ obj.move_para('centro' | 'esquerda' | 'direita')
 
 Melhorar objetos scales e eixos
 Parametrizar o strength (hoje está repetindo na função que seta a simulação e na que altera)
+Incluir dados receitas
+tooltip
+
+# Texto
+
+Para um lar, uma empresa ou um governo funcionar, é preciso de dinheiro. O dinheiro precisa vir de algum lugar, e esse dinheiro vai ser usado para pagar por bens e serviços.
+
+Para um lar, uma empresa ou um governo continuar funcionando, é preciso que haja um equilíbrio entre o dinheiro que entra (receitas) e o dinheiro que sai (despesas).
+
+Para alcançar esse equilíbrio ao longo do tempo, é importante planejar e monitorar essas receitas e despesas.
+
+Para ajudar a manter esse equilíbrio, ou ao menos para manter eventuais desequilíbrios sob controle, o governo todo ano estabelece metas anuais de receitas, despesas e resultados &mdash; a diferença entre receita e despesas.
+
+Uma das ferramentas para acompanhar essas metas é o Relatório de Avaliação de Receitas e Despesas Primárias, publicado bimestralmente &mdash; daí ser conhecido como "O Bimestral".
+
+Esse relatório traz informações sobre as receitas e despesas previstas, e o seus valores após a reavaliação bimestral, com as respectivas justificativas. O relatório inicialmente mostra os grandes valores das receitas e despesas, e em seguida detalha os componentes desses grandes itens.
+
+## Os grandes números
+
+A Lei Orçamentária de 2022 previa uma arrecadação de R$... 
+
+
+
+Com esse objetivo, o governo todo ano define metas anuais de receitas, despesas e resultados
+
+
+
+
+
+
+O equilíbrio
+Todo ano, o governo estabelece metas anuais de receitas e despesas e resultados.
+
+O relatório de avaliação de receitas e despesas é um instrumento
+
+art. 64, parágrafo 4o.
