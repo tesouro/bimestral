@@ -1092,9 +1092,64 @@ class MenuControle {
 
 }
 
+//const menu_controle = new MenuControle('.controle', 'acao');
 
 
-const menu_controle = new MenuControle('.controle', 'acao');
+/* scroller */
+
+const scroller = {
+
+    steps : {
+
+        list : null,
+
+        get : () => {
+
+            const steps_html = document.querySelectorAll(".step");
+
+            scroller.steps.list = Array.from(steps_html).map(d => d.dataset.step);
+        }
+
+    },
+
+    init : function() {
+
+        scroller.steps.get();
+
+        console.log(scroller.steps.list);
+
+        enterView({
+
+            selector: '.step',
+
+            enter : (el) => {
+
+                const step = el.dataset.step;
+                const step_index = scroller.steps.list.indexOf(step);
+
+                console.log(step, step_index);
+
+            },
+
+            exit : (el) => {
+
+                const step = el.dataset.step;
+                const step_index = scroller.steps.list.indexOf(step);
+                const step_anterior = scroller.steps.list[step_index - 1]
+
+                console.log('back', step, step_index, 'anterior:', step_anterior);
+
+            }
+        
+        })
+
+    }
+
+}
+
+scroller.init();
+
+
 
 
 //itens.forEach(item => item.esconde(false))
