@@ -32,9 +32,9 @@ h1 {
 
 .abertura {
 
-    height: 100vh;
-    width: 100vw;
     background-color: whitesmoke;
+    padding: 0 10px;
+    padding-bottom: calc(5vh + 1rem);
 
 }
 
@@ -45,20 +45,38 @@ h1 {
 
 }
 
-.wrapper {
+.abertura-inner p:last-child {
+    margin-bottom: 0;
+}
 
-    border: 5px dashed #333;
-    border-radius: 20px;
+.scroller-wrapper {
+
     padding: 1rem;
     max-width: 1000px;
     margin: 5vh auto;
-    height: 90vh;
+    /*height: 90vh;*/
+
+    position: relative;
+
+}
+
+article.steps-scroller {
 
 }
 
 .svg-container {
+
+    border: 5px dashed #333;
+    border-radius: 20px;
     width: 100%;
-    height: 100%;
+
+    position: sticky;
+    top: 5vh;
+    /*bottom: 5vh;*/
+    height: 90vh;
+    left: 0;
+
+
 }
 
 svg {
@@ -142,3 +160,33 @@ rect {
     padding: .4em .75em;
     font-family: monospace;
 }
+
+/* = = = = = = = = =
+   SCROLLER
+   = = = = = = = = = */
+
+.step-wrapper {
+    height: 100vh;
+}
+
+.step {
+    max-width: 400px;
+    border: 4px solid #333;
+    border-radius: 10px;
+    box-shadow: 0 0 4px 4px lightgrey;
+    padding: 0 1em;
+}
+
+.step.direita {
+    margin-left: auto;
+}
+
+.step.esquerda {
+    margin-right: auto;
+}
+
+.step.centro {
+    margin-left: auto;
+    margin-right: auto;
+}
+

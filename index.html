@@ -34,9 +34,9 @@
 
     </div>
 
-    <div class="wrapper">
+    <div class="scroller-wrapper">
 
-        <div class="controle">
+        <!--<div class="controle">
             <button data-acao="rec">1. Mostra Receita</button>
             <button data-acao="transf">2. Mostra transferências</button>
             <button data-acao="rec-liq">3. Receita Líquida</button>
@@ -47,12 +47,24 @@
             <button data-acao="itens-desp">8. Itens da Despesa</button>
             <button data-acao="bolhas">9. Bolhas</button>
             <button data-acao="bolhas-pct">10. Bolhas Percentuais</button>
+        </div>-->
+
+        <div class="svg-container">
+            <svg>
+                <defs>             
+                    <!--<pattern id="pattern-receita" x="5" y="5" width="40" height="40" patternUnits="userSpaceOnUse">
+                      <rect x="5" y="5" width="30" height="30"/>
+                    </pattern>-->
+                </defs>
+
+                
+            </svg>
         </div>
 
-        <article>
+        <article class="steps-scroller">
 
             <div class="step-wrapper">
-                <div class="step" data-step="Receita Bruta">
+                <div class="step direita" data-step="Receita Bruta">
 
                     <p>O valor das <span class="termo-tecnico">receitas primárias</span> previstas no orçamento de 2022 era de R$ <span class="js--valor" data-tipo-valor="receita-bruta-loa"></span> trilhão.</p>
 
@@ -60,7 +72,7 @@
             </div>
 
             <div class="step-wrapper">
-                <div class="step" data-step="Transferências">
+                <div class="step direita" data-step="Transferências">
 
                     <p>Parte desse valor, no entanto, pertence legalmente a Estados, Municípios e Distrito Federal. São as <span class="termo-tecnico">transferências constitucionais e legais</span>, cujo valor previsto na orçamento era de R$ <span class="js--valor" data-tipo-valor="transferencias-loa"></span> bilhões.</p>
 
@@ -68,7 +80,7 @@
             </div>
 
             <div class="step-wrapper">
-                <div class="step" data-step="Receita Líquida">
+                <div class="step direita" data-step="Receita Líquida">
 
                     <p>Quando se descontam essas transferências, ficamos com a <span class="termo-tecnico">receita líquida</span>, no valor de R$ <span class="js--valor" data-tipo-valor="receita-liquida-loa"></span> trilhão no orçamento.</p>
 
@@ -76,7 +88,7 @@
             </div>
 
             <div class="step-wrapper">
-                <div class="step" data-step="Despesas">
+                <div class="step esquerda" data-step="Despesas">
 
                     <p>Por outro lado, o orçamento prevê <span class="termo-tecnico">despesas primárias</span>, no valor de R$ <span class="js--valor" data-tipo-valor="despesa-loa"></span> trilhão.</p>
 
@@ -84,7 +96,7 @@
             </div>
 
             <div class="step-wrapper">
-                <div class="step" data-step="Resultado">
+                <div class="step centro" data-step="Resultado">
 
                     <p>Confrontando as receitas líquidas com as despesas, chegamos a um <span class="termo-tecnico">resultado primário</span> no valor de R$ <span class="js--valor" data-tipo-valor="resultado-loa"></span> bilhões.</p>
 
@@ -92,7 +104,7 @@
             </div>
 
             <div class="step-wrapper">
-                <div class="step" data-step="Meta">
+                <div class="step centro" data-step="Meta">
 
                     <p>Esse resultado está dentro da <span class="termo-tecnico">meta de resultado</span> fixada para este ano, no valor de R$ <span class="js--valor" data-tipo-valor="meta-loa"></span> bilhões.</p>
 
@@ -100,7 +112,7 @@
             </div>
 
             <div class="step-wrapper">
-                <div class="step" data-step="Reavaliação">
+                <div class="step centro" data-step="Reavaliação">
 
                     <p>Na avaliação do <span class="js--valor" data-tipo-valor="bimestre-referencia"></span> º bimestre, as receitas líquidas previstas para o ano <span class="js--valor" data-tipo-valor="variacao-receitas" data-tipo-variacao="aumento|diminuicao">aumentaram</span> para R$ <span class="js--valor" data-tipo-valor="receita-liquida-reav"></span> bilhões.</p>
 
@@ -120,18 +132,6 @@
 
 
         </article>
-
-        <div class="svg-container">
-            <svg>
-                <defs>             
-                    <!--<pattern id="pattern-receita" x="5" y="5" width="40" height="40" patternUnits="userSpaceOnUse">
-                      <rect x="5" y="5" width="30" height="30"/>
-                    </pattern>-->
-                </defs>
-
-                
-            </svg>
-        </div>
 
     </div>
 
