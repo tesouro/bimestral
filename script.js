@@ -519,6 +519,7 @@ class GrandeReceita extends GrandeNumero {
         //aí só vou lidar com valores líquidos depois disso, de forma que os morfa_para() vão ser entre o valor liquido loa e o valor líquido reav.
 
         this.interpolator_para_liq_loa = flubber.interpolate(this.d_loa,  this.d_liq_loa);
+        this.interpolator_para_bruto_loa = flubber.interpolate(this.d_liq_loa,  this.d_loa);
         
         this.interpolator_para_reav = flubber.interpolate(this.d_liq_loa,  this.d_liq_reav);
         this.interpolator_para_loa  = flubber.interpolate(this.d_liq_reav, this.d_liq_loa);
@@ -528,6 +529,19 @@ class GrandeReceita extends GrandeNumero {
     morfa_para_liquido() { 
 
         const interpolator = this.interpolator_para_liq_loa;
+
+        this.d3_ref
+          .transition()
+          .delay(0)
+          .duration(1000)
+          .attrTween('d', () => interpolator)
+        ;
+
+    }
+
+    morfa_para_bruto() { 
+
+        const interpolator = this.interpolator_para_bruto_loa;
 
         this.d3_ref
           .transition()
@@ -1127,6 +1141,8 @@ const scroller = {
                 const step = el.dataset.step;
                 const step_index = scroller.steps.list.indexOf(step);
 
+               scroller.render[step]();
+
                 console.log(step, step_index);
 
             },
@@ -1137,11 +1153,98 @@ const scroller = {
                 const step_index = scroller.steps.list.indexOf(step);
                 const step_anterior = scroller.steps.list[step_index - 1]
 
+                scroller.render[step](true); // voltando = true;
+
                 console.log('back', step, step_index, 'anterior:', step_anterior);
 
             }
         
         })
+
+    },
+
+    render : {
+
+        //'Inicial' : (voltando = true)
+
+        'Receita Bruta' : (voltando = false) => {
+
+            if (voltando) {
+
+                GN.receita.esconde(true);
+
+            } else {
+
+                GN.receita.esconde(false);
+
+            }
+            
+        },
+    
+        'Transferências' : (voltando = false) => {
+
+            if (voltando) {
+
+                GN.transferencias.esconde(true);
+
+            } else {
+
+                GN.transferencias.esconde(false);
+
+            }
+            
+        },
+    
+        'Receita Líquida' : (voltando = false) => {
+
+            if (voltando) {
+
+                GN.receita.morfa_para_bruto();
+                GN.transferencias.esconde(false);
+
+            } else {
+
+                GN.receita.morfa_para_liquido();
+                GN.transferencias.esconde(true);
+            }
+
+        },
+    
+        'Despesas' : (voltando = false) => {
+
+            if (voltando) {
+
+                GN.despesa.esconde(true);
+
+            } else {
+
+                GN.despesa.esconde(false);
+
+            }
+
+        },
+    
+        'Resultado' : (voltando = false) => {
+
+            if (voltando) {
+
+                GN.resultado.esconde(true);
+
+                setTimeout( () => {
+                    GN.despesa.move_para('direita');
+                    GN.receita.move_para('esquerda');
+                }, 750);
+                
+
+            } else {
+
+                GN.despesa.move_para('centro');
+                GN.receita.move_para('centro');
+                setTimeout( () => GN.resultado.esconde(false), 750);
+
+            }
+
+        }
 
     }
 
