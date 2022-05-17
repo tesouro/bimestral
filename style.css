@@ -60,10 +60,6 @@ h1 {
 
 }
 
-article.steps-scroller {
-
-}
-
 .svg-container {
 
     border: 5px dashed #333;
@@ -75,6 +71,7 @@ article.steps-scroller {
     /*bottom: 5vh;*/
     height: 90vh;
     left: 0;
+    z-index: -1;
 
 
 }
@@ -175,6 +172,7 @@ rect {
     border-radius: 10px;
     box-shadow: 0 0 4px 4px lightgrey;
     padding: 0 1em;
+    background-color: whitesmoke;
 }
 
 .step.direita {
