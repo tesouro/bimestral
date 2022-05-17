@@ -1,3 +1,6 @@
+// vai lá pra cima antes de qq coisa, pra não avacalhar o scroller. e só inicializa o scroller depois de criados os objetos.
+window.scrollTo(0,0);
+
 // definições das classes / protótipos dos objetos
 
 class Chart {
@@ -737,6 +740,10 @@ function init() {
 
     prepara_simulacao(itens_despesa);
 
+    // só inicializa o scroller depois de tudo montado
+    //window.scrollTo(0,0);
+    scroller.init();
+
 
 }
 
@@ -1249,8 +1256,6 @@ const scroller = {
     }
 
 }
-
-scroller.init();
 
 
 
