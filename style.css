@@ -7,6 +7,8 @@
     --amarelo-tesouro: rgb(255,213,0);
     --verde-tesouro: rgb(50,156,50);
     --azul-tesouro: rgb(0,74,147);
+    --vermelho: #80140D;
+    --cor-transf: #9C782A;
 
     /* vão ser atualizados pelo JS
 
@@ -25,18 +27,40 @@ body {
     /*background-color: var(--verde-tesouro);*/
 
     font-family: Rubik;
+    line-height: 1.3;
     margin: 0;
 
 }
 
-h1 {
+.cover {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: whitesmoke;
+}
+
+.cover h1 {
+    font-family: Girassol;
+    font-size: 4rem;
+}
+
+.cover img {
+    max-width: 90%;
+}
+
+.abertura h2 {
     margin-top: 0;
     padding-top: 3rem;
+    font-size: 2rem;
+    text-align: center;
 }
 
 .abertura {
 
-    background-color: whitesmoke;
+    background-color: cornsilk;
     padding: 0 10px;
     padding-bottom: calc(5vh + 1rem);
 
@@ -47,6 +71,17 @@ h1 {
     max-width: 600px;
     margin: 0 auto;
 
+}
+
+.abertura-inner p {
+    font-size: 1.25em;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+.abertura-inner p:first-child {
+    margin-top: 0;
+    padding-top: 3rem;
 }
 
 .abertura-inner p:last-child {
@@ -104,8 +139,8 @@ path.grande-numero.escondido  {
 
 path[data-nome="receita"] {stroke: var(--amarelo-tesouro);}
 path[data-nome="despesa"] {stroke: var(--verde-tesouro);}
-path[data-nome="transferencias"] {stroke: firebrick;}
-path[data-nome="resultado"] {stroke: var(--azul-tesouro);}
+path[data-nome="transferencias"] {stroke: var(--cor-transf);}
+path[data-nome="resultado"] {stroke: var(--vermelho);}
 
 path.item {
 
@@ -120,8 +155,9 @@ path.item.bolha {
 
 #pattern-receita > rect { fill: var(--amarelo-tesouro); }
 #pattern-despesa > rect { fill: var(--verde-tesouro); }
-#pattern-transferencias > rect { fill: firebrick; }
-#pattern-resultado > rect { fill: var(--azul-tesouro); }
+#pattern-transferencias > rect { fill: var(--cor-transf); }
+#pattern-resultado > rect { fill: var(--vermelho); }
+#pattern-meta > rect { fill: transparent; }
 
 /* eixo */
 .axis path {
@@ -190,5 +226,13 @@ rect {
 .step.centro {
     margin-left: auto;
     margin-right: auto;
+}
+
+.termo-tecnico {
+    background-color: black;
+    color: whitesmoke;
+    padding: 0.15em;
+    border-radius: 0.3em;
+
 }
 
