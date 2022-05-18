@@ -21,6 +21,7 @@ termo_receita_liquida <- "3. Receita Líquida (1) - (2)"
 termo_despesa <- "4. Despesas Primárias"
 termo_transf <- "2. Transferências por Repartição de Receita"
 termo_resultado <- "5. Resultado Primário (3) - (4)"
+termo_meta <- "6. Meta de Resultado Primário OFS (Art. 2º, caput, LDO-2022)"
 
 termo_obrig <- "Obrigatórias"
 termo_discr <- "Discricionárias do Poder Executivo"
@@ -89,6 +90,18 @@ resultado <- list(
   reav = -grandes_numeros[[get_posicao(termo_resultado), termo_reav]]
 )
 
+meta <- list(
+  nome = 'meta',
+  categoria = 'grande-numero',
+  
+  posicao_inicial_loa = grandes_numeros[[get_posicao(termo_receita_liquida), termo_loa]],
+  posicao_inicial_reav = grandes_numeros[[get_posicao(termo_receita_liquida), termo_reav]],
+  
+  loa = -grandes_numeros[[get_posicao(termo_meta), termo_loa]],
+  reav = -grandes_numeros[[get_posicao(termo_meta), termo_reav]]
+)
+
+
 obrig <- list(
   nome = 'despesas obrigatórias',
   categoria = 'despesas',
@@ -118,7 +131,8 @@ grandes_numeros <- list(
   receita = receita,
   despesa = despesa,
   transferencias = transferencias,
-  resultado = resultado
+  resultado = resultado,
+  meta = meta
   #obrigatorias = obrig,
   #discricionarias = discr
 )

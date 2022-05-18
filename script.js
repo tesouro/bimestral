@@ -690,7 +690,8 @@ const GN = {
     despesa : null,
     receita : null,
     transferencias : null,
-    resultado : null
+    resultado : null,
+    meta : null
 }
 
 const itens_despesa = [];
@@ -743,7 +744,6 @@ function init() {
     // só inicializa o scroller depois de tudo montado
     //window.scrollTo(0,0);
     scroller.init();
-
 
 }
 
