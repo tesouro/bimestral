@@ -1142,6 +1142,7 @@ const scroller = {
         enterView({
 
             selector: '.step',
+            offset: 0.2, //ou seja, dispara quando o topo do elemento atinge 20% da tela medindo de baixo para cima.
 
             enter : (el) => {
 
