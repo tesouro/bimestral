@@ -1327,7 +1327,26 @@ const scroller = {
 
             }
 
-        }
+        },
+
+        'Composição' : (voltando = false) => {
+
+            if (voltando) {
+
+                GN.resultado.esconde(false);
+                GN.meta.esconde(false);
+                GN.despesa.move_para('centro');
+                GN.receita.move_para('centro');
+                
+            } else {
+
+                GN.resultado.esconde(true);
+                GN.meta.esconde(true);
+                GN.despesa.move_para('direita');
+                GN.receita.move_para('esquerda');
+            }
+
+        },
 
 
     }
