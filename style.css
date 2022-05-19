@@ -141,7 +141,10 @@ path[data-nome="receita"] {stroke: var(--amarelo-tesouro);}
 path[data-nome="despesa"] {stroke: var(--verde-tesouro);}
 path[data-nome="transferencias"] {stroke: var(--cor-transf);}
 path[data-nome="resultado"] {stroke: var(--vermelho);}
-path[data-nome="meta"] {stroke: var(--vermelho);}
+path[data-nome="meta"] {
+    stroke: red;
+    stroke-dasharray: 8;
+}
 
 path.item {
 

@@ -738,6 +738,7 @@ function init() {
 
     GN.despesa.move_para('direita');
     GN.resultado.move_para('centro');
+    GN.meta.move_para('centro');
 
     prepara_simulacao(itens_despesa);
 
@@ -1252,7 +1253,82 @@ const scroller = {
 
             }
 
+        },
+
+        'Meta' : (voltando = false) => {
+
+            if (voltando) {
+
+                GN.meta.esconde(true);
+                
+            } else {
+
+                GN.meta.esconde(false);
+
+            }
+
+        },
+
+        'Reavaliação Despesas' : (voltando = false) => {
+
+            if (voltando) {
+
+                GN.despesa.morfa_para('loa');
+                setTimeout(() => {
+                    GN.meta.esconde(false);
+                    GN.resultado.esconde(false);
+                }, 750);
+                
+
+            } else {
+
+                GN.meta.esconde(true);
+                GN.resultado.esconde(true);
+                setTimeout(() => GN.despesa.morfa_para('reav'), 750);
+
+            }
+
+        },
+
+        'Reavaliação Receitas' : (voltando = false) => {
+
+            if (voltando) {
+
+                GN.receita.morfa_para('loa');
+                
+            } else {
+
+                GN.receita.morfa_para('reav');
+
+            }
+
+        },
+
+        'Reavaliação Resultado' : (voltando = false) => {
+
+            if (voltando) {
+
+                GN.resultado.morfa_para('loa');
+                GN.meta.morfa_para('loa')
+                setTimeout(() => {
+                    GN.resultado.esconde(true);
+                    GN.meta.esconde(true);
+                }, 750);
+                
+            } else {
+
+                GN.resultado.esconde(false);
+                GN.resultado.morfa_para('reav');
+                setTimeout(() => {
+                    GN.meta.esconde(false);
+                    GN.meta.morfa_para('reav');
+                }, 1000);
+
+
+            }
+
         }
+
 
     }
 
