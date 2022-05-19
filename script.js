@@ -600,6 +600,7 @@ class Forma extends GrandeNumero {
           ( (valor_reav - valor_loa) / valor_loa )
         ;
 
+        this.elemento.classList.remove('grande-numero');
         this.elemento.setAttribute('data-classificador', classificador);
         this.elemento.setAttribute('data-id', id); // esse id vai facilitar recuperar o objeto no tooltip
         this.elemento.classList.add('item');
