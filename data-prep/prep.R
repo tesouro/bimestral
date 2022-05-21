@@ -176,8 +176,8 @@ desp_det_pre <- desp_det %>%
       valor_quadradinhos_loa)
   ) 
     
-#desp_det_pre$percent_reav <- desp_det_pre$reav / sum(desp_det_pre$reav)
-desp_det_pre$percent_reav <- desp_det_pre$valor_quadradinhos_reav / sum(desp_det_pre$valor_quadradinhos_reav)
+desp_det_pre$percent_reav <- desp_det_pre$reav / sum(desp_det_pre$reav)
+#desp_det_pre$percent_reav <- desp_det_pre$valor_quadradinhos_reav / sum(desp_det_pre$valor_quadradinhos_reav)
 
 
 desp_det_export <- desp_det_pre %>%
