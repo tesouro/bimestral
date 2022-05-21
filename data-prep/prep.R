@@ -163,12 +163,7 @@ desp_det_pre <- desp_det %>%
   ) %>%
   rename(
     loa = !!sym(termo_loa),
-    reav = !!sym(termo_reav))
-    
-desp_det_pre$percent_reav <- desp_det_pre$reav / sum(desp_det_pre$reav)
-
-desp_det_export <- desp_det_pre %>%
-  arrange(-valor_quadradinhos_reav) %>%
+    reav = !!sym(termo_reav)) %>%
   mutate(
     # esses dois primeiros mutates aqui é por causa do arredondamento
     valor_quadradinhos_reav = ifelse(
@@ -178,7 +173,16 @@ desp_det_export <- desp_det_pre %>%
     valor_quadradinhos_loa = ifelse(
       nome == "Demais", 
       valor_quadradinhos_loa + grandes_numeros$despesa$loa - sum(valor_quadradinhos_loa),
-      valor_quadradinhos_loa),
+      valor_quadradinhos_loa)
+  ) 
+    
+#desp_det_pre$percent_reav <- desp_det_pre$reav / sum(desp_det_pre$reav)
+desp_det_pre$percent_reav <- desp_det_pre$valor_quadradinhos_reav / sum(desp_det_pre$valor_quadradinhos_reav)
+
+
+desp_det_export <- desp_det_pre %>%
+  arrange(-valor_quadradinhos_reav) %>%
+  mutate(
     posicao_inicial_loa = 0 + cumsum(lag(valor_quadradinhos_loa,1, default = 0)),
     posicao_inicial_reav = 0 + cumsum(lag(valor_quadradinhos_reav,1, default = 0)),
     categoria = "itens-despesa"
