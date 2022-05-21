@@ -170,6 +170,15 @@ desp_det_pre$percent_reav <- desp_det_pre$reav / sum(desp_det_pre$reav)
 desp_det_export <- desp_det_pre %>%
   arrange(-valor_quadradinhos_reav) %>%
   mutate(
+    # esses dois primeiros mutates aqui é por causa do arredondamento
+    valor_quadradinhos_reav = ifelse(
+      nome == "Demais", 
+      valor_quadradinhos_reav + grandes_numeros$despesa$reav - sum(valor_quadradinhos_reav),
+      valor_quadradinhos_reav),
+    valor_quadradinhos_loa = ifelse(
+      nome == "Demais", 
+      valor_quadradinhos_loa + grandes_numeros$despesa$loa - sum(valor_quadradinhos_loa),
+      valor_quadradinhos_loa),
     posicao_inicial_loa = 0 + cumsum(lag(valor_quadradinhos_loa,1, default = 0)),
     posicao_inicial_reav = 0 + cumsum(lag(valor_quadradinhos_reav,1, default = 0)),
     categoria = "itens-despesa"
