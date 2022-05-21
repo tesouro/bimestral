@@ -481,6 +481,12 @@ class GrandeNumero {
 
     }
 
+    esmaece(esmaece = false) {
+
+        if (esmaece) this.elemento.classList.add('esmaecido');
+        else this.elemento.classList.remove('esmaecido');
+    }
+
     morfa_para(direcao) { // loa ou reav
 
         const interpolator = this['interpolator_para_' + direcao]
@@ -1345,6 +1351,47 @@ const scroller = {
                 GN.meta.esconde(true);
                 GN.despesa.move_para('direita');
                 GN.receita.move_para('esquerda');
+            }
+
+        },
+
+        'Composição - Despesa - Maior item' : (voltando = false) => {
+
+            if (voltando) {
+
+                GN.receita.esmaece(false);
+                itens_despesa[0].esconde(true);
+                
+            } else {
+
+                GN.receita.esmaece(true);
+                itens_despesa[0].esconde(false);
+            }
+
+        },
+
+        'Composição - Despesa - Segundo Maior item' : (voltando = false) => {
+
+            if (voltando) {
+
+                itens_despesa[1].esconde(true);
+                
+            } else {
+
+                itens_despesa[1].esconde(false);
+            }
+
+        },
+
+        'Composição - Despesa - demais itens' : (voltando = false) => {
+
+            if (voltando) {
+
+                itens_despesa.forEach((item, i) => {if (i > 1) item.esconde(true)});
+                
+            } else {
+
+                itens_despesa.forEach((item, i) => {if (i > 1) item.esconde(false)});
             }
 
         },

@@ -133,7 +133,11 @@ path.grande-numero:not(.item) {
     transition: transform .3s, opacity .3s;
 }
 
-path.grande-numero.escondido  {
+path.esmaecido  {
+    opacity: 0.5;
+}
+
+path.escondido  {
     opacity: 0;
 }
 
@@ -149,8 +153,12 @@ path[data-nome="meta"] {
 path.item {
 
     stroke: white;
-    fill: rebeccapurple;
+    /*fill: rebeccapurple;*/
     transition: stroke-width .3s, opacity .3s;
+}
+
+path[data-tipo="item-despesa"] {
+    fill: var(--verde-tesouro);
 }
 
 path.item.bolha {
