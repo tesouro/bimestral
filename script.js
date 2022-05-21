@@ -814,8 +814,8 @@ function monta_itens_despesa(xDespesas) {
             d.nome,
             'item-despesa',
             '',
-            d.loa,
-            d.reav,
+            d.valor_quadradinhos_loa * 1000, //d.loa,  // o ajuste no "demais foi feito na coluna vlr_quadradinhos_loa, por isso vamos usá-lo aqui"
+            d.valor_quadradinhos_reav * 1000, //d.reav,
             d.posicao_inicial_loa,
             d.posicao_inicial_reav,
             xDespesas,
