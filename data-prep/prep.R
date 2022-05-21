@@ -137,9 +137,66 @@ grandes_numeros <- list(
   #discricionarias = discr
 )
 
+# receitas - detalhados ---------------------------------------------------
 
+rec_det_raw <- read_excel('planilhas-bimestral-2022-1bim.xlsx', sheet = '3', skip = 4)
 
+linhas_rec_que_nao_interessam <- c(
+  "I. RECEITA TOTAL",
+  "Receita Administrada pela RFB/ME (exceto RGPS)",
+  "Receitas Não-Administradas pela RFB",
+  "CPMF"
+)
 
+linha_transferencia <- "II. TRANSFERÊNCIAS POR REPARTIÇÃO DE RECEITA"
+numero_linha_transferencia <- which(rec_det_raw$Discriminação == linha_transferencia)
+termo_reav_rec <- "Avaliação 1º Bimestre\r\n(b)"
+
+rec_det <- rec_det_raw %>%
+  select(c("Discriminação", termo_loa, termo_reav_rec)) %>%
+  filter(row_number() < numero_linha_transferencia) %>%
+  filter(!(`Discriminação` %in% linhas_rec_que_nao_interessam)) %>%
+  filter(!is.na(!!sym(termo_loa))) %>%
+  filter(!is.na(`Discriminação`)) %>%
+  filter(!!sym(termo_reav_rec) > 0) %>%
+  mutate(
+    nome = ifelse(!!sym(termo_reav_rec) < 1000, "Outras", `Discriminação`)
+  )
+
+rec_det_pre <- rec_det %>%
+  select(-`Discriminação`) %>%
+  group_by(nome) %>%
+  summarise(across(where(is.numeric), sum)) %>%
+  mutate(
+    valor_quadradinhos_reav = round(!!sym(termo_reav_rec)/1000, 0),
+    valor_quadradinhos_loa = round(!!sym(termo_loa)/1000, 0)
+  ) %>%
+  rename(
+    loa = !!sym(termo_loa),
+    reav = !!sym(termo_reav_rec)) %>%
+  mutate(
+    # esses dois primeiros mutates aqui é por causa do arredondamento
+    valor_quadradinhos_reav = ifelse(
+      nome == "Demais Receitas", 
+      valor_quadradinhos_reav + grandes_numeros$receita$bruta$reav - sum(valor_quadradinhos_reav),
+      valor_quadradinhos_reav),
+    valor_quadradinhos_loa = ifelse(
+      nome == "Demais Receitas", 
+      valor_quadradinhos_loa + grandes_numeros$receita$bruta$loa - sum(valor_quadradinhos_loa),
+      valor_quadradinhos_loa)
+  ) 
+
+rec_det_pre$percent_reav <- rec_det_pre$reav / sum(rec_det_pre$reav)
+
+rec_det_export <- rec_det_pre %>%
+  arrange(-valor_quadradinhos_reav) %>%
+  mutate(
+    posicao_inicial_loa = 0 + cumsum(lag(valor_quadradinhos_loa,1, default = 0)),
+    posicao_inicial_reav = 0 + cumsum(lag(valor_quadradinhos_reav,1, default = 0)),
+    categoria = "itens-receita"
+  ) %>%
+  arrange(-percent_reav) %>%
+  mutate(percent_reav_cum = cumsum(percent_reav))
 
 # despesas - detalhados ---------------------------------------------------
 
@@ -194,7 +251,8 @@ desp_det_export <- desp_det_pre %>%
 
 output <- list(
   grandes_numeros = grandes_numeros,
-  itens_despesas = desp_det_export
+  itens_despesas = desp_det_export,
+  itens_receitas = rec_det_export
 )
 
 jsonlite::write_json(output, '../output.json', auto_unbox = TRUE)
