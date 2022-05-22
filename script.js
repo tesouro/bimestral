@@ -702,6 +702,7 @@ const GN = {
 }
 
 const itens_despesa = [];
+const itens_receitas = [];
 
 // definições básicas
 
@@ -736,8 +737,10 @@ function init() {
 
     // pega a posição x direita dos grandes números, para construir as formas já nessa posição
     const xDespesas = GN.despesa.x_direita;
+    const xReceitas = GN.receita.x_esquerda;
 
     monta_itens_despesa(xDespesas);
+    monta_itens_receita(xReceitas);
 
     monta_escalas();
     monta_eixos();
@@ -830,6 +833,37 @@ function monta_itens_despesa(xDespesas) {
 
     })
 
+}
+
+function monta_itens_receita(xReceitas) {
+
+    console.log(dados);
+
+    const itens = dados.raw.itens_receitas;
+
+    itens.forEach((d,i) => {
+
+        // INTERFACE COM OS DADOS
+
+        const forma = new Forma(
+            d.nome,
+            'item-receita',
+            '',
+            d.valor_quadradinhos_loa * 1000, //d.loa,  // o ajuste no "demais foi feito na coluna vlr_quadradinhos_loa, por isso vamos usá-lo aqui"
+            d.valor_quadradinhos_reav * 1000, //d.reav,
+            d.posicao_inicial_loa,
+            d.posicao_inicial_reav,
+            xReceitas,
+            d.percent_reav,
+            d.percent_reav_cum,
+            i
+        )
+
+        itens_receitas.push(forma);
+
+        //const prev = new Forma('Benefícios Previdenciários', 'item-despesa', 'Despesas Obrigatórias', 778, 778, 0, 0, X0);
+
+    })
 
 }
 
@@ -1189,6 +1223,12 @@ const scroller = {
 
                 GN.receita.esconde(true);
 
+                // tudo aqui foi acrecentado para corrigir erros de quando a página é recarregada no meio da narrativa
+                GN.resultado.esconde(true);
+                GN.meta.esconde(true);
+                GN.receita.esmaece(false);
+                GN.despesa.esmaece(false);
+
             } else {
 
                 GN.receita.esconde(false);
@@ -1392,6 +1432,36 @@ const scroller = {
             } else {
 
                 itens_despesa.forEach((item, i) => {if (i > 1) item.esconde(false)});
+            }
+
+        },
+
+        'Composição - Receita' : (voltando = false) => {
+
+            if (voltando) {
+
+                GN.receita.morfa_para_liquido();
+                setTimeout(() => GN.receita.esmaece(true), 500); 
+                itens_despesa.forEach(item => item.esmaece(true));
+
+            } else {
+
+                GN.receita.esmaece(false);
+                setTimeout(() => GN.receita.morfa_para_bruto(), 500);
+                itens_despesa.forEach(item => item.esmaece(true));
+            }
+
+        },
+
+        'Composição - Receita - Maior item' : (voltando = false) => {
+
+            if (voltando) {
+
+                itens_receitas[0].esconde(true);
+                
+            } else {
+
+                itens_receitas[0].esconde(false);
             }
 
         },

@@ -161,6 +161,10 @@ path[data-tipo="item-despesa"] {
     fill: var(--verde-tesouro);
 }
 
+path[data-tipo="item-receita"] {
+    fill: var(--amarelo-tesouro);
+}
+
 path.item.bolha {
     stroke-width: 0;
 }
