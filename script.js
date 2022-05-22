@@ -1440,12 +1440,14 @@ const scroller = {
 
             if (voltando) {
 
+                GN.despesa.esconde(false);
                 GN.receita.morfa_para_liquido();
                 setTimeout(() => GN.receita.esmaece(true), 500); 
-                itens_despesa.forEach(item => item.esmaece(true));
+                itens_despesa.forEach(item => item.esmaece(false));
 
             } else {
 
+                GN.despesa.esconde(true);
                 GN.receita.esmaece(false);
                 setTimeout(() => GN.receita.morfa_para_bruto(), 500);
                 itens_despesa.forEach(item => item.esmaece(true));
@@ -1465,6 +1467,32 @@ const scroller = {
             }
 
         },
+
+        'Composição - Receita - Segundo Maior item' : (voltando = false) => {
+
+            if (voltando) {
+
+                itens_receitas[1].esconde(true);
+                
+            } else {
+
+                itens_receitas[1].esconde(false);
+            }
+
+        },
+
+        'Composição - Receita - demais itens' : (voltando = false) => {
+
+            if (voltando) {
+
+                itens_receitas.forEach((item, i) => {if (i > 1) item.esconde(true)});
+                
+            } else {
+
+                itens_receitas.forEach((item, i) => {if (i > 1) item.esconde(false)});
+            }
+
+        }
 
 
     }
