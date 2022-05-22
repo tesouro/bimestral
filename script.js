@@ -590,6 +590,10 @@ class Forma extends GrandeNumero {
     y;
     y0;
 
+    // deltas para calcular a translação
+    delta_x;
+    delta_y;
+
     // para armazenar os pontos finais da simulação
     xf;
     yf;
@@ -664,16 +668,22 @@ class Forma extends GrandeNumero {
         //this.elemento.style.transform = `translate(${this.xf}px, ${this.yf}px)`;
         this.d3_ref
           .transition()
-          .duration(1000)
+          .duration(200)
           .style('transform', `translate(${this.xf}px, ${this.yf}px)`)
         ;
     }
 
     translada_para_posicao_inicial() {
 
+        // aqui o pulo do gato para evitar erros na volta da narrativa... além de remover a transformação de translação, "reseto" o valor de x,y da simulação para os valores iniciais (ou seja, os deltas para 0,0), para os parâmetros da simulação ficarem coerentes com os parâmetros visuais, e evitar aqueles "saltos".
+        this.x = this.x0;
+        this.y = this.y0;
+        this.delta_x = 0;
+        this.delta_y = 0;
+
         this.d3_ref
           .transition()
-          .duration(1000)
+          .duration(200)
           .style('transform', `translate(0,0)`)
       ;
 
@@ -894,19 +904,29 @@ function prepara_simulacao(itens) {
       .force('x', d3.forceX().strength(strength).x(d => scales.xVar(d.var)))
       .force('y', d3.forceY().strength(strength).y(d => (d.tipo == "item-despesa" ? chart.h * 2/6 : chart.h * 4/6 ) + chart.margin.top))
       .force('collision', d3.forceCollide().strength(strength*2.5).radius(d => d.r_reav + 1))
-      //.alphaMin(0.2)
+      //.alphaMin(0.1)
       .on('tick', () => {
           itens.forEach(item => {
 
-              const xf = item.x - item.x0;
-              const yf = item.y - item.y0;
-              item.elemento.style.transform = `translate(${xf}px, ${yf}px)`;
-              item.xf = xf;
-              item.yf = yf;
+              const delta_x = item.x - item.x0;
+              const delta_y = item.y - item.y0;
+              item.elemento.style.transform = `translate(${delta_x}px, ${delta_y}px)`;
+              item.delta_x = delta_x;
+              item.delta_y = delta_y;
 
             })
        })
-      .stop()
+    .on('end', () => { // armazena os valores finais
+
+        itens.forEach(item => {
+
+            item.xf = item.delta_x;
+            item.yf = item.delta_y;
+
+          })
+
+    })
+    .stop()
     ;
 
     sim.nodes(itens);
@@ -1523,16 +1543,19 @@ const scroller = {
                 });
                 setTimeout(() => {
                     GN.receita.esconde(false);
-                }, 500);
+                }, 750);
 
 
 
             } else {
 
                 GN.receita.esconde(true);
+
                 sim.restart().alpha(1);
+                
                 itens_despesa.forEach(item => item.morfa_para_circulo());
                 setTimeout(() => itens_receitas.forEach(item => item.morfa_para_circulo()), 500);
+
                 update_eixo('xVar');
 
             }
