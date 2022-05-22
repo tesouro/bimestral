@@ -779,8 +779,8 @@ function init() {
     prepara_simulacao([...itens_despesa, ...itens_receitas]);
 
     // só inicializa o scroller depois de tudo montado
-    //window.scrollTo(0,0);
-    scroller.init();
+    //window.scrollTo(0,0); dá um tempo para o scroll voltar antes de ligar o monitor do scroller.
+    setTimeout(() => scroller.init(), 1000);
 
 }
 
