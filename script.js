@@ -669,6 +669,16 @@ class Forma extends GrandeNumero {
         ;
     }
 
+    translada_para_posicao_inicial() {
+
+        this.d3_ref
+          .transition()
+          .duration(1000)
+          .style('transform', `translate(0,0)`)
+      ;
+
+    }
+
 }
 
 class Dados {
@@ -1377,7 +1387,7 @@ const scroller = {
                 setTimeout(() => {
                     GN.meta.esconde(false);
                     GN.meta.morfa_para('reav');
-                }, 1000);
+                }, 750);
 
 
             }
@@ -1500,6 +1510,32 @@ const scroller = {
                 itens_receitas.forEach((item, i) => {if (i > 1) item.esconde(false)});
             }
 
+        },
+
+        'Bolhas' : (voltando = false) => {
+
+            if (voltando) {
+
+                sim.stop();
+                [...itens_despesa, ...itens_receitas].forEach(item => {
+                    item.translada_para_posicao_inicial();
+                    item.morfa_para_forma()
+                });
+                setTimeout(() => {
+                    GN.receita.esconde(false);
+                }, 500);
+
+
+
+            } else {
+
+                GN.receita.esconde(true);
+                sim.restart().alpha(1);
+                itens_despesa.forEach(item => item.morfa_para_circulo());
+                setTimeout(() => itens_receitas.forEach(item => item.morfa_para_circulo()), 500);
+                update_eixo('xVar');
+
+            }
         }
 
 
