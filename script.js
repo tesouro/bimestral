@@ -1549,7 +1549,7 @@ const scroller = {
 
 
             } else {
-
+                
                 GN.receita.esconde(true);
 
                 sim.restart().alpha(1);
@@ -1561,6 +1561,12 @@ const scroller = {
                 setTimeout(() => itens_receitas.forEach(item => item.morfa_para_circulo()), 500);
 
                 update_eixo('xVar');
+
+                // para garantir, caso o usuário role muito rápido
+                setTimout(() => {
+                    GN.resultado.esconde(true);
+                    GN.meta.esconde(true);
+                }, 1000)
 
             }
         }
