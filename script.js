@@ -1541,6 +1541,7 @@ const scroller = {
                     item.translada_para_posicao_inicial();
                     item.morfa_para_forma()
                 });
+                itens_despesa.forEach(item => item.esmaece(true));
                 setTimeout(() => {
                     GN.receita.esconde(false);
                 }, 750);
@@ -1553,7 +1554,10 @@ const scroller = {
 
                 sim.restart().alpha(1);
                 
-                itens_despesa.forEach(item => item.morfa_para_circulo());
+                itens_despesa.forEach(item => {
+                    item.morfa_para_circulo();
+                    item.esmaece(false);
+                });
                 setTimeout(() => itens_receitas.forEach(item => item.morfa_para_circulo()), 500);
 
                 update_eixo('xVar');
