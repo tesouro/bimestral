@@ -756,7 +756,7 @@ function init() {
     GN.resultado.move_para('centro');
     GN.meta.move_para('centro');
 
-    prepara_simulacao(itens_despesa);
+    prepara_simulacao([...itens_despesa, ...itens_receitas]);
 
     // só inicializa o scroller depois de tudo montado
     //window.scrollTo(0,0);
@@ -882,7 +882,7 @@ function prepara_simulacao(itens) {
     sim
       .velocityDecay(0.3)
       .force('x', d3.forceX().strength(strength).x(d => scales.xVar(d.var)))
-      .force('y', d3.forceY().strength(strength).y(chart.h/6 + chart.margin.top))
+      .force('y', d3.forceY().strength(strength).y(d => (d.tipo == "item-despesa" ? chart.h * 2/6 : chart.h * 4/6 ) + chart.margin.top))
       .force('collision', d3.forceCollide().strength(strength*2.5).radius(d => d.r_reav + 1))
       //.alphaMin(0.2)
       .on('tick', () => {
@@ -942,17 +942,19 @@ function helper_pega_max_min(array, coluna, max = true) {
 
 function monta_escalas() {
 
-    const maior_var = helper_pega_max_min(itens_despesa, "var", true);
-    const menor_var = helper_pega_max_min(itens_despesa, "var", false);
+    const itens = [...itens_despesa, ...itens_receitas];
+
+    const maior_var = helper_pega_max_min(itens, "var", true);
+    const menor_var = helper_pega_max_min(itens, "var", false);
     const max_var = Math.max(Math.abs(maior_var), Math.abs(menor_var));
 
-    const maior_varPct = helper_pega_max_min(itens_despesa, "varPct", true);
-    const menor_varPct = helper_pega_max_min(itens_despesa, "varPct", false);
+    const maior_varPct = helper_pega_max_min(itens, "varPct", true);
+    const menor_varPct = helper_pega_max_min(itens, "varPct", false);
     const max_varPct = Math.max(Math.abs(maior_varPct), Math.abs(menor_varPct));
 
 
-    const maior_loa = helper_pega_max_min(itens_despesa, "valor_loa", true);
-    const maior_reav = helper_pega_max_min(itens_despesa, "valor_reav", true);
+    const maior_loa = helper_pega_max_min(itens, "valor_loa", true);
+    const maior_reav = helper_pega_max_min(itens, "valor_reav", true);
     const maior_valor = Math.max(maior_loa, maior_reav);
 
     //console.log(maior_variacao, maior_varPct, maior_valor);
@@ -998,7 +1000,7 @@ function update_eixo(eixo) {
 
 function define_raios() {
 
-    itens_despesa.forEach(item => {
+    [...itens_despesa, ...itens_receitas].forEach(item => {
         item.r_loa = scales.r(item.valor_loa);
         item.r_reav = scales.r(item.valor_reav);
     })
