@@ -511,6 +511,8 @@ class GrandeReceita extends GrandeNumero {
     d_liq_reav;
 
     interpolator_para_liq_loa;
+    interpolator_de_liq_para_bruto_reav;
+    interpolator_de_bruto_para_liq_reav;
 
 
     constructor(nome, tipo, valor_loa, valor_reav, posicao_inicial_loa, posicao_inicial_reav, valor_liq_loa, valor_liq_reav, X0, forma_inicial) {
@@ -530,14 +532,18 @@ class GrandeReceita extends GrandeNumero {
         this.interpolator_para_liq_loa = flubber.interpolate(this.d_loa,  this.d_liq_loa);
         this.interpolator_para_bruto_loa = flubber.interpolate(this.d_liq_loa,  this.d_loa);
         
+        // para o passo inicial dos componentes da receita
+        this.interpolator_de_liq_para_bruto_reav = flubber.interpolate(this.d_liq_reav,  this.d_reav);
+        this.interpolator_de_bruto_para_liq_reav = flubber.interpolate(this.d_reav,  this.d_liq_reav);
+        
         this.interpolator_para_reav = flubber.interpolate(this.d_liq_loa,  this.d_liq_reav);
         this.interpolator_para_loa  = flubber.interpolate(this.d_liq_reav, this.d_liq_loa);
 
     }
 
-    morfa_para_liquido() { 
+    morfa_para_liquido(tipo = 'loa') { 
 
-        const interpolator = this.interpolator_para_liq_loa;
+        const interpolator = tipo == 'loa' ? this.interpolator_para_liq_loa : this.interpolator_de_bruto_para_liq_reav
 
         this.d3_ref
           .transition()
@@ -548,9 +554,9 @@ class GrandeReceita extends GrandeNumero {
 
     }
 
-    morfa_para_bruto() { 
+    morfa_para_bruto(tipo = 'loa') { 
 
-        const interpolator = this.interpolator_para_bruto_loa;
+        const interpolator = tipo == 'loa' ? this.interpolator_para_bruto_loa : this.interpolator_de_liq_para_bruto_reav;
 
         this.d3_ref
           .transition()
@@ -1441,7 +1447,7 @@ const scroller = {
             if (voltando) {
 
                 GN.despesa.esconde(false);
-                GN.receita.morfa_para_liquido();
+                GN.receita.morfa_para_liquido('reav');
                 setTimeout(() => GN.receita.esmaece(true), 500); 
                 itens_despesa.forEach(item => item.esmaece(false));
 
@@ -1449,7 +1455,7 @@ const scroller = {
 
                 GN.despesa.esconde(true);
                 GN.receita.esmaece(false);
-                setTimeout(() => GN.receita.morfa_para_bruto(), 500);
+                setTimeout(() => GN.receita.morfa_para_bruto('reav'), 500);
                 itens_despesa.forEach(item => item.esmaece(true));
             }
 
