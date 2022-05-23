@@ -1008,6 +1008,8 @@ function monta_escalas() {
 
 }
 
+// essas três funções seguintes poderiam fazer parte de uma classe
+
 function monta_eixos() {
 
     const formatPercent = d3.format(".0%");
@@ -1025,8 +1027,15 @@ function monta_eixos() {
 }
 
 function update_eixo(eixo) {
+    eixos.d3_ref.attr('opacity', 1);
     eixos.d3_ref.transition().duration(1000).call(eixos[eixo]);
 }
+
+function esconde_eixo(eixo) {
+    eixos.d3_ref.transition().duration(1000).attr('opacity', 0);
+}
+
+
 
 function define_raios() {
 
@@ -1545,6 +1554,8 @@ const scroller = {
                 setTimeout(() => {
                     GN.receita.esconde(false);
                 }, 750);
+                
+                esconde_eixo('xVar');
 
 
 
