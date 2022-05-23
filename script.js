@@ -1563,7 +1563,7 @@ const scroller = {
                 update_eixo('xVar');
 
                 // para garantir, caso o usuário role muito rápido
-                setTimout(() => {
+                setTimeout(() => {
                     GN.resultado.esconde(true);
                     GN.meta.esconde(true);
                 }, 1000)
