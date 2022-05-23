@@ -8,7 +8,16 @@
     --verde-tesouro: rgb(50,156,50);
     --azul-tesouro: rgb(0,74,147);
     --vermelho: #80140D;
+
+    --cor-texto: #333;
+
     --cor-transf: #9C782A;
+    --cor-desp: var(--verde-tesouro);
+    --cor-rec: var(--amarelo-tesouro);
+    --cor-resultado: var(--vermelho);
+    --cor-meta: crimson;
+
+    --font: Rubik;
 
     /* vão ser atualizados pelo JS
 
@@ -26,7 +35,7 @@ body {
 
     /*background-color: var(--verde-tesouro);*/
 
-    font-family: Rubik;
+    font-family: var(--font);
     line-height: 1.3;
     margin: 0;
 
@@ -114,6 +123,10 @@ body {
 
 }
 
+/* * * * * * 
+ * * SVG * * 
+ * * * * * */
+
 svg {
 
     width: 100%;
@@ -140,12 +153,12 @@ path.escondido  {
     opacity: 0;
 }
 
-path[data-nome="receita"] {stroke: var(--amarelo-tesouro);}
-path[data-nome="despesa"] {stroke: var(--verde-tesouro);}
+path[data-nome="receita"] {stroke: var(--cor-rec);}
+path[data-nome="despesa"] {stroke: var(--cor-desp);}
 path[data-nome="transferencias"] {stroke: var(--cor-transf);}
-path[data-nome="resultado"] {stroke: var(--vermelho);}
+path[data-nome="resultado"] {stroke: var(--cor-resultado);}
 path[data-nome="meta"] {
-    stroke: red;
+    stroke: var(--cor-meta);
     stroke-dasharray: 8;
 }
 
@@ -157,26 +170,30 @@ path.item {
 }
 
 path[data-tipo="item-despesa"] {
-    fill: var(--verde-tesouro);
+    fill: var(--cor-desp);
 }
 
 path[data-tipo="item-receita"] {
-    fill: var(--amarelo-tesouro);
+    fill: var(--cor-rec);
 }
 
 path.item.bolha {
     stroke-width: 0;
 }
 
-#pattern-receita > rect { fill: var(--amarelo-tesouro); }
-#pattern-despesa > rect { fill: var(--verde-tesouro); }
+#pattern-receita > rect { fill: var(--cor-rec); }
+#pattern-despesa > rect { fill: var(--cor-desp); }
 #pattern-transferencias > rect { fill: var(--cor-transf); }
-#pattern-resultado > rect { fill: var(--vermelho); }
+#pattern-resultado > rect { fill: var(--cor-resultado); }
 #pattern-meta > rect { fill: transparent; }
 
 /* eixo */
 .axis path {
     stroke-width: 1px;
+}
+
+.axis text {
+    font-family: var(--font);
 }
 
 /*
@@ -228,6 +245,7 @@ rect {
     box-shadow: 0 0 4px 4px lightgrey;
     padding: 0 1em;
     background-color: whitesmoke;
+    line-height: 1.5;
 }
 
 .step.direita {
@@ -250,4 +268,47 @@ rect {
     border-radius: 0.3em;
 
 }
+
+[data-tipo-termo="receita"] {
+
+    color: var(--cor-texto);
+    background-color: var(--cor-rec); 
+
+}
+
+[data-tipo-termo="despesa"] {
+
+    /*color: var(--cor-texto);*/
+    background-color: var(--cor-desp); 
+
+}
+
+[data-tipo-termo="transferências"] {
+
+    /*color: var(--cor-texto);*/
+    background-color: var(--cor-transf); 
+
+}
+
+[data-tipo-termo="resultado"] {
+
+    /*color: var(--cor-texto);*/
+    background-color: var(--cor-resultado); 
+
+}
+
+[data-tipo-termo="meta"] {
+
+    /*color: var(--cor-texto);*/
+    border: 2px dashed var(--cor-meta); 
+    background-color: transparent;
+    color: var(--cor-meta);
+
+}
+
+[data-tipo-valor] { font-weight: bold; }
+[data-tipo-valor="resultado"] {color: var(--cor-resultado);}
+[data-tipo-valor="meta"] {color: var(--cor-meta);}
+[data-tipo-valor="receita"] {color: var(--cor-receita);}
+[data-tipo-valor="despesa"] {color: var(--cor-despesa);}
 
