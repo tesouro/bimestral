@@ -245,6 +245,16 @@ rect {
    SCROLLER
    = = = = = = = = = */
 
+article.steps-scroller {
+    transition: opacity .5s;
+}
+
+.scroller-wrapper[data-mode="explore"] article.steps-scroller {
+    opacity: 0;
+    pointer-events: none;
+    z-index: -1; 
+}
+
 .step-wrapper {
     height: 100vh;
 }
@@ -323,3 +333,75 @@ rect {
 [data-tipo-valor="receita"] {color: var(--cor-receita);}
 [data-tipo-valor="despesa"] {color: var(--cor-despesa);}
 
+/* * * * * * * *
+   B U T T O N S
+ * * * * * * * */
+
+.btn-explorar {
+    margin: 1rem auto 2rem;
+    max-width: 200px;
+    display: block;
+    padding: 0.5em;
+    border-radius: 5px;
+    font-size: .9rem;
+    font-family: inherit;
+    /* font-weight: bold; */
+    border-width: 3px;
+    background-color: crimson;
+    color: white;
+    border-color: lightcoral;
+}
+
+/* * * * * * * *
+   T O O L T I P
+ * * * * * * * * */
+
+ .info-card.invisivel {
+     display: none;
+ }
+
+ .info-card {
+     position: absolute;
+     top: 50%;
+     border: 3px solid var(--cor-texto);
+     padding: 1rem;
+ }
+
+ .info-card p {
+     margin: 0;
+ }
+
+ [data-info-card-tipo="Receita"] { border-color: var(--cor-rec); }
+ [data-info-card-tipo="Despesa"] { border-color: var(--cor-desp); }
+
+ .ic-titulo-nome {
+     font-size: 1.2rem;
+     font-weight: bold;
+ }
+
+ .ic-titulo-tipo::after {
+     display: inline-block;
+     padding: .25em .5em;
+     font-size: .8rem;
+     letter-spacing: .1em;
+     border-radius: .5em;
+ }
+
+[data-info-card-tipo="Receita"] .ic-titulo-tipo::after {
+   background-color: var(--cor-rec);
+   content: 'Receita'
+}
+
+[data-info-card-tipo="Despesa"] .ic-titulo-tipo::after {
+   background-color: var(--cor-desp);
+   color: white;
+   content: 'Despesa'
+}
+
+[data-info-card-tipo="Receita"] .ic-titulo-nome {
+     color: var(--cor-rec);
+ }
+
+[data-info-card-tipo="Despesa"] .ic-titulo-nome {
+    color: var(--cor-desp);
+}
