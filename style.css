@@ -252,7 +252,11 @@ article.steps-scroller {
 .scroller-wrapper[data-mode="explore"] article.steps-scroller {
     opacity: 0;
     pointer-events: none;
-    z-index: -1; 
+    z-index: -2; 
+}
+
+.scroller-wrapper[data-mode="explore"] .svg-container {
+    z-index: 1;
 }
 
 .step-wrapper {
@@ -337,7 +341,7 @@ article.steps-scroller {
    B U T T O N S
  * * * * * * * */
 
-.btn-explorar {
+.btn-explore, .btn-story {
     margin: 1rem auto 2rem;
     max-width: 200px;
     display: block;
@@ -350,6 +354,20 @@ article.steps-scroller {
     background-color: crimson;
     color: white;
     border-color: lightcoral;
+}
+
+.btn-story {
+    display: none;
+    opacity: 0;
+    transition: opacity .5s;
+    position: absolute;
+    top: 2rem;
+    left: 1rem;
+}
+
+.scroller-wrapper[data-mode="explore"] .btn-story {
+    display: initial;
+    opacity: 1;
 }
 
 /* * * * * * * *

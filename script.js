@@ -1231,6 +1231,7 @@ const scroller = {
     init : function() {
 
         scroller.steps.get();
+        scroller.monitora_btns();
 
         console.log(scroller.steps.list);
 
@@ -1589,10 +1590,38 @@ const scroller = {
         }
 
 
+    },
+
+    alterna_para_modo : (modo) => {
+
+        const wrapper = document.querySelector('.scroller-wrapper');
+
+        wrapper.dataset.mode = modo;
+
+    },
+
+    btns : ['.btn-explore', '.btn-story'],
+
+    monitora_btns : () => {
+
+        const btns = document.querySelectorAll(scroller.btns);
+        btns.forEach(btn => btn.addEventListener(
+
+            'click', 
+
+            (e)=> { 
+
+                console.log('botao clicado', e.target);
+
+                if (e.target.className == 'btn-explore') scroller.alterna_para_modo('explore');
+
+                if (e.target.className == 'btn-story') scroller.alterna_para_modo('story');
+
+            })
+        )
     }
 
 }
-
 
 
 
