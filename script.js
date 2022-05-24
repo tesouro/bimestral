@@ -1563,6 +1563,7 @@ const scroller = {
                 }, 750);
 
                 esconde_eixo('xVar');
+                scroller.alterna_para_modo('story');
 
 
 
