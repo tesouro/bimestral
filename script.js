@@ -745,6 +745,7 @@ const scales = {
 const eixos = {
 
     d3_ref : null,
+    d3_ref_titulo: null,
 
     xVar : null,
     xVarPct : null
@@ -1024,15 +1025,20 @@ function monta_eixos() {
       .attr('transform', `translate(0,${chart.margin.top})`)
     ;
 
+    eixos.ref_titulo = document.querySelector('.titulo-eixo');
+    eixos.ref_titulo.style.top = chart.margin.top + "px";
+
 }
 
 function update_eixo(eixo) {
     eixos.d3_ref.attr('opacity', 1);
     eixos.d3_ref.transition().duration(1000).call(eixos[eixo]);
+    eixos.ref_titulo.style.opacity = 1;
 }
 
 function esconde_eixo(eixo) {
     eixos.d3_ref.transition().duration(1000).attr('opacity', 0);
+    eixos.ref_titulo.style.opacity = 0;
 }
 
 
@@ -1554,7 +1560,7 @@ const scroller = {
                 setTimeout(() => {
                     GN.receita.esconde(false);
                 }, 750);
-                
+
                 esconde_eixo('xVar');
 
 

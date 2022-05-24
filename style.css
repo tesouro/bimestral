@@ -196,6 +196,17 @@ path.item.bolha {
     font-family: var(--font);
 }
 
+.titulo-eixo {
+    position: absolute;
+    top: 2rem; /* vai ser definido pelo JS */
+    right: 0;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity .5s;
+    margin-top: .5rem;
+    margin-right: 2.5rem;
+}
+
 /*
 rect {
 
