@@ -727,7 +727,7 @@ const GN = {
     meta : null
 }
 
-const itens_despesa = [];
+const itens_despesas = [];
 const itens_receitas = [];
 
 // definições básicas
@@ -777,7 +777,7 @@ function init() {
     GN.resultado.move_para('centro');
     GN.meta.move_para('centro');
 
-    prepara_simulacao([...itens_despesa, ...itens_receitas]);
+    prepara_simulacao([...itens_despesas, ...itens_receitas]);
 
     // só inicializa o scroller depois de tudo montado
     //window.scrollTo(0,0); dá um tempo para o scroll voltar antes de ligar o monitor do scroller.
@@ -854,7 +854,7 @@ function monta_itens_despesa(xDespesas) {
             i
         )
 
-        itens_despesa.push(forma);
+        itens_despesas.push(forma);
 
         //const prev = new Forma('Benefícios Previdenciários', 'item-despesa', 'Despesas Obrigatórias', 778, 778, 0, 0, X0);
 
@@ -973,7 +973,7 @@ function helper_pega_max_min(array, coluna, max = true) {
 
 function monta_escalas() {
 
-    const itens = [...itens_despesa, ...itens_receitas];
+    const itens = [...itens_despesas, ...itens_receitas];
 
     const maior_var = helper_pega_max_min(itens, "var", true);
     const menor_var = helper_pega_max_min(itens, "var", false);
@@ -1045,7 +1045,7 @@ function esconde_eixo(eixo) {
 
 function define_raios() {
 
-    [...itens_despesa, ...itens_receitas].forEach(item => {
+    [...itens_despesas, ...itens_receitas].forEach(item => {
         item.r_loa = scales.r(item.valor_loa);
         item.r_reav = scales.r(item.valor_reav);
     })
@@ -1154,14 +1154,14 @@ class MenuControle {
 
         'itens-desp' : () => {
 
-            itens_despesa.forEach(item => item.esconde(false));
+            itens_despesas.forEach(item => item.esconde(false));
 
         },
 
         'bolhas' : () => {
 
             sim.restart().alpha(1);
-            itens_despesa.forEach(item => item.morfa_para_circulo());
+            itens_despesas.forEach(item => item.morfa_para_circulo());
             update_eixo('xVar');
 
         },
@@ -1454,12 +1454,12 @@ const scroller = {
             if (voltando) {
 
                 GN.receita.esmaece(false);
-                itens_despesa[0].esconde(true);
+                itens_despesas[0].esconde(true);
                 
             } else {
 
                 GN.receita.esmaece(true);
-                itens_despesa[0].esconde(false);
+                itens_despesas[0].esconde(false);
             }
 
         },
@@ -1468,11 +1468,11 @@ const scroller = {
 
             if (voltando) {
 
-                itens_despesa[1].esconde(true);
+                itens_despesas[1].esconde(true);
                 
             } else {
 
-                itens_despesa[1].esconde(false);
+                itens_despesas[1].esconde(false);
             }
 
         },
@@ -1481,11 +1481,11 @@ const scroller = {
 
             if (voltando) {
 
-                itens_despesa.forEach((item, i) => {if (i > 1) item.esconde(true)});
+                itens_despesas.forEach((item, i) => {if (i > 1) item.esconde(true)});
                 
             } else {
 
-                itens_despesa.forEach((item, i) => {if (i > 1) item.esconde(false)});
+                itens_despesas.forEach((item, i) => {if (i > 1) item.esconde(false)});
             }
 
         },
@@ -1497,14 +1497,14 @@ const scroller = {
                 GN.despesa.esconde(false);
                 GN.receita.morfa_para_liquido('reav');
                 setTimeout(() => GN.receita.esmaece(true), 500); 
-                itens_despesa.forEach(item => item.esmaece(false));
+                itens_despesas.forEach(item => item.esmaece(false));
 
             } else {
 
                 GN.despesa.esconde(true);
                 GN.receita.esmaece(false);
                 setTimeout(() => GN.receita.morfa_para_bruto('reav'), 500);
-                itens_despesa.forEach(item => item.esmaece(true));
+                itens_despesas.forEach(item => item.esmaece(true));
             }
 
         },
@@ -1553,11 +1553,11 @@ const scroller = {
             if (voltando) {
 
                 sim.stop();
-                [...itens_despesa, ...itens_receitas].forEach(item => {
+                [...itens_despesas, ...itens_receitas].forEach(item => {
                     item.translada_para_posicao_inicial();
                     item.morfa_para_forma()
                 });
-                itens_despesa.forEach(item => item.esmaece(true));
+                itens_despesas.forEach(item => item.esmaece(true));
                 setTimeout(() => {
                     GN.receita.esconde(false);
                 }, 750);
@@ -1573,7 +1573,7 @@ const scroller = {
 
                 sim.restart().alpha(1);
                 
-                itens_despesa.forEach(item => {
+                itens_despesas.forEach(item => {
                     item.morfa_para_circulo();
                     item.esmaece(false);
                 });
@@ -1635,7 +1635,7 @@ const scroller = {
 
 const card = {
 
-    ref_tooltip : null,
+    ref_tooltip : '.tooltip',
     ref_card : null,
 
     monitora : (on_off) => {
@@ -1645,11 +1645,12 @@ const card = {
         const itens = document.querySelectorAll('.item');
 
         if (on_off == 'on') itens.forEach(item => {
-            item.addEventListener('hover', card.atua_hover);
+            item.addEventListener('mouseenter', card.atua_hover);
+            item.addEventListener('mouseout', card.esconde_tt);
             item.addEventListener('click', card.atua_click);
         }) 
         else itens.forEach(item => {
-            item.removeEventListener('hover', card.atua_hover);
+            item.removeEventListener('mouseenter', card.atua_hover);
             item.removeEventListener('click', card.atua_click);
         })
 
@@ -1661,14 +1662,46 @@ const card = {
         const tipo = e.target.dataset.tipo;
         const chave = 
           tipo == "item-receita" ?
-          'itens_despesas' :
-          'itens_receitas'
+          'itens_receitas' :
+          'itens_despesas'
         ;
+
+        const Tipo = tipo.slice(5).slice(0,1).toUpperCase() + tipo.slice(5).slice(1);
+
+        console.log(Tipo);
 
         const mini_data = dados.raw[chave][id];
         const forma = eval(chave)[id];
 
-        console.log(id, tipo, mini_data, forma);
+        const tt = document.querySelector(card.ref_tooltip);
+        tt.querySelector('.tt-nome').innerHTML = mini_data.nome;
+        tt.querySelector('.tt-valor').innerHTML = 'R$ ' + Math.round(mini_data.reav / 1000, 0) + ' bilhões';
+
+        tt.classList.remove('invisivel');
+        tt.dataset.ttTipo = Tipo;
+
+        const ttW = +window.getComputedStyle(tt).width.slice(0,-2);
+        const ttH = +window.getComputedStyle(tt).height.slice(0,-2);
+
+        if (forma.x + ttW > chart.w) {
+            
+            tt.style.left = (forma.x - ttW) + 'px';
+
+        } else {
+
+            tt.style.left = forma.x + 'px';
+
+        }
+
+        if (forma.y + ttH > chart.h) {
+            
+            tt.style.top = (forma.y - ttH) + 'px';
+
+        } else {
+
+            tt.style.top = forma.y + 'px';
+            
+        }
 
     },
 
@@ -1678,14 +1711,23 @@ const card = {
         const tipo = e.target.dataset.tipo;
         const chave = 
           tipo == "item-receita" ?
-          'itens_despesas' :
-          'itens_receitas'
+          'itens_receitas' :
+          'itens_despesas'
         ;
 
         const mini_data = dados.raw[chave][id];
         const forma = eval(chave)[id];
 
         console.log(id, tipo, mini_data, forma);
+
+    },
+
+    esconde_tt : (e) => {
+
+        console.log('disparou mouseout');
+
+        const tt = document.querySelector(card.ref_tooltip);
+        tt.classList.add('invisivel');
 
     }
 

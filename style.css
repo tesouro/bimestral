@@ -166,7 +166,12 @@ path.item {
 
     stroke: white;
     /*fill: rebeccapurple;*/
-    transition: stroke-width .3s, opacity .3s;
+    transition: stroke-width .3s, opacity .3s, stroke .3s;
+}
+
+[data-mode="explore"] .item.bolha:hover {
+    stroke: crimson;
+    stroke-width: 3px;
 }
 
 path[data-tipo="item-despesa"] {
@@ -374,43 +379,73 @@ article.steps-scroller {
    T O O L T I P
  * * * * * * * * */
 
- .info-card.invisivel {
-     display: none;
+.info-card.invisivel, .tooltip.invisivel {
+    display: none;
+}
+
+.info-card {
+    position: absolute;
+    top: 50%;
+    border: 3px solid var(--cor-info-card);
+    padding: 1rem;
+}
+
+.tooltip {
+    position: absolute;
+    max-width: 250px;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: whitesmoke;
+    border: 2px solid var(--cor-tt-card);
+    font-size: .8em;
+    color: var(--cor-texto);
+    pointer-events: none;
  }
 
- .info-card {
-     position: absolute;
-     top: 50%;
-     border: 3px solid var(--cor-texto);
-     padding: 1rem;
+.tooltip .tt-nome {
+    font-weight: bold;
+}
+
+.info-card p,
+.tooltip p {
+    margin: 0;
  }
 
- .info-card p {
-     margin: 0;
- }
+[data-tt-tipo="Receita"] { --cor-tt-card: var(--cor-rec); }
+[data-tt-tipo="Despesa"] { --cor-tt-card: var(--cor-desp);}
 
- [data-info-card-tipo="Receita"] { border-color: var(--cor-rec); }
- [data-info-card-tipo="Despesa"] { border-color: var(--cor-desp); }
+[data-info-card-tipo="Receita"] { --cor-info-card: var(--cor-rec); }
+[data-info-card-tipo="Despesa"] { --cor-info-card: var(--cor-desp); }
 
- .ic-titulo-nome {
-     font-size: 1.2rem;
-     font-weight: bold;
- }
+.ic-titulo-nome {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
 
- .ic-titulo-tipo::after {
-     display: inline-block;
-     padding: .25em .5em;
-     font-size: .8rem;
-     letter-spacing: .1em;
-     border-radius: .5em;
- }
+.ic-titulo-tipo::after,
+.tt-tipo::after {
+    display: inline-block;
+    padding: .25em .5em;
+    font-size: .8rem;
+    letter-spacing: .1em;
+    border-radius: .5em;
+}
 
-[data-info-card-tipo="Receita"] .ic-titulo-tipo::after {
+.tt-tipo::after {
+    padding: 0.1rem 0.2rem;
+    border-radius: 0;
+    font-size: .6rem;
+    text-transform: uppercase;
+}
+
+[data-info-card-tipo="Receita"] .ic-titulo-tipo::after,
+[data-tt-tipo="Receita"] .tt-tipo::after {
    background-color: var(--cor-rec);
    content: 'Receita'
 }
 
-[data-info-card-tipo="Despesa"] .ic-titulo-tipo::after {
+[data-info-card-tipo="Despesa"] .ic-titulo-tipo::after,
+[data-tt-tipo="Despesa"] .tt-tipo::after {
    background-color: var(--cor-desp);
    color: white;
    content: 'Despesa'
