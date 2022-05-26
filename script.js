@@ -1636,7 +1636,7 @@ const scroller = {
 const card = {
 
     ref_tooltip : '.tooltip',
-    ref_card : null,
+    ref_card : '.info-card',
 
     monitora : (on_off) => {
 
@@ -1645,18 +1645,19 @@ const card = {
         const itens = document.querySelectorAll('.item');
 
         if (on_off == 'on') itens.forEach(item => {
-            item.addEventListener('mouseenter', card.atua_hover);
+            item.addEventListener('mouseenter', card.monta_tt);
             item.addEventListener('mouseout', card.esconde_tt);
-            item.addEventListener('click', card.atua_click);
+            item.addEventListener('click', card.monta_card);
         }) 
         else itens.forEach(item => {
-            item.removeEventListener('mouseenter', card.atua_hover);
-            item.removeEventListener('click', card.atua_click);
+            item.removeEventListener('mouseenter', card.monta_tt);
+            item.removeEventListener('mouseout', card.esconde_tt);
+            item.removeEventListener('click', card.monta_card);
         })
 
     },
 
-    atua_hover : (e) => {
+    monta_tt : (e) => {
 
         const id = e.target.dataset.id;
         const tipo = e.target.dataset.tipo;
@@ -1705,7 +1706,7 @@ const card = {
 
     },
 
-    atua_click : (e) => {
+    monta_card : (e) => {
 
         const id = e.target.dataset.id;
         const tipo = e.target.dataset.tipo;
@@ -1715,10 +1716,38 @@ const card = {
           'itens_despesas'
         ;
 
+        const Tipo = tipo.slice(5).slice(0,1).toUpperCase() + tipo.slice(5).slice(1);
+
         const mini_data = dados.raw[chave][id];
         const forma = eval(chave)[id];
 
-        console.log(id, tipo, mini_data, forma);
+        const loa = mini_data.loa;
+        const reav = mini_data.reav;
+        const variacao = reav - loa;
+        const var_pct = reav / loa - 1;
+        const aumento_diminuicao = variacao > 0 ? 'aumento' : 'diminuicao'
+
+        const infocard = document.querySelector(card.ref_card);
+
+        infocard.dataset.infoCardTipo = Tipo;
+        infocard.dataset.tipoVariacao = aumento_diminuicao;
+
+        infocard.querySelector('.ic-titulo-nome-texto').innerHTML = mini_data.nome;
+
+        infocard.querySelector('.ic-titulo-valor').innerHTML = 'R$ ' + Math.round(mini_data.reav / 1000, 0) + ' bilhões';
+
+        infocard.querySelector('.ic-titulo-variacao-valor').innerHTML = (aumento_diminuicao == 'aumento' ? 'Aumento' : 'Diminuição') + 
+        ' de R$ ' + Math.abs(Math.round(variacao / 1000, 2)) + ' bilhões';
+
+        infocard.querySelector('.ic-titulo-variacao-pct-valor').innerHTML = (aumento_diminuicao == 'aumento' ? '+' : '-')
+        + Math.round(var_pct*100,2) + '%';
+
+        infocard.classList.remove('invisivel');
+        
+        const cardW = +window.getComputedStyle(infocard).width.slice(0,-2);
+        const cardH = +window.getComputedStyle(infocard).height.slice(0,-2);
+
+        console.log(id, tipo, mini_data, forma, var_pct);
 
     },
 

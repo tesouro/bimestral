@@ -422,21 +422,35 @@ article.steps-scroller {
     font-weight: bold;
 }
 
+.ic-titulo-valor {
+    font-weight: bold;
+}
+
 .ic-titulo-tipo::after,
 .tt-tipo::after {
     display: inline-block;
+    /*border-radius: .5em;
     padding: .25em .5em;
-    font-size: .8rem;
+    font-size: .8rem;*/
     letter-spacing: .1em;
-    border-radius: .5em;
+    padding: 0.1rem 0.2rem;
+    border-radius: 0;
+    font-size: .6rem;
+    text-transform: uppercase;
+    
 }
 
+.ic-variacao {
+    font-size: .8em;
+}
+
+/*
 .tt-tipo::after {
     padding: 0.1rem 0.2rem;
     border-radius: 0;
     font-size: .6rem;
     text-transform: uppercase;
-}
+}*/
 
 [data-info-card-tipo="Receita"] .ic-titulo-tipo::after,
 [data-tt-tipo="Receita"] .tt-tipo::after {
@@ -457,4 +471,23 @@ article.steps-scroller {
 
 [data-info-card-tipo="Despesa"] .ic-titulo-nome {
     color: var(--cor-desp);
+}
+
+.icon-variacao-aumento, 
+.icon-variacao-diminuicao {
+    /*border-radius: 50%;
+    background-color: #333;
+    color: white;
+    width: 1em;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+    height: 1em;*/
+}
+
+[data-tipo-variacao="aumento"] .icon-variacao-diminuicao {
+    display: none;
+}
+[data-tipo-variacao="diminuicao"] .icon-variacao-aumento {
+    display: none;
 }
