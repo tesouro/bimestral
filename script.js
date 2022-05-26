@@ -1599,6 +1599,9 @@ const scroller = {
 
         wrapper.dataset.mode = modo;
 
+        if (modo == 'explore') card.monitora('on');
+        if (modo == 'story') card.monitora('off');
+
     },
 
     btns : ['.btn-explore', '.btn-story'],
@@ -1630,6 +1633,62 @@ const scroller = {
 
 /*setTimeout(itens.forEach(item => item.morfa_para_circulo()), 8000);*/
 
+const card = {
 
+    ref_tooltip : null,
+    ref_card : null,
+
+    monitora : (on_off) => {
+
+        console.log('é para monitorar?', on_off);
+
+        const itens = document.querySelectorAll('.item');
+
+        if (on_off == 'on') itens.forEach(item => {
+            item.addEventListener('hover', card.atua_hover);
+            item.addEventListener('click', card.atua_click);
+        }) 
+        else itens.forEach(item => {
+            item.removeEventListener('hover', card.atua_hover);
+            item.removeEventListener('click', card.atua_click);
+        })
+
+    },
+
+    atua_hover : (e) => {
+
+        const id = e.target.dataset.id;
+        const tipo = e.target.dataset.tipo;
+        const chave = 
+          tipo == "item-receita" ?
+          'itens_despesas' :
+          'itens_receitas'
+        ;
+
+        const mini_data = dados.raw[chave][id];
+        const forma = eval(chave)[id];
+
+        console.log(id, tipo, mini_data, forma);
+
+    },
+
+    atua_click : (e) => {
+
+        const id = e.target.dataset.id;
+        const tipo = e.target.dataset.tipo;
+        const chave = 
+          tipo == "item-receita" ?
+          'itens_despesas' :
+          'itens_receitas'
+        ;
+
+        const mini_data = dados.raw[chave][id];
+        const forma = eval(chave)[id];
+
+        console.log(id, tipo, mini_data, forma);
+
+    }
+
+}
 
 
