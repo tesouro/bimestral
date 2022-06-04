@@ -385,9 +385,11 @@ article.steps-scroller {
 
 .info-card {
     position: absolute;
-    top: 50%;
     border: 3px solid var(--cor-info-card);
     padding: 1rem;
+    background-color: ghostwhite;
+    width: 400px;
+
 }
 
 .tooltip {
@@ -409,7 +411,22 @@ article.steps-scroller {
 .info-card p,
 .tooltip p {
     margin: 0;
- }
+}
+
+.ic-btn-fechar {
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    position: absolute;
+    border: none;
+    top: 1rem;
+    right: 1rem;
+    background-color: transparent;
+    font-size: 2rem;
+}
+
+.ic-btn-fechar:hover {
+    color: firebrick;
+}
 
 [data-tt-tipo="Receita"] { --cor-tt-card: var(--cor-rec); }
 [data-tt-tipo="Despesa"] { --cor-tt-card: var(--cor-desp);}
@@ -418,6 +435,7 @@ article.steps-scroller {
 [data-info-card-tipo="Despesa"] { --cor-info-card: var(--cor-desp); }
 
 .ic-titulo-nome {
+    padding-top: .5rem;
     font-size: 1.2rem;
     font-weight: bold;
 }
@@ -451,6 +469,26 @@ article.steps-scroller {
     font-size: .6rem;
     text-transform: uppercase;
 }*/
+
+.ic-mini-viz {
+    margin-top: .5rem;
+}
+
+.ic-mini-viz-label-reav,
+.ic-mini-viz-label-loa {
+    margin-bottom: 0;
+    padding-top: .5rem;
+    font-size: .8rem;
+    transition: width .4s;
+}
+
+.ic-mini-viz-bar-loa,
+.ic-mini-viz-bar-reav {
+
+    height: 1rem;
+    background-color: var(--cor-info-card);
+
+}
 
 [data-info-card-tipo="Receita"] .ic-titulo-tipo::after,
 [data-tt-tipo="Receita"] .tt-tipo::after {
@@ -490,4 +528,18 @@ article.steps-scroller {
 }
 [data-tipo-variacao="diminuicao"] .icon-variacao-aumento {
     display: none;
+}
+
+.ic-justificativa {
+    font-size: .8rem;
+}
+
+.ic-justificativa-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    padding-top: .5rem;
+}
+
+.ic-justificativa-texto {
+    font-weight: lighter;
 }

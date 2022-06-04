@@ -783,6 +783,8 @@ function init() {
     //window.scrollTo(0,0); dá um tempo para o scroll voltar antes de ligar o monitor do scroller.
     setTimeout(() => scroller.init(), 1000);
 
+    card.botao_fechar.monitora();
+
 }
 
 function monta_grandes_numeros() {
@@ -1657,6 +1659,17 @@ const card = {
 
     },
 
+    botao_fechar : {
+
+        monitora : () => {
+            document.querySelector('.ic-btn-fechar').addEventListener('click', e => {
+                const infocard = document.querySelector(card.ref_card);
+                infocard.classList.add('invisivel');
+            })
+        }
+
+    },
+
     monta_tt : (e) => {
 
         const id = e.target.dataset.id;
@@ -1748,6 +1761,44 @@ const card = {
         const cardH = +window.getComputedStyle(infocard).height.slice(0,-2);
 
         console.log(id, tipo, mini_data, forma, var_pct);
+
+        // viz
+
+        infocard.querySelector('.ic-mini-viz-label-value-loa').innerHTML = 'R$ ' + Math.round(mini_data.loa / 1000, 0) + ' bilhões';
+
+        infocard.querySelector('.ic-mini-viz-label-value-reav').innerHTML = 'R$ ' + Math.round(mini_data.reav / 1000, 0) + ' bilhões';
+
+        const maior = Math.max(mini_data.loa, mini_data.reav);
+
+        infocard.querySelector('.ic-mini-viz-bar-loa').style.width = 100 * mini_data.loa / maior + "%";
+        infocard.querySelector('.ic-mini-viz-bar-reav').style.width = 100 * mini_data.reav / maior + "%";
+
+
+        if (forma.x + cardW > chart.w) {
+            
+            infocard.style.left = (forma.x - cardW) + 'px';
+
+        } else {
+
+            infocard.style.left = forma.x + 'px';
+
+        }
+
+        if (forma.y + cardH > chart.h) {
+
+            let top = forma.y - cardH;
+
+            if (top < 0) top = 0;
+            
+            infocard.style.top = top + 'px';
+
+        } else {
+
+            infocard.style.top = forma.y + 'px';
+            
+        }
+
+
 
     },
 
