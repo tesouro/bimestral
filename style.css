@@ -55,6 +55,14 @@ body {
     font-size: 4rem;
 }
 
+@media (max-width: 420px) {
+
+    .cover h1 {
+        font-size: 3rem
+    }
+
+}
+
 .cover img {
     max-width: 90%;
 }
@@ -291,7 +299,7 @@ article.steps-scroller {
 }
 
 .step {
-    max-width: 400px;
+    max-width: 320px;
     border: 4px solid #333;
     border-radius: 10px;
     box-shadow: 0 0 4px 4px lightgrey;

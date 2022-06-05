@@ -9,6 +9,9 @@ class Chart {
     elemento;
     container;
 
+    // mobile ou desktop
+    modo = 'desktop';
+
     // dimensoes do grafico
     w;
     h;
@@ -75,6 +78,8 @@ class Chart {
         this.w = w;
         this.h = h;
 
+        if (w < 420) this.modo = 'mobile';
+
     }
 
     set_viewbox() {
@@ -91,7 +96,7 @@ class Chart {
 
         console.log(w , h, l, gap);
 
-        const [ W , H ] = [0.4 * w , 1 * h];
+        const [ W , H ] = [0.4 * w , .95 * h];
 
         const area = W * H;
 
@@ -1006,9 +1011,11 @@ function monta_escalas() {
       .range([margin, chart.w - margin])
     ;
 
+    let r_max = chart.modo == 'mobile' ? 30 : 60;
+
     scales.r
       .domain([0, maior_valor])
-      .range([1, 60])
+      .range([1, r_max])
     ;
 
 }
@@ -1021,6 +1028,11 @@ function monta_eixos() {
 
     eixos.xVar = d3.axisTop(scales.xVar)
     eixos.xVarPct = d3.axisTop(scales.xVarPct).tickFormat(formatPercent);
+
+    if (chart.modo == 'mobile') {
+        eixos.xVar.ticks(5);
+        eixos.xVarPct.ticks(5);
+    }
 
     // não tá legal isso. mas o prazo tampouco tá legal.
     eixos.d3_ref = d3.select('svg')
@@ -1820,12 +1832,17 @@ const card = {
         overlay.classList.add('active');
         overlay.addEventListener('click', card.botao_fechar.atua);
 
+        // deixa tooltip invisivel, por via das dúvidas
+
+        card.esconde_tt();
+
+
 
 
 
     },
 
-    esconde_tt : (e) => {
+    esconde_tt : () => {
 
         console.log('disparou mouseout');
 
