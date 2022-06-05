@@ -784,6 +784,8 @@ function init() {
     setTimeout(() => scroller.init(), 1000);
 
     card.botao_fechar.monitora();
+    resumo.calcula_valores();
+    resumo.monitora();
 
 }
 
@@ -1043,8 +1045,6 @@ function esconde_eixo(eixo) {
     eixos.ref_titulo.style.opacity = 0;
 }
 
-
-
 function define_raios() {
 
     [...itens_despesas, ...itens_receitas].forEach(item => {
@@ -1053,6 +1053,8 @@ function define_raios() {
     })
 
 }
+
+const numero_br = new Intl.NumberFormat('pt-BR');
 
 /*
 const maior_valor = 778;
@@ -1431,6 +1433,8 @@ const scroller = {
             }
 
         },
+
+        'Resumo' : () => {},
 
         'Composição' : (voltando = false) => {
 
@@ -1830,6 +1834,52 @@ const card = {
 
     }
 
+}
+
+const resumo = {
+
+    monitora : () => {
+
+        document.querySelector('#resumo-tipo').addEventListener('change', resumo.atua);
+
+    },
+
+    atua : (e) => {
+
+        const opcao = e.target.value;
+
+        console.log('aqui', opcao);
+
+        document.querySelector('.viz-resumo').dataset.modoResumo = opcao;
+
+
+    },
+
+    calcula_valores : () => {
+
+        const totais = {
+            'rec-loa'     : dados.raw.grandes_numeros.receita.liquida.loa,
+            'rec-reav'    : dados.raw.grandes_numeros.receita.liquida.reav,
+            'desp-loa'    : dados.raw.grandes_numeros.despesa.loa,
+            'desp-reav'   : dados.raw.grandes_numeros.despesa.reav,
+            'result-loa'  : dados.raw.grandes_numeros.resultado.loa,
+            'result-reav' : dados.raw.grandes_numeros.resultado.reav
+        }
+
+        const valores = Object.values(totais);
+        const rotulos = Object.keys(totais);
+
+        const max = Math.max(...valores);
+
+        rotulos.forEach(rotulo => {
+
+            document.querySelector(`.viz-resumo-container-${rotulo} .bar`).style.setProperty('--bar-width', totais[rotulo] / max );
+
+            document.querySelector(`.viz-resumo-container-${rotulo} .label-value`).innerText = numero_br.format(totais[rotulo]);
+
+        })
+
+    }
 }
 
 
