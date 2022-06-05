@@ -791,6 +791,7 @@ function init() {
     card.botao_fechar.monitora();
     resumo.calcula_valores();
     resumo.monitora();
+    seletor_modo_simulacao.monitora();
 
 }
 
@@ -948,13 +949,14 @@ function update_simulacao(tipo) {
     // tipo: Var ou VarPct
 
     const chave_var = tipo == "Var" ? 'var' : 'varPct';
+    const divisor = tipo == 'Var' ? 1000 : 1;
 
     const strength = 0.04;
 
     const scale = scales['x' + tipo];
  
     sim
-      .force('x', d3.forceX().strength(strength).x(d => scale(d[chave_var])))
+      .force('x', d3.forceX().strength(strength).x(d => scale(d[chave_var]/divisor)))
       .restart().alpha(.5);
 
 }
@@ -1650,6 +1652,32 @@ const scroller = {
 //itens.forEach(item => item.esconde(false))
 
 /*setTimeout(itens.forEach(item => item.morfa_para_circulo()), 8000);*/
+const seletor_modo_simulacao = {
+
+    monitora : () => {
+
+        document.querySelector('#modo-variacao').addEventListener('change', seletor_modo_simulacao.atua);
+
+    },
+
+    atua : (e) => {
+
+        const modo = e.target.value;
+
+        if (modo == 'var-abs') {
+
+            update_simulacao('Var')
+            update_eixo('xVar');
+
+        } else {
+
+            update_simulacao('VarPct')
+            update_eixo('xVarPct');
+
+        }
+
+    }
+}
 
 const card = {
 
