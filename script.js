@@ -499,7 +499,7 @@ class GrandeNumero {
         this.d3_ref
           .transition()
           .delay(0)
-          .duration(1000)
+          .duration(750)
           .attrTween('d', () => interpolator)
         ;
 
