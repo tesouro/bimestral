@@ -55,14 +55,6 @@ body {
     font-size: 4rem;
 }
 
-@media (max-width: 420px) {
-
-    .cover h1 {
-        font-size: 3rem
-    }
-
-}
-
 .cover img {
     max-width: 90%;
 }
@@ -663,4 +655,14 @@ select#resumo-tipo {
 [data-modo-resumo="resumo-lovaXreav"] .viz-resumo-container-result-reav { --pos: 6;}
 
 
+@media (max-width: 420px) {
 
+    .cover h1 {
+        font-size: 3rem
+    }
+
+    .info-card {
+        width: 320px;
+    }
+
+}

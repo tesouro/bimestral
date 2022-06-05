@@ -911,7 +911,7 @@ function prepara_simulacao(itens) {
 
     sim
       .velocityDecay(0.3)
-      .force('x', d3.forceX().strength(strength).x(d => scales.xVar(d.var)))
+      .force('x', d3.forceX().strength(strength).x(d => scales.xVar(d.var/1000)))
       .force('y', d3.forceY().strength(strength).y(d => (d.tipo == "item-despesa" ? chart.h * 2/6 : chart.h * 4/6 ) + chart.margin.top))
       .force('collision', d3.forceCollide().strength(strength*2.5).radius(d => d.r_reav + 1))
       //.alphaMin(0.1)
@@ -1002,7 +1002,7 @@ function monta_escalas() {
     const margin = 50;
 
     scales.xVar
-      .domain([-max_var, max_var]) // para ter o ZERO no centro
+      .domain([-max_var/1000, max_var/1000]) // para ter o ZERO no centro
       .range([margin, chart.w - margin])
     ;
 
