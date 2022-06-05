@@ -91,7 +91,7 @@ class Chart {
 
         console.log(w , h, l, gap);
 
-        const [ W , H ] = [0.4 * w , 0.8 * h];
+        const [ W , H ] = [0.4 * w , 1 * h];
 
         const area = W * H;
 
