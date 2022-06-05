@@ -1789,7 +1789,7 @@ const card = {
         const loa = mini_data.loa;
         const reav = mini_data.reav;
         const variacao = reav - loa;
-        const var_pct = reav / loa - 1;
+        const var_pct = loa == 0 ? 'na' : reav / loa - 1;
         const aumento_diminuicao = variacao > 0 ? 'aumento' : 'diminuicao'
 
         const infocard = document.querySelector(card.ref_card);
@@ -1804,7 +1804,7 @@ const card = {
         infocard.querySelector('.ic-titulo-variacao-valor').innerHTML = (aumento_diminuicao == 'aumento' ? 'Aumento' : 'Diminuição') + 
         ' de R$ ' + Math.abs(Math.round(variacao / 1000, 2)) + ' bilhões';
 
-        infocard.querySelector('.ic-titulo-variacao-pct-valor').innerHTML = (aumento_diminuicao == 'aumento' ? '+' : '-')
+        infocard.querySelector('.ic-titulo-variacao-pct-valor').innerHTML = var_pct == 'na' ? 'o item não estava presente na LOA' : (aumento_diminuicao == 'aumento' ? '+' : '-')
         + Math.round(var_pct*100,2) + '%';
 
         infocard.classList.remove('invisivel');
