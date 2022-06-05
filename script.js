@@ -1662,10 +1662,18 @@ const card = {
     botao_fechar : {
 
         monitora : () => {
-            document.querySelector('.ic-btn-fechar').addEventListener('click', e => {
-                const infocard = document.querySelector(card.ref_card);
-                infocard.classList.add('invisivel');
-            })
+            document.querySelector('.ic-btn-fechar').addEventListener( 'click', card.botao_fechar.atua )
+        },
+
+        atua : (e) => {
+
+            const infocard = document.querySelector(card.ref_card);
+            infocard.classList.add('invisivel');
+
+            let overlay = document.querySelector('.overlay')
+            overlay.classList.remove('active');
+            overlay.removeEventListener('click', card.botao_fechar.atua);
+
         }
 
     },
@@ -1775,8 +1783,12 @@ const card = {
 
 
         if (forma.x + cardW > chart.w) {
+
+            let left = forma.x - cardW;
+
+            if (left < 0) left = 0;
             
-            infocard.style.left = (forma.x - cardW) + 'px';
+            infocard.style.left = left + 'px';
 
         } else {
 
@@ -1797,6 +1809,13 @@ const card = {
             infocard.style.top = forma.y + 'px';
             
         }
+
+        // "liga" overlay
+
+        let overlay = document.querySelector('.overlay')
+        overlay.classList.add('active');
+        overlay.addEventListener('click', card.botao_fechar.atua);
+
 
 
 

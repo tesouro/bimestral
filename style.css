@@ -166,12 +166,33 @@ path.item {
 
     stroke: white;
     /*fill: rebeccapurple;*/
-    transition: stroke-width .3s, opacity .3s, stroke .3s;
+    transition: stroke-width .3s, opacity .3s, stroke .3s, filter .3s;
 }
 
 [data-mode="explore"] .item.bolha:hover {
     stroke: crimson;
     stroke-width: 3px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    background-color: white;
+    pointer-events: none;
+    transition: opacity .3s;
+}
+
+.overlay.active {
+    opacity: .5;
+    pointer-events: initial;
+}
+
+[data-mode="explore"] .overlay {
+    
 }
 
 path[data-tipo="item-despesa"] {
@@ -185,6 +206,7 @@ path[data-tipo="item-receita"] {
 path.item.bolha {
     stroke-width: 0;
 }
+
 
 #pattern-receita > rect { fill: var(--cor-rec); }
 #pattern-despesa > rect { fill: var(--cor-desp); }
