@@ -365,6 +365,40 @@ article.steps-scroller {
 [data-tipo-valor="despesa"] {color: var(--cor-despesa);}
 
 /* * * * * * * *
+V I Z
+* * * * * * */
+
+.info-tip-acrescimo,
+.info-tip-reducao {
+    opacity: 0;
+    position: absolute;
+    bottom: 0;
+    transition: opacity .3s;
+    width: 150px;
+    max-width: 35%;
+    font-size: .8rem;
+    font-weight: lighter;
+    padding: 1rem;
+}
+
+.info-tip-acrescimo {
+    right: 0;
+    text-align: right;
+}
+
+.info-tip-reducao {
+    left: 0;
+    text-align: left;
+}
+
+.scroller-wrapper[data-mode="explore"] .info-tip-acrescimo,
+.scroller-wrapper[data-mode="explore"] .info-tip-reducao {
+    opacity: 1;
+}
+
+
+
+/* * * * * * * *
    B U T T O N S
  * * * * * * * */
 
