@@ -223,17 +223,6 @@ path.item.bolha {
     font-family: var(--font);
 }
 
-.titulo-eixo {
-    position: absolute;
-    top: 2rem; /* vai ser definido pelo JS */
-    right: 0;
-    font-size: 14px;
-    opacity: 0;
-    transition: opacity .5s;
-    margin-top: .5rem;
-    margin-right: 2.5rem;
-}
-
 /*
 rect {
 
@@ -396,6 +385,35 @@ V I Z
     opacity: 1;
 }
 
+.titulo-eixo {
+    position: absolute;
+    top: 2rem; /* vai ser definido pelo JS */
+    right: 0;
+    left: 0;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity .5s;
+    margin-top: .5rem;
+    margin-right: 2.5rem;
+    margin-left: 2.5rem;
+}
+
+.titulo-eixo p {
+    margin: 0;
+    margin-left: auto;
+    text-align: center;
+
+}
+
+select#modo-variacao {
+    font-family: inherit;
+    font-size: inherit;
+    background-color: transparent;
+    border: 1px solid currentColor;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
 
 
 /* * * * * * * *
@@ -420,10 +438,7 @@ V I Z
 .btn-story {
     display: none;
     opacity: 0;
-    transition: opacity .5s;
-    position: absolute;
-    top: 2rem;
-    left: 1rem;
+    transition: opacity .5s;    
 }
 
 .scroller-wrapper[data-mode="explore"] .btn-story {
@@ -697,6 +712,10 @@ select#resumo-tipo {
 
     .info-card {
         width: 320px;
+    }
+
+    .scroller-wrapper[data-mode="explore"] .btn-story {
+        display: block;
     }
 
 }
