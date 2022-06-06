@@ -1542,15 +1542,28 @@ const scroller = {
 
         },
 
+        'Composição - Receita - Terceiro Maior item' : (voltando = false) => {
+
+            if (voltando) {
+
+                itens_receitas[2].esconde(true);
+                
+            } else {
+
+                itens_receitas[2].esconde(false);
+            }
+
+        },
+
         'Composição - Receita - demais itens' : (voltando = false) => {
 
             if (voltando) {
 
-                itens_receitas.forEach((item, i) => {if (i > 1) item.esconde(true)});
+                itens_receitas.forEach((item, i) => {if (i > 2) item.esconde(true)});
                 
             } else {
 
-                itens_receitas.forEach((item, i) => {if (i > 1) item.esconde(false)});
+                itens_receitas.forEach((item, i) => {if (i > 2) item.esconde(false)});
             }
 
         },
