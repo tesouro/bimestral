@@ -124,6 +124,18 @@ discr <- list(
   reav = grandes_numeros[[get_posicao(termo_discr), termo_reav]]
 )
 
+teto <- list(
+
+    nome = 'teto dos gastos',
+  categoria = 'grande-numero',
+  
+  posicao_inicial_loa = 0,
+  posicao_inicial_reav = 0,
+  
+  loa = round(1679572.80847003/1000, 0),
+  reav = round(1680992.78983395/1000, 0)
+  
+)
 
 # output - grandes números ------------------------------------------------
 
@@ -132,7 +144,8 @@ grandes_numeros <- list(
   despesa = despesa,
   transferencias = transferencias,
   resultado = resultado,
-  meta = meta
+  meta = meta,
+  teto = teto
   #obrigatorias = obrig,
   #discricionarias = discr
 )
@@ -153,20 +166,22 @@ numero_linha_transferencia <- which(rec_det_raw$Discriminação == linha_transfe
 termo_reav_rec <- "Avaliação 1º Bimestre\r\n(b)"
 
 rec_det <- rec_det_raw %>%
-  select(c("Discriminação", termo_loa, termo_reav_rec)) %>%
+  select(c("Discriminação", termo_loa, termo_reav_rec, justificativa)) %>%
   filter(row_number() < numero_linha_transferencia) %>%
   filter(!(`Discriminação` %in% linhas_rec_que_nao_interessam)) %>%
   filter(!is.na(!!sym(termo_loa))) %>%
   filter(!is.na(`Discriminação`)) %>%
   filter(!!sym(termo_reav_rec) > 0) %>%
   mutate(
-    nome = ifelse(!!sym(termo_reav_rec) < 1000, "Outras", `Discriminação`)
+    nome = ifelse(!!sym(termo_reav_rec) < 1000, "Outras", `Discriminação`),
+    justificativa = ifelse(is.na(justificativa), 'sem análise específica.', justificativa)
   )
 
 rec_det_pre <- rec_det %>%
   select(-`Discriminação`) %>%
   group_by(nome) %>%
   summarise(across(where(is.numeric), sum)) %>%
+  ungroup() %>%
   mutate(
     valor_quadradinhos_reav = round(!!sym(termo_reav_rec)/1000, 0),
     valor_quadradinhos_loa = round(!!sym(termo_loa)/1000, 0)
@@ -188,6 +203,9 @@ rec_det_pre <- rec_det %>%
 
 rec_det_pre$percent_reav <- rec_det_pre$reav / sum(rec_det_pre$reav)
 
+rec_justificativas <- rec_det %>%
+  select(nome, justificativa)
+
 rec_det_export <- rec_det_pre %>%
   arrange(-valor_quadradinhos_reav) %>%
   mutate(
@@ -196,24 +214,27 @@ rec_det_export <- rec_det_pre %>%
     categoria = "itens-receita"
   ) %>%
   arrange(-percent_reav) %>%
-  mutate(percent_reav_cum = cumsum(percent_reav))
+  mutate(percent_reav_cum = cumsum(percent_reav)) %>%
+  left_join(rec_justificativas)
 
 # despesas - detalhados ---------------------------------------------------
 
 desp_det_raw <- read_excel('planilhas-bimestral-2022-1bim.xlsx', sheet = '5', skip = 4)
 
 desp_det <- desp_det_raw[!is.na(desp_det_raw[,2]),] %>%
-  select(c("Descrição", termo_loa, termo_reav)) %>%
+  select(c("Descrição", termo_loa, termo_reav, justificativa)) %>%
   filter(!(`Descrição` %in% c('Total', 'Despesas do Poder Executivo Sujeitas à Programação Financeira'))) %>%
   filter(!!sym(termo_reav) > 0) %>%
   mutate(
-    nome = ifelse(!!sym(termo_reav) < 1000, "Demais", `Descrição`)
+    nome = ifelse(!!sym(termo_reav) < 1000, "Demais", `Descrição`),
+    justificativa = ifelse(is.na(justificativa), 'sem análise específica.', justificativa)
   )
 
 desp_det_pre <- desp_det %>%
   select(-`Descrição`) %>%
   group_by(nome) %>%
   summarise(across(where(is.numeric), sum)) %>%
+  ungroup() %>%
   mutate(
     valor_quadradinhos_reav = round(!!sym(termo_reav)/1000, 0),
     valor_quadradinhos_loa = round(!!sym(termo_loa)/1000, 0)
@@ -236,6 +257,10 @@ desp_det_pre <- desp_det %>%
 desp_det_pre$percent_reav <- desp_det_pre$reav / sum(desp_det_pre$reav)
 #desp_det_pre$percent_reav <- desp_det_pre$valor_quadradinhos_reav / sum(desp_det_pre$valor_quadradinhos_reav)
 
+desp_justificativas <- desp_det %>%
+  group_by(nome) %>%
+  summarise(justificativa = first(justificativa)) %>%
+  mutate(justificativa = ifelse(nome == 'Demais', 'sem análise específica.', justificativa))
 
 desp_det_export <- desp_det_pre %>%
   arrange(-valor_quadradinhos_reav) %>%
@@ -245,7 +270,8 @@ desp_det_export <- desp_det_pre %>%
     categoria = "itens-despesa"
   ) %>%
   arrange(-percent_reav) %>%
-  mutate(percent_reav_cum = cumsum(percent_reav))
+  mutate(percent_reav_cum = cumsum(percent_reav)) %>%
+  left_join(desp_justificativas)
 
 # export de novo ----------------------------------------------------------
 
