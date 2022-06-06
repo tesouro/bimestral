@@ -465,10 +465,12 @@ select#modo-variacao {
     transition: opacity .5s;    
 }
 
+/* * escondendo o botão "Retornar à história" porque ficou meio confuso 
 .scroller-wrapper[data-mode="explore"] .btn-story {
     display: initial;
     opacity: 1;
 }
+*/
 
 /* * * * * * * *
    T O O L T I P
