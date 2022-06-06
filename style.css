@@ -194,7 +194,7 @@ path.item {
 }
 
 [data-mode="explore"] .item.bolha:hover {
-    stroke: crimson;
+    stroke: #333;
     stroke-width: 3px;
 }
 
