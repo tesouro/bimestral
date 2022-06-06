@@ -94,8 +94,6 @@ class Chart {
 
         const { w , h, l, gap } = this ;
 
-        console.log(w , h, l, gap);
-
         const [ W , H ] = [0.4 * w , .95 * h];
 
         const area = W * H;
@@ -106,14 +104,10 @@ class Chart {
 
         let new_l = lado_quadradinho - gap;
 
-        console.log(area_quadradinho, Math.sqrt(area_quadradinho));
-
         const ncol = Math.floor( ( W - gap ) / ( new_l + gap ) );
 
         this.ncol = ncol;
         this.l = new_l;
-
-        console.log(ncol);
 
     }
 
@@ -413,7 +407,6 @@ class GrandeNumero {
 
             const W = chart.ncol * (chart.gap + chart.l);//bbox.width;
             // pode acontecer de a forma não ocupar toda a largura disponível, e aí o width do bbox vai ficar "subestimado".
-            console.log(W, 'a largura');
 
             const { w , h } = chart
             
@@ -712,7 +705,6 @@ class Dados {
         fetch(this.file)
           .then(response => response.json())
           .then(data => {
-              console.log(data);
               this.raw = data;
               init();
 
@@ -775,6 +767,8 @@ function init() {
     monta_itens_despesa(xDespesas);
     monta_itens_receita(xReceitas);
 
+    console.log('montou?')
+
     monta_escalas();
     monta_eixos();
     define_raios();
@@ -794,6 +788,8 @@ function init() {
     resumo.monitora();
     seletor_modo_simulacao.monitora();
 
+    document.querySelector('[data-ready]').dataset.ready = 'sim';
+
 }
 
 function monta_grandes_numeros() {
@@ -805,8 +801,6 @@ function monta_grandes_numeros() {
         // INTERFACE COM OS DADOS
 
         const d = dados.raw.grandes_numeros[nome];
-
-        console.log(nome, d);
 
         GN[nome] = nome == "receita" ?
 
@@ -837,13 +831,9 @@ function monta_grandes_numeros() {
 
     })
 
-    console.log('done');
-
 }
 
 function monta_itens_despesa(xDespesas) {
-
-    console.log(dados);
 
     const itens = dados.raw.itens_despesas;
 
@@ -871,11 +861,11 @@ function monta_itens_despesa(xDespesas) {
 
     })
 
+    console.log('terminou?');
+
 }
 
 function monta_itens_receita(xReceitas) {
-
-    console.log(dados);
 
     const itens = dados.raw.itens_receitas;
 
@@ -1000,8 +990,6 @@ function monta_escalas() {
     const maior_reav = helper_pega_max_min(itens, "valor_reav", true);
     const maior_valor = Math.max(maior_loa, maior_reav);
 
-    //console.log(maior_variacao, maior_varPct, maior_valor);
-
     const margin = 50;
 
     scales.xVar
@@ -1107,8 +1095,6 @@ const itens = [prev, desp_pf, pessoal, bpc, abono];
 let delay = 5000;
 
 */
-
-console.log('pode começar');
 
 class MenuControle {
 
@@ -1220,7 +1206,6 @@ class MenuControle {
         else {
 
             const acao = e.target.dataset[nome_data_attr];
-            console.log(acao);
             acoes[acao]();        
         }
 
@@ -1253,7 +1238,7 @@ const scroller = {
         scroller.steps.get();
         scroller.monitora_btns();
 
-        console.log(scroller.steps.list);
+        //console.log(scroller.steps.list);
 
         enterView({
 
@@ -1265,9 +1250,9 @@ const scroller = {
                 const step = el.dataset.step;
                 const step_index = scroller.steps.list.indexOf(step);
 
-               scroller.render[step]();
+                scroller.render[step]();
 
-                console.log(step, step_index);
+                //console.log(step, step_index);
 
             },
 
@@ -1279,7 +1264,7 @@ const scroller = {
 
                 scroller.render[step](true); // voltando = true;
 
-                console.log('back', step, step_index, 'anterior:', step_anterior);
+                //console.log('back', step, step_index, 'anterior:', step_anterior);
 
             }
         
@@ -1637,8 +1622,6 @@ const scroller = {
 
             (e)=> { 
 
-                console.log('botao clicado', e.target);
-
                 if (e.target.className == 'btn-explore') scroller.alterna_para_modo('explore');
 
                 if (e.target.className == 'btn-story') scroller.alterna_para_modo('story');
@@ -1688,8 +1671,6 @@ const card = {
 
     monitora : (on_off) => {
 
-        console.log('é para monitorar?', on_off);
-
         const itens = document.querySelectorAll('.item');
 
         if (on_off == 'on') itens.forEach(item => {
@@ -1735,8 +1716,6 @@ const card = {
         ;
 
         const Tipo = tipo.slice(5).slice(0,1).toUpperCase() + tipo.slice(5).slice(1);
-
-        console.log(Tipo);
 
         const mini_data = dados.raw[chave][id];
         const forma = eval(chave)[id];
@@ -1817,7 +1796,7 @@ const card = {
         const cardW = +window.getComputedStyle(infocard).width.slice(0,-2);
         const cardH = +window.getComputedStyle(infocard).height.slice(0,-2);
 
-        console.log(id, tipo, mini_data, forma, var_pct);
+        //console.log(id, tipo, mini_data, forma, var_pct);
 
         // viz
 
@@ -1877,8 +1856,6 @@ const card = {
 
     esconde_tt : () => {
 
-        console.log('disparou mouseout');
-
         const tt = document.querySelector(card.ref_tooltip);
         tt.classList.add('invisivel');
 
@@ -1897,8 +1874,6 @@ const resumo = {
     atua : (e) => {
 
         const opcao = e.target.value;
-
-        console.log('aqui', opcao);
 
         document.querySelector('.viz-resumo').dataset.modoResumo = opcao;
 
