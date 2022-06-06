@@ -529,8 +529,9 @@ select#modo-variacao {
     
 }
 
-.ic-variacao {
+p.ic-variacao {
     font-size: .8em;
+    margin-top: 1rem;
 }
 
 /*

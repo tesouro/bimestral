@@ -1070,6 +1070,7 @@ function define_raios() {
 }
 
 const numero_br = new Intl.NumberFormat('pt-BR');
+const numero_br1 = new Intl.NumberFormat('pt-BR', {maximumFractionDigits: 1, minimumFractionDigits: 1});
 
 /*
 const maior_valor = 778;
@@ -1803,6 +1804,7 @@ const card = {
         infocard.querySelector('.ic-justificativa-text').innerHTML = mini_data.justificativa;
 
         infocard.querySelector('.ic-titulo-valor').innerHTML = 'R$ ' + Math.round(mini_data.reav / 1000, 0) + ' bilhões';
+        infocard.querySelector('.ic-titulo-pct-do-total').innerHTML = numero_br1.format(mini_data.percent_reav * 100);
 
         infocard.querySelector('.ic-titulo-variacao-valor').innerHTML = (aumento_diminuicao == 'aumento' ? 'Aumento' : 'Diminuição') + 
         ' de R$ ' + Math.abs(Math.round(variacao / 1000, 2)) + ' bilhões';
