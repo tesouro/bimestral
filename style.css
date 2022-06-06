@@ -603,6 +603,8 @@ select#modo-variacao {
 
 .ic-justificativa {
     font-size: .8rem;
+    font-weight: lighter;
+    margin-top: 1rem;
 }
 
 .ic-justificativa-title {

@@ -729,7 +729,8 @@ const GN = {
     receita : null,
     transferencias : null,
     resultado : null,
-    meta : null
+    meta : null//,
+    //teto : null
 }
 
 const itens_despesas = [];
@@ -1799,12 +1800,14 @@ const card = {
 
         infocard.querySelector('.ic-titulo-nome-texto').innerHTML = mini_data.nome;
 
+        infocard.querySelector('.ic-justificativa-text').innerHTML = mini_data.justificativa;
+
         infocard.querySelector('.ic-titulo-valor').innerHTML = 'R$ ' + Math.round(mini_data.reav / 1000, 0) + ' bilhões';
 
         infocard.querySelector('.ic-titulo-variacao-valor').innerHTML = (aumento_diminuicao == 'aumento' ? 'Aumento' : 'Diminuição') + 
         ' de R$ ' + Math.abs(Math.round(variacao / 1000, 2)) + ' bilhões';
 
-        infocard.querySelector('.ic-titulo-variacao-pct-valor').innerHTML = var_pct == 'na' ? 'o item não estava presente na LOA' : (aumento_diminuicao == 'aumento' ? '+' : '-')
+        infocard.querySelector('.ic-titulo-variacao-pct-valor').innerHTML = var_pct == 'na' ? 'o item não estava presente na LOA' : (aumento_diminuicao == 'aumento' ? '+' : '')
         + Math.round(var_pct*100,2) + '%';
 
         infocard.classList.remove('invisivel');
