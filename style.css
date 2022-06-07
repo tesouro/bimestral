@@ -193,10 +193,18 @@ path.item {
     transition: stroke-width .3s, opacity .3s, stroke .3s, filter .3s;
 }
 
-[data-mode="explore"] .item.bolha:hover {
-    stroke: #333;
-    stroke-width: 3px;
+.scroller-wrapper:has( .bolha:hover) .bolha {
+
+    opacity: .5;
+
 }
+
+.scroller-wrapper[data-mode="explore"] .item.bolha:hover {
+
+    opacity: 1
+}
+
+
 
 .overlay {
     position: absolute;
