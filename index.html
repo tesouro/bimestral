@@ -76,7 +76,7 @@
             
             <div class="titulo-eixo">
                 <p>
-                    Variação em relação à LOA:  
+                    Variação em relação ao orçamento:  
                     <select name="modo-variacao" id="modo-variacao">
                         <option value="var-abs">diferença em R$ bi</option>
                         <option value="var-pct">diferença em %</option>
@@ -87,8 +87,8 @@
 
             </div>
 
-            <div class="info-tip-acrescimo">Itens que mais cresceram em relação à LOA</div>
-            <div class="info-tip-reducao">Itens que mais diminuiram em relação à LOA</div>
+            <div class="info-tip-acrescimo">Itens que mais cresceram em relação ao orçamento</div>
+            <div class="info-tip-reducao">Itens que mais diminuiram em relação ao orçamento</div>
             <div class="tooltip invisivel" data-tt-tipo="Despesa">
                 <p class="tt-tipo"></p>
                 <p class="tt-nome">Despesa tal</p>
@@ -113,11 +113,11 @@
                         <span class="icon-variacao-diminuicao">&#9660;</span> 
                          <span class="ic-titulo-variacao-valor">R$ 4 bilhões</span>
                          (<span class="ic-titulo-variacao-pct-valor">+23%</span>)
-                         em relação ao valor da LOA
+                         em relação ao valor do orçamento.
                     </p>
                 </div>
                 <div class="ic-mini-viz">
-                    <p class="ic-mini-viz-label-loa">LOA: <span class="ic-mini-viz-label-value-loa"></span></p>
+                    <p class="ic-mini-viz-label-loa">Orçamento: <span class="ic-mini-viz-label-value-loa"></span></p>
                     <div class="ic-mini-viz-bar-loa"></div>
                     <p class="ic-mini-viz-label-loa">Reavaliação: <span class="ic-mini-viz-label-value-reav"></span></p>
                     <div class="ic-mini-viz-bar-reav"></div>
@@ -211,7 +211,7 @@
 
                         <select name="resumo-tipo" id="resumo-tipo">
                             <option value="resumo-recXdesp">receitas e despesas</option>
-                            <option value="resumo-lovaXreav">LOA e reavaliação</option>
+                            <option value="resumo-lovaXreav">Orçamento e reavaliação</option>
                         </select> (valores em bilhões de R$):
 
                     </p>
@@ -219,7 +219,7 @@
                     <div class="viz-resumo" data-modo-resumo="resumo-recXdesp">
 
                         <div class="viz-resumo-container-rec-loa">
-                            <p class="label-bar">Receita Líquida (LOA)</p>
+                            <p class="label-bar">Receita Líquida (orçamento)</p>
                             <div class="container-bar">
                                 <span class="bar"></span><span class="label-value"></span>
                             </div>
@@ -227,7 +227,7 @@
                         </div>
 
                         <div class="viz-resumo-container-desp-loa">
-                            <p class="label-bar">Despesa (LOA)</p>
+                            <p class="label-bar">Despesa (orçamento)</p>
                             <div class="container-bar">
                                 <span class="bar"></span><span class="label-value"></span>
                             </div>
@@ -235,7 +235,7 @@
                         </div>
 
                         <div class="viz-resumo-container-result-loa">
-                            <p class="label-bar">Déficit (LOA)</p>
+                            <p class="label-bar">Déficit (orçamento)</p>
                             <div class="container-bar">
                                 <span class="bar"></span><span class="label-value"></span>
                             </div>
@@ -346,7 +346,7 @@
             <div class="step-wrapper">
                 <div class="step centro" data-step="Bolhas">
 
-                    <p>Para explorá-los, os itens estão agora representados por bolhas, cujos tamanhos são proporcionais aos valores. As bolhas estão inicialmente dispostas horizontalmente conforme a diferença entre o valor na atual avaliação e o seu valor original na LOA. Clique sobre elas para obter informações mais detalhadas, incluindo as justificativas para as variações.</p>
+                    <p>Para explorá-los, os itens estão agora representados por bolhas, cujos tamanhos são proporcionais aos valores. As bolhas estão inicialmente dispostas horizontalmente conforme a diferença entre o valor na atual avaliação e o seu valor original no orçamento. Clique sobre elas para obter informações mais detalhadas, incluindo as justificativas para as variações.</p>
 
                     <button class="btn-explore">Clique para explorar</button>
 
