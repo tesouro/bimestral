@@ -44,8 +44,17 @@ body {
 }
 
 .loading {
-    font-size: .9rem;
+    font-size: 1rem;
+    letter-spacing: .1em;
     font-weight: lighter;
+    position: absolute;
+    bottom: 2rem;
+    left: 0;
+    text-align: center;
+    background-color: black;
+    padding: 1rem;
+    color: white;
+    width: 100%;
 }
 
 .loading-pronto {
@@ -71,12 +80,21 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: whitesmoke;
+    background-color: black;
+    position: relative;
 }
 
 .cover h1 {
     font-family: Girassol;
     font-size: 4rem;
+    color: transparent;
+    background-image: url(/media/arte-mari.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100%;
+    width: 100%;
+    margin: 0;
 }
 
 .cover img {
