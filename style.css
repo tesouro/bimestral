@@ -124,7 +124,7 @@ body {
     font-family: Girassol;
     font-size: 4rem;
     color: transparent;
-    background-image: url(/media/arte-mari.png);
+    background-image: url(./media/arte-mari.png);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
