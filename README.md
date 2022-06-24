@@ -1,15 +1,64 @@
 # Relatório Bimestral
 
-Uma ideia inicial
+Olá! Este é o repositório de uma história de dados sobre o Relatório Bimestral, um relatório bastante técnico, mas que possui informações bem interessantes. Por isso pensamos em tentar criar algo mais acessível, didático e... divertido, por que não?
+
+A história foi toda montada usando apenas HTML, CSS e (vanilla) Javascript, com um pouco de D3 para o diagrama de força.
+
+Para a preparação dos dados, utilizamos R.
+
+Existe bastante espaço para otimização, ainda não estamos satisfeitos com o tempo inicial de processamento para o cálculo das formas, principalmente para os grandes valores, que poderiam ser bastante simplificados. O prazo não permitiu, mas quem sabe no futuro?
+
+O resto deste readme é basicamente um brainstorm de ideias desconexas, e alguns rascunhos.
+
+## Uma ideia inicial
 
 1. Metáfora dos quadradinhos, cada R$ 1 bi representado por um quadradinho. Cada despesa representada por seu valor, na forma de quadradinhos contíguos.
 2. Contorno do conjunto dos quadradinhos: despesa e receita totais. Superpõe, mostra déficit.
 3. Separa de novo, mostra nova estimativa. Superpõe de novo, mostra novo déficit.
 4. Separa. Pinta (?) categorias, depois contorna os grupos de quadradinhos. Somecom os quadradinhos. Permite hover.
 5. Modo analítico: converte formas em círculos.
-6. Permite visualizar principais variações absolutas e percentuais. Permite visualizar maiores valores.
+6. Permite visualizar principais variações absolutas e percentuais. Permite explorar itens individualmente, trazendo uma espécie de "card" com mais detalhes sobre aquele item, incluindo as justificativas que estão no corpo do relatório.
+
+## Rascunhos
+
+O primeiro rascunho
 
 ![](./inspiration/bimestral-sketch-01.jpeg)
+
+Detalhando a ideia inicial um pouco mais...
+
+![](./inspiration/bimestral-sketch-1_1.jpg)
+
+![](./inspiration/bimestral-sketch-1_2.jpg)
+
+![](./inspiration/bimestral-sketch-1_3.jpg)
+
+Mas como calcular as formas geométricas?
+
+![](./inspiration/projeto-bimestral_1.jpg)
+
+![](./inspiration/projeto-bimestral_2.jpg)
+
+![](./inspiration/projeto-bimestral_3.jpg)
+
+![](./inspiration/projeto-bimestral_4.jpg)
+
+![](./inspiration/projeto-bimestral_5.jpg)
+
+![](./inspiration/projeto-bimestral_6.jpg)
+
+![](./inspiration/projeto-bimestral_7.jpg)
+
+Protótipo da implementação do algoritmo
+
+![](./inspiration/prototipo-1.png)
+
+![](./inspiration/prototipo-2.png)
+
+![](./inspiration/prototipo-3.png)
+
+![](./inspiration/prototipo-4.png)
+
 
 Vamos precisar de muitas cores, então vale dar uma olhada nesse texto da Lisa:
 
@@ -18,7 +67,7 @@ https://blog.datawrapper.de/10-ways-to-use-fewer-colors-in-your-data-visualizati
 https://github.com/veltman/flubber
 
 
-## Patterns
+## Patterns em SVG
 
 Uma ideia: para não ter que desenhar os milhares de rects e estrangular a memória do browser, posso preencher as formas com um padrão de quadradinhos!
 
@@ -48,14 +97,9 @@ path {
 
 Aí depois eu cobriria os paths da despesa e receita total com os paths dos agrupamentos.
 
-
-
-
-os objetos são criados.
-obj.esconde(false) faz eles aparecerem
-obj.move_para('centro' | 'esquerda' | 'direita')
-
-
+1. os objetos são criados.
+2. `obj.esconde(false)` faz eles aparecerem
+3. `obj.move_para('centro' | 'esquerda' | 'direita')`
 
 # Fazer
 
