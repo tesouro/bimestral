@@ -42,7 +42,7 @@ class Chart {
 
             {
                 nome: 'elemento',
-                ref : 'svg',
+                ref : 'svg.chart',
                 multiplo: false
             },
     
@@ -1026,7 +1026,7 @@ function monta_eixos() {
     }
 
     // não tá legal isso. mas o prazo tampouco tá legal.
-    eixos.d3_ref = d3.select('svg')
+    eixos.d3_ref = d3.select('svg.chart')
       .append('g')
       .classed('axis', true)
       .attr('transform', `translate(0,${chart.margin.top})`)
