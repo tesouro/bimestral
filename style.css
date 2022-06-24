@@ -44,14 +44,52 @@ body {
 }
 
 .loading {
-    font-size: .9rem;
+    font-size: 1rem;
+    letter-spacing: .1em;
     font-weight: lighter;
+    text-align: center;
+    background-color: black;
+    color: white;
+    width: 100%;
+    margin: .5rem;
+
 }
 
 .loading-pronto {
     transition: opacity .3s;
     opacity: 0;
     font-weight: normal;
+}
+
+.setinha {
+    opacity: 0;
+    font-size: 2rem;
+    text-align: center;
+    color: white;
+    margin-top: .5rem;
+    margin-bottom: 2rem;
+    transition: opacity .5s;
+}
+
+[data-ready="sim"] .setinha {
+    opacity: 1;
+    animation: puxa 2s 1s infinite; 
+}
+
+@keyframes puxa {
+
+    0% {
+        transform: translateY(-15%);
+    }
+
+    30% {
+        transform: translateY(30%);
+    }
+
+    100% {
+        transform: translateY(-15%);
+    }
+
 }
 
 [data-ready="sim"] .loading-pronto {
@@ -71,12 +109,21 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: whitesmoke;
+    background-color: black;
+    position: relative;
 }
 
 .cover h1 {
     font-family: Girassol;
     font-size: 4rem;
+    color: transparent;
+    background-image: url(/media/arte-mari.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100%;
+    width: 100%;
+    margin: 0;
 }
 
 .cover img {
