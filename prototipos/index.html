@@ -5,18 +5,31 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Protótipo Grid</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./v3/style.css">
 </head>
 <body>
 
     <div class="wrapper">
 
+        <div class="controle">
+            <button data-acao="rec">1. Mostra Receita</button>
+            <button data-acao="transf">2. Mostra transferências</button>
+            <button data-acao="rec-liq">3. Receita Líquida</button>
+            <button data-acao="rec-desp">4. Despesa</button>
+            <button data-acao="resultado">5. Resultado</button>
+            <button data-acao="reav">6. Reavaliação</button>
+            <button data-acao="desp" disabled>7. Só Despesa</button>
+            <button data-acao="itens-desp" disabled>8. Itens da Despesa</button>
+            <button data-acao="bolhas" disabled>9. Bolhas</button>
+            <button data-acao="bolhas-pct" disabled>10. Bolhas Percentuais</button>
+        </div>
+
         <div class="svg-container">
             <svg>
                 <defs>             
-                    <pattern id="Pattern" x="5" y="5" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <!--<pattern id="Pattern" x="5" y="5" width="40" height="40" patternUnits="userSpaceOnUse">
                       <rect x="5" y="5" width="30" height="30" fill="hotpink"/>
-                    </pattern>
+                    </pattern>-->
                 </defs>
 
                 
@@ -27,7 +40,7 @@
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/flubber@0.3.0"></script>
-    <script src="script.js"></script>
+    <script src="./v3/script.js"></script>
     
 </body>
 </html>
