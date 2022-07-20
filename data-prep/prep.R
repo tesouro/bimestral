@@ -2,7 +2,7 @@ library(tidyverse)
 library(readxl)
 library(jsonlite)
 
-grandes_numeros_raw <- read_excel('planilhas-bimestral-2022-1bim.xlsx', sheet = '1', skip = 2)
+grandes_numeros_raw <- read_excel('planilhas-bimestral-2022-2bim.xlsx', sheet = '1', skip = 2)
 
 grandes_numeros <- grandes_numeros_raw %>%
   filter(!is.na(`Discriminação`)) %>%
@@ -13,7 +13,7 @@ grandes_numeros <- grandes_numeros_raw %>%
 
 
 termo_loa <- "LOA 2022\r\n(a)"
-termo_reav <- "Avaliação \r\n1º Bimestre\r\n(b)"
+termo_reav <- "Avaliação \r\n2º Bimestre\r\n(c)"
 
 termo_receita_bruta <- "1. Receita Primária Total"
 termo_receita_liquida <- "3. Receita Líquida (1) - (2)"
@@ -152,7 +152,7 @@ grandes_numeros <- list(
 
 # receitas - detalhados ---------------------------------------------------
 
-rec_det_raw <- read_excel('planilhas-bimestral-2022-1bim.xlsx', sheet = '3', skip = 4)
+rec_det_raw <- read_excel('planilhas-bimestral-2022-2bim.xlsx', sheet = '3', skip = 4)
 
 linhas_rec_que_nao_interessam <- c(
   "I. RECEITA TOTAL",
@@ -219,7 +219,7 @@ rec_det_export <- rec_det_pre %>%
 
 # despesas - detalhados ---------------------------------------------------
 
-desp_det_raw <- read_excel('planilhas-bimestral-2022-1bim.xlsx', sheet = '5', skip = 4)
+desp_det_raw <- read_excel('planilhas-bimestral-2022-2bim.xlsx', sheet = '6', skip = 4)
 
 desp_det <- desp_det_raw[!is.na(desp_det_raw[,2]),] %>%
   select(c("Descrição", termo_loa, termo_reav, justificativa)) %>%
