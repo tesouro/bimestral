@@ -1078,6 +1078,7 @@ function define_raios() {
 /* para formatar os numeros */
 const numero_br = new Intl.NumberFormat('pt-BR');
 const numero_br1 = new Intl.NumberFormat('pt-BR', {maximumFractionDigits: 1, minimumFractionDigits: 1});
+const numero_br0 = new Intl.NumberFormat('pt-BR', {maximumFractionDigits: 0, minimumFractionDigits: 0});
 
 const multiplos = [1, 1e3, 1e6, 1e9, 1e12];
 const sufixo    = ["", "mil", "mi", "bi", "tri"];
@@ -1090,7 +1091,7 @@ const obj_mult = multiplos.map((d,i) => ({
 function formata_valor(x) {
   for (mult of obj_mult) {
     const val = x/mult.valor;
-    if (val < 1000) return numero_br.format(val) + " " + mult.sufixo;
+    if (val < 1000) return numero_br0.format(val) + " " + mult.sufixo;
   }
 }
 
@@ -1833,7 +1834,7 @@ const card = {
         infocard.querySelector('.ic-titulo-pct-do-total').innerHTML = numero_br1.format(mini_data.percent_reav * 100);
 
         infocard.querySelector('.ic-titulo-variacao-valor').innerHTML = (aumento_diminuicao == 'aumento' ? 'Aumento' : 'Diminuição') + 
-        ' de R$ ' + Math.abs(Math.round(variacao / 1000, 2)) + ' bilhões';
+        ' de R$ ' + formata_valor(Math.abs(variacao * 1e6));
 
         infocard.querySelector('.ic-titulo-variacao-pct-valor').innerHTML = var_pct == 'na' ? 'o item não estava presente na LOA' : (aumento_diminuicao == 'aumento' ? '+' : '')
         + Math.round(var_pct*100,2) + '%';
