@@ -1075,8 +1075,24 @@ function define_raios() {
 
 }
 
+/* para formatar os numeros */
 const numero_br = new Intl.NumberFormat('pt-BR');
 const numero_br1 = new Intl.NumberFormat('pt-BR', {maximumFractionDigits: 1, minimumFractionDigits: 1});
+
+const multiplos = [1, 1e3, 1e6, 1e9, 1e12];
+const sufixo    = ["", "mil", "mi", "bi", "tri"];
+const obj_mult = multiplos.map((d,i) => ({
+  valor: d,
+  sufixo: sufixo[i]
+}));
+
+
+function formata_valor(x) {
+  for (mult of obj_mult) {
+    const val = x/mult.valor;
+    if (val < 1000) return numero_br.format(val) + " " + mult.sufixo;
+  }
+}
 
 /*
 const maior_valor = 778;
