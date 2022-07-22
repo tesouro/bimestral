@@ -802,6 +802,8 @@ function init() {
     resumo.calcula_valores();
     resumo.monitora();
     seletor_modo_simulacao.monitora();
+    
+    //atualiza_textos();
 
     document.querySelector('[data-ready]').dataset.ready = 'sim';
 
@@ -1957,6 +1959,50 @@ const resumo = {
         })
 
     }
+}
+
+function atualiza_textos() {
+
+    const demais_despesas = dados.raw.grandes_numeros.despesa.reav - itens_despesas[0].valor_reav - itens_despesas[1].valor_reav;
+
+    const demais_receitas = dados.raw.grandes_numeros.receita.bruta.reav - itens_receitas[0].valor_reav - itens_receitas[1].valor_reav - itens_receitas[2].valor_reav;
+
+    const textos_valores = {
+
+        "receita-bruta-loa" : dados.raw.grandes_numeros.receita.bruta.loa,
+        "transferencias-loa" : dados.raw.grandes_numeros.transferencias.loa,
+        "receita-liquida-loa" : dados.raw.grandes_numeros.receita.liquida.loa,
+        "despesa-loa" : dados.raw.grandes_numeros.despesa.loa,
+        "resultado-loa" : dados.raw.grandes_numeros.resultado.loa,
+        "meta-loa" : dados.raw.grandes_numeros.meta.loa,
+        "despesas-reav" : dados.raw.grandes_numeros.despesa.reav,
+        "receita-liquida-reav" :  dados.raw.grandes_numeros.receita.bruta.reav,
+        "resultado-reav" : dados.raw.grandes_numeros.resultado.reav,
+        "primeira despesa" : itens_despesas[0].valor_reav,
+        "segunda despesa" : itens_despesas[1].valor_reav,
+        "demais despesas" : demais_despesas,
+        "primeira receita" : itens_receitas[0].valor_reav,
+        "segunda receita" : itens_receitas[1].valor_reav,
+        "terceira receita" : itens_receitas[2].valor_reav,
+        "demais receitas" : demais_receitas
+
+    }
+
+    console.log(textos_valores)
+
+
+
+    Object.keys(textos_valores).forEach(nome_valor => {
+
+        console.log(nome_valor)
+
+        document.querySelector(`[data-nome-valor="${nome_valor}"]`)
+          .innerText = formata_valor(textos_valores[nome_valor]);
+
+    })
+
+
+
 }
 
 
