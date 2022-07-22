@@ -1896,6 +1896,8 @@ const card = {
 
 const resumo = {
 
+    totais : null,
+
     monitora : () => {
 
         document.querySelector('#resumo-tipo').addEventListener('change', resumo.atua);
@@ -1921,6 +1923,8 @@ const resumo = {
             'result-loa'  : dados.raw.grandes_numeros.resultado.loa,
             'result-reav' : dados.raw.grandes_numeros.resultado.reav
         }
+
+        resumo.totais = totais;
 
         const valores = Object.values(totais);
         const rotulos = Object.keys(totais);
