@@ -164,9 +164,24 @@ class GrandeNumero {
         this.posicao_inicial_reav = posicao_inicial_reav;
         this.forma_inicial = forma_inicial;
 
+        /* ajuste para o resultado */
+        let ajuste_loa = 0;
+        let ajuste_reav = 0;
 
-        this.d_loa = this.gera_atributo_d_path(valor_loa, posicao_inicial_loa, X0);
-        this.d_reav = this.gera_atributo_d_path(valor_reav, posicao_inicial_reav, X0);
+        if (nome == "resultado") {
+
+            let resultado_arredondado_loa = GN.despesa.valor_loa - GN.receita.valor_liq_loa;
+            let resultado_arredondado_reav = GN.despesa.valor_reav - GN.receita.valor_liq_reav;
+
+            ajuste_loa = resultado_arredondado_loa - valor_loa;
+            ajuste_reav = resultado_arredondado_reav - valor_reav;
+
+        }
+
+        /* fim ajuste */
+
+        this.d_loa = this.gera_atributo_d_path(valor_loa + ajuste_loa, posicao_inicial_loa, X0);
+        this.d_reav = this.gera_atributo_d_path(valor_reav + ajuste_reav, posicao_inicial_reav, X0);
 
         this.interpolator_para_reav = flubber.interpolate(this.d_loa,  this.d_reav);
         this.interpolator_para_loa  = flubber.interpolate(this.d_reav, this.d_loa);
@@ -830,6 +845,9 @@ function monta_grandes_numeros() {
         ;
 
     })
+
+    // ajuste resultado
+
 
 }
 
