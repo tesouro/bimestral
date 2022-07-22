@@ -164,9 +164,24 @@ class GrandeNumero {
         this.posicao_inicial_reav = posicao_inicial_reav;
         this.forma_inicial = forma_inicial;
 
+        /* ajuste para o resultado */
+        let ajuste_loa = 0;
+        let ajuste_reav = 0;
 
-        this.d_loa = this.gera_atributo_d_path(valor_loa, posicao_inicial_loa, X0);
-        this.d_reav = this.gera_atributo_d_path(valor_reav, posicao_inicial_reav, X0);
+        if (nome == "resultado") {
+
+            let resultado_arredondado_loa = GN.despesa.valor_loa - GN.receita.valor_liq_loa;
+            let resultado_arredondado_reav = GN.despesa.valor_reav - GN.receita.valor_liq_reav;
+
+            ajuste_loa = resultado_arredondado_loa - valor_loa;
+            ajuste_reav = resultado_arredondado_reav - valor_reav;
+
+        }
+
+        /* fim ajuste */
+
+        this.d_loa = this.gera_atributo_d_path(valor_loa + ajuste_loa, posicao_inicial_loa, X0);
+        this.d_reav = this.gera_atributo_d_path(valor_reav + ajuste_reav, posicao_inicial_reav, X0);
 
         this.interpolator_para_reav = flubber.interpolate(this.d_loa,  this.d_reav);
         this.interpolator_para_loa  = flubber.interpolate(this.d_reav, this.d_loa);
@@ -787,6 +802,8 @@ function init() {
     resumo.calcula_valores();
     resumo.monitora();
     seletor_modo_simulacao.monitora();
+    
+    //atualiza_textos();
 
     document.querySelector('[data-ready]').dataset.ready = 'sim';
 
@@ -830,6 +847,9 @@ function monta_grandes_numeros() {
         ;
 
     })
+
+    // ajuste resultado
+
 
 }
 
@@ -1057,8 +1077,25 @@ function define_raios() {
 
 }
 
+/* para formatar os numeros */
 const numero_br = new Intl.NumberFormat('pt-BR');
 const numero_br1 = new Intl.NumberFormat('pt-BR', {maximumFractionDigits: 1, minimumFractionDigits: 1});
+const numero_br0 = new Intl.NumberFormat('pt-BR', {maximumFractionDigits: 0, minimumFractionDigits: 0});
+
+const multiplos = [1, 1e3, 1e6, 1e9, 1e12];
+const sufixo    = ["", "mil", "mi", "bi", "tri"];
+const obj_mult = multiplos.map((d,i) => ({
+  valor: d,
+  sufixo: sufixo[i]
+}));
+
+
+function formata_valor(x) {
+  for (mult of obj_mult) {
+    const val = x/mult.valor;
+    if (val < 1000) return numero_br0.format(val) + " " + mult.sufixo;
+  }
+}
 
 /*
 const maior_valor = 778;
@@ -1799,7 +1836,7 @@ const card = {
         infocard.querySelector('.ic-titulo-pct-do-total').innerHTML = numero_br1.format(mini_data.percent_reav * 100);
 
         infocard.querySelector('.ic-titulo-variacao-valor').innerHTML = (aumento_diminuicao == 'aumento' ? 'Aumento' : 'Diminuição') + 
-        ' de R$ ' + Math.abs(Math.round(variacao / 1000, 2)) + ' bilhões';
+        ' de R$ ' + formata_valor(Math.abs(variacao * 1e6));
 
         infocard.querySelector('.ic-titulo-variacao-pct-valor').innerHTML = var_pct == 'na' ? 'o item não estava presente na LOA' : (aumento_diminuicao == 'aumento' ? '+' : '')
         + Math.round(var_pct*100,2) + '%';
@@ -1878,6 +1915,8 @@ const card = {
 
 const resumo = {
 
+    totais : null,
+
     monitora : () => {
 
         document.querySelector('#resumo-tipo').addEventListener('change', resumo.atua);
@@ -1904,6 +1943,8 @@ const resumo = {
             'result-reav' : dados.raw.grandes_numeros.resultado.reav
         }
 
+        resumo.totais = totais;
+
         const valores = Object.values(totais);
         const rotulos = Object.keys(totais);
 
@@ -1918,6 +1959,50 @@ const resumo = {
         })
 
     }
+}
+
+function atualiza_textos() {
+
+    const demais_despesas = dados.raw.grandes_numeros.despesa.reav - itens_despesas[0].valor_reav - itens_despesas[1].valor_reav;
+
+    const demais_receitas = dados.raw.grandes_numeros.receita.bruta.reav - itens_receitas[0].valor_reav - itens_receitas[1].valor_reav - itens_receitas[2].valor_reav;
+
+    const textos_valores = {
+
+        "receita-bruta-loa" : dados.raw.grandes_numeros.receita.bruta.loa,
+        "transferencias-loa" : dados.raw.grandes_numeros.transferencias.loa,
+        "receita-liquida-loa" : dados.raw.grandes_numeros.receita.liquida.loa,
+        "despesa-loa" : dados.raw.grandes_numeros.despesa.loa,
+        "resultado-loa" : dados.raw.grandes_numeros.resultado.loa,
+        "meta-loa" : dados.raw.grandes_numeros.meta.loa,
+        "despesas-reav" : dados.raw.grandes_numeros.despesa.reav,
+        "receita-liquida-reav" :  dados.raw.grandes_numeros.receita.bruta.reav,
+        "resultado-reav" : dados.raw.grandes_numeros.resultado.reav,
+        "primeira despesa" : itens_despesas[0].valor_reav,
+        "segunda despesa" : itens_despesas[1].valor_reav,
+        "demais despesas" : demais_despesas,
+        "primeira receita" : itens_receitas[0].valor_reav,
+        "segunda receita" : itens_receitas[1].valor_reav,
+        "terceira receita" : itens_receitas[2].valor_reav,
+        "demais receitas" : demais_receitas
+
+    }
+
+    console.log(textos_valores)
+
+
+
+    Object.keys(textos_valores).forEach(nome_valor => {
+
+        console.log(nome_valor)
+
+        document.querySelector(`[data-nome-valor="${nome_valor}"]`)
+          .innerText = formata_valor(textos_valores[nome_valor]);
+
+    })
+
+
+
 }
 
 
