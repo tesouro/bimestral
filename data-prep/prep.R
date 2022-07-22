@@ -2,7 +2,7 @@ library(tidyverse)
 library(readxl)
 library(jsonlite)
 
-grandes_numeros_raw <- read_excel('planilhas-bimestral-2022-2bim.xlsx', sheet = '1', skip = 2)
+grandes_numeros_raw <- read_excel('planilhas-bimestral-2022-3bim.xlsx', sheet = 'Resumo_sum_executivo', skip = 3)
 
 grandes_numeros <- grandes_numeros_raw %>%
   filter(!is.na(`Discriminação`)) %>%
@@ -13,7 +13,7 @@ grandes_numeros <- grandes_numeros_raw %>%
 
 
 termo_loa <- "LOA 2022\r\n(a)"
-termo_reav <- "Avaliação \r\n2º Bimestre\r\n(c)"
+termo_reav <- "Avaliação \r\n3º Bimestre\r\n(c)"
 
 termo_receita_bruta <- "1. Receita Primária Total"
 termo_receita_liquida <- "3. Receita Líquida (1) - (2)"
@@ -152,7 +152,7 @@ grandes_numeros <- list(
 
 # receitas - detalhados ---------------------------------------------------
 
-rec_det_raw <- read_excel('planilhas-bimestral-2022-2bim.xlsx', sheet = '3', skip = 4)
+rec_det_raw <- read_excel('planilhas-bimestral-2022-3bim.xlsx', sheet = 'Receita', skip = 4)
 
 linhas_rec_que_nao_interessam <- c(
   "I. RECEITA TOTAL",
@@ -163,7 +163,7 @@ linhas_rec_que_nao_interessam <- c(
 
 linha_transferencia <- "II. TRANSFERÊNCIAS POR REPARTIÇÃO DE RECEITA"
 numero_linha_transferencia <- which(rec_det_raw$Discriminação == linha_transferencia)
-termo_reav_rec <- "Avaliação 1º Bimestre\r\n(b)"
+termo_reav_rec <- termo_reav#"Avaliação 1º Bimestre\r\n(b)"
 
 rec_det <- rec_det_raw %>%
   select(c("Discriminação", termo_loa, termo_reav_rec, justificativa)) %>%
@@ -219,7 +219,7 @@ rec_det_export <- rec_det_pre %>%
 
 # despesas - detalhados ---------------------------------------------------
 
-desp_det_raw <- read_excel('planilhas-bimestral-2022-2bim.xlsx', sheet = '6', skip = 4)
+desp_det_raw <- read_excel('planilhas-bimestral-2022-3bim.xlsx', sheet = 'Despesa', skip = 3)
 
 desp_det <- desp_det_raw[!is.na(desp_det_raw[,2]),] %>%
   select(c("Descrição", termo_loa, termo_reav, justificativa)) %>%
