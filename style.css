@@ -545,6 +545,10 @@ select#modo-variacao {
     padding: 1rem;
     background-color: ghostwhite;
     width: 400px;
+    max-height: 90vh;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--cor-info-card);
 
 }
 
