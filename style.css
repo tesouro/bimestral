@@ -129,12 +129,17 @@ body {
     background-repeat: no-repeat;
     background-position: center center;
     height: 100%;
-    width: 100%;
+    width: 90%;
+    max-width: 800px;
     margin: 0;
 }
 
 .cover img {
-    max-width: 90%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 200px;
 }
 
 .abertura h2 {
