@@ -1,5 +1,15 @@
 # Relatório Bimestral
 
+## Log
+
+Adaptado para o caso de resultado positivo. Ainda é preciso corrigir:
+- referências no texto;
+- a questão da meta de ZERO
+- o tamanho das receitas (passa do container)
+- quando o resultado é positivo, as receitas sobrepõem as despesas
+
+## Sobre o projeto
+
 Olá! Este é o repositório de uma história de dados sobre o Relatório Bimestral, um relatório bastante técnico, mas que possui informações bem interessantes. Por isso pensamos em tentar criar algo mais acessível, didático e... divertido, por que não?
 
 A história foi toda montada usando apenas HTML, CSS e (vanilla) Javascript, com um pouco de D3 para o diagrama de força.
@@ -126,14 +136,7 @@ Esse relatório traz informações sobre as receitas e despesas previstas, e o s
 
 A Lei Orçamentária de 2022 previa uma arrecadação de R$... 
 
-
-
 Com esse objetivo, o governo todo ano define metas anuais de receitas, despesas e resultados
-
-
-
-
-
 
 O equilíbrio
 Todo ano, o governo estabelece metas anuais de receitas e despesas e resultados.
