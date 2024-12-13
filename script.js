@@ -176,7 +176,11 @@ class GrandeNumero {
             ajuste_loa = resultado_arredondado_loa - valor_loa;
             ajuste_reav = resultado_arredondado_reav - valor_reav;
 
+            console.log(ajuste_loa, ajuste_reav, resultado_arredondado_loa, resultado_arredondado_reav);
+
         }
+
+        console.log(this);
 
         /* fim ajuste */
 
@@ -195,8 +199,11 @@ class GrandeNumero {
     // não posso deixar particular porque a classe derivada dessa precisa acessar esse método
     gera_atributo_d_path(qde, posicao_inicial, X0 = 0) {
 
+        console.log(qde, posicao_inicial);
         const grid = calcula_grid(qde, posicao_inicial);
+        console.log(grid);
         const subgrid = calcula_subgrid(grid);
+        console.log(subgrid);
         const lista_pontos = calcula_pontos_contorno_ordenados(subgrid);
         const d = calcula_atributo_d(lista_pontos, X0);
 
@@ -721,6 +728,7 @@ class Dados {
           .then(response => response.json())
           .then(data => {
               this.raw = data;
+              console.log(data);
               init();
 
           })
