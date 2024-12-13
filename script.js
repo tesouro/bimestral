@@ -158,8 +158,8 @@ class GrandeNumero {
 
         this.nome = nome;
         this.tipo = tipo;
-        this.valor_loa = valor_loa;
-        this.valor_reav = valor_reav;
+        this.valor_loa = valor_loa == 0 ? 1 : valor_loa;
+        this.valor_reav = valor_reav == 0 ? 1 : valor_reav;
         this.posicao_inicial_loa = posicao_inicial_loa;
         this.posicao_inicial_reav = posicao_inicial_reav;
         this.forma_inicial = forma_inicial;
@@ -170,8 +170,8 @@ class GrandeNumero {
 
         if (nome == "resultado") {
 
-            let resultado_arredondado_loa = GN.despesa.valor_loa - GN.receita.valor_liq_loa;
-            let resultado_arredondado_reav = GN.despesa.valor_reav - GN.receita.valor_liq_reav;
+            let resultado_arredondado_loa = Math.abs(GN.despesa.valor_loa - GN.receita.valor_liq_loa);
+            let resultado_arredondado_reav = Math.abs(GN.despesa.valor_reav - GN.receita.valor_liq_reav);
 
             ajuste_loa = resultado_arredondado_loa - valor_loa;
             ajuste_reav = resultado_arredondado_reav - valor_reav;
@@ -184,8 +184,8 @@ class GrandeNumero {
 
         /* fim ajuste */
 
-        this.d_loa = this.gera_atributo_d_path(valor_loa + ajuste_loa, posicao_inicial_loa, X0);
-        this.d_reav = this.gera_atributo_d_path(valor_reav + ajuste_reav, posicao_inicial_reav, X0);
+        this.d_loa = this.gera_atributo_d_path(this.valor_loa + ajuste_loa, posicao_inicial_loa, X0);
+        this.d_reav = this.gera_atributo_d_path(this.valor_reav + ajuste_reav, posicao_inicial_reav, X0);
 
         this.interpolator_para_reav = flubber.interpolate(this.d_loa,  this.d_reav);
         this.interpolator_para_loa  = flubber.interpolate(this.d_reav, this.d_loa);

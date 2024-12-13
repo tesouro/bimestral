@@ -81,15 +81,22 @@ transferencias <- list(
   reav = grandes_numeros[[get_posicao(termo_transf), termo_reav]]
 )
 
+resultado_loa <- grandes_numeros[[get_posicao(termo_resultado), termo_loa]]
+resultado_reav <- grandes_numeros[[get_posicao(termo_resultado), termo_reav]]
+
 resultado <- list(
   nome = 'resultado',
   categoria = 'grande-numero',
   
-  posicao_inicial_loa = grandes_numeros[[get_posicao(termo_receita_liquida), termo_loa]],
-  posicao_inicial_reav = grandes_numeros[[get_posicao(termo_receita_liquida), termo_reav]],
+  posicao_inicial_loa = grandes_numeros[[get_posicao(
+    ifelse(resultado_loa < 0, termo_receita_liquida, termo_despesa)
+    ), termo_loa]],
+  posicao_inicial_reav = grandes_numeros[[get_posicao(
+    ifelse(resultado_reav < 0, termo_receita_liquida, termo_despesa)
+    ), termo_reav]],
   
-  loa = -grandes_numeros[[get_posicao(termo_resultado), termo_loa]],
-  reav = -grandes_numeros[[get_posicao(termo_resultado), termo_reav]]
+  loa = abs(grandes_numeros[[get_posicao(termo_resultado), termo_loa]]),
+  reav = abs(grandes_numeros[[get_posicao(termo_resultado), termo_reav]])
 )
 
 meta <- list(
@@ -141,7 +148,7 @@ teto <- list(
 
 # output - grandes números ------------------------------------------------
 
-grandes_numeros <- list(
+grandes_numeros_sumario <- list(
   receita = receita,
   despesa = despesa,
   transferencias = transferencias,
@@ -169,8 +176,8 @@ termo_reav_rec <- termo_reav#"Avaliação 1º Bimestre\r\n(b)"
 
 rec_det <- rec_det_raw %>%
   select(c("Discriminação", termo_loa, termo_reav_rec, justificativa)) %>%
+  filter(row_number() < numero_linha_transferencia) %>%
   filter(justificativa != "") %>%
-  #filter(row_number() < numero_linha_transferencia) %>%
   #filter(!(`Discriminação` %in% linhas_rec_que_nao_interessam)) %>%
   filter(!is.na(!!sym(termo_loa))) %>%
   filter(!is.na(`Discriminação`)) %>%
@@ -222,14 +229,15 @@ rec_det_export <- rec_det_pre %>%
 
 # despesas - detalhados ---------------------------------------------------
 
-desp_det_raw <- read_excel('planilhas-bimestral-2022-3bim.xlsx', sheet = 'Despesa', skip = 3)
+desp_det_raw <- read_excel(nome_planilha, sheet = 'Despesas1', skip = 2)
 
 desp_det <- desp_det_raw[!is.na(desp_det_raw[,2]),] %>%
   select(c("Descrição", termo_loa, termo_reav, justificativa)) %>%
-  filter(!(`Descrição` %in% c('Total', 'Despesas do Poder Executivo Sujeitas à Programação Financeira'))) %>%
+  #filter(!(`Descrição` %in% c('Total', 'Despesas do Poder Executivo Sujeitas à Programação Financeira'))) %>%
+  filter(justificativa != "") %>%
   filter(!!sym(termo_reav) > 0) %>%
   mutate(
-    nome = ifelse(!!sym(termo_reav) < 1000, "Demais", `Descrição`),
+    nome = ifelse(!!sym(termo_reav) < 10000, "Demais", `Descrição`),
     justificativa = ifelse(is.na(justificativa), 'sem análise específica.', justificativa)
   )
 
@@ -279,7 +287,7 @@ desp_det_export <- desp_det_pre %>%
 # export de novo ----------------------------------------------------------
 
 output <- list(
-  grandes_numeros = grandes_numeros,
+  grandes_numeros = grandes_numeros_sumario,
   itens_despesas = desp_det_export,
   itens_receitas = rec_det_export
 )
