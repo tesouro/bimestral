@@ -180,7 +180,7 @@ class GrandeNumero {
 
         }
 
-        console.log(this);
+        //console.log(this);
 
         /* fim ajuste */
 
@@ -199,11 +199,11 @@ class GrandeNumero {
     // não posso deixar particular porque a classe derivada dessa precisa acessar esse método
     gera_atributo_d_path(qde, posicao_inicial, X0 = 0) {
 
-        console.log(qde, posicao_inicial);
+        //console.log(qde, posicao_inicial);
         const grid = calcula_grid(qde, posicao_inicial);
-        console.log(grid);
+        //console.log(grid);
         const subgrid = calcula_subgrid(grid);
-        console.log(subgrid);
+        //console.log(subgrid);
         const lista_pontos = calcula_pontos_contorno_ordenados(subgrid);
         const d = calcula_atributo_d(lista_pontos, X0);
 
@@ -2019,4 +2019,14 @@ function atualiza_textos() {
 
 }
 
+/*
+function atualiza_textos_itens() {
+
+    const desps = itens_despesas.sort( (a,b) => b.valor_reav - a.valor_reav);
+    const recs = itens_receitas.sort( (a,b) => b.valor_reav - a.valor_reav);
+
+    document.querySelector(`[data-nome-valor="item-despesa-$"]`).innerText
+
+}
+    */
 
