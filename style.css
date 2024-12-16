@@ -764,6 +764,14 @@ select#resumo-tipo {
     width: calc( var(--bar-width) * var(--bar-max-width) );
 }
 
+.bar.deficit {
+    background-color: var(--cor-atual);
+}
+
+.bar.superavit {
+    background-color: var(--azul-tesouro);
+}
+
 .label-bar, .label-value {
     margin-bottom: 0;
     margin-top: 0;
