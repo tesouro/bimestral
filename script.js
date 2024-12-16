@@ -158,7 +158,7 @@ class GrandeNumero {
 
         this.nome = nome;
         this.tipo = tipo;
-        this.valor_loa = valor_loa == 0 ? 1 : valor_loa;
+        this.valor_loa = valor_loa == 0 ? 1 : valor_loa; 
         this.valor_reav = valor_reav == 0 ? 1 : valor_reav;
         this.posicao_inicial_loa = posicao_inicial_loa;
         this.posicao_inicial_reav = posicao_inicial_reav;
@@ -650,6 +650,8 @@ class Forma extends GrandeNumero {
 
     morfa_para_circulo() {
 
+        console.log(this.nome);
+
         this.d3_ref
           .classed('bolha', true)
           .transition()
@@ -663,6 +665,8 @@ class Forma extends GrandeNumero {
               {maxSegmentLength: 1}
             ))
         ;
+
+        console.log("ok");
 
     }
 
@@ -775,7 +779,7 @@ const eixos = {
 
 // início (o construtor da classe dados vai chamar a função init)
 
-const max_valor = 2118;
+const max_valor = 2720;
 const chart = new Chart(max_valor);
 const dados = new Dados('output.json');
 
@@ -798,7 +802,7 @@ function init() {
 
     GN.despesa.move_para('direita');
     GN.resultado.move_para('centro');
-    GN.meta.move_para('centro');
+    //GN.meta.move_para('centro');
 
     prepara_simulacao([...itens_despesas, ...itens_receitas]);
 
@@ -822,6 +826,8 @@ function monta_grandes_numeros() {
     const grandes_numeros = Object.keys(GN);
 
     grandes_numeros.forEach(nome => {
+
+        if (nome == "meta") return;
 
         // INTERFACE COM OS DADOS
 
@@ -1329,7 +1335,7 @@ const scroller = {
 
                 // tudo aqui foi acrecentado para corrigir erros de quando a página é recarregada no meio da narrativa
                 GN.resultado.esconde(true);
-                GN.meta.esconde(true);
+                //GN.meta.esconde(true);
                 GN.receita.esmaece(false);
                 GN.despesa.esmaece(false);
 
@@ -1410,11 +1416,11 @@ const scroller = {
 
             if (voltando) {
 
-                GN.meta.esconde(true);
+                //GN.meta.esconde(true);
                 
             } else {
 
-                GN.meta.esconde(false);
+                //GN.meta.esconde(false);
 
             }
 
@@ -1426,14 +1432,14 @@ const scroller = {
 
                 GN.despesa.morfa_para('loa');
                 setTimeout(() => {
-                    GN.meta.esconde(false);
+                    //GN.meta.esconde(false);
                     GN.resultado.esconde(false);
                 }, 750);
                 
 
             } else {
 
-                GN.meta.esconde(true);
+                //GN.meta.esconde(true);
                 GN.resultado.esconde(true);
                 setTimeout(() => GN.despesa.morfa_para('reav'), 750);
 
@@ -1460,10 +1466,10 @@ const scroller = {
             if (voltando) {
 
                 GN.resultado.morfa_para('loa');
-                GN.meta.morfa_para('loa')
+                //GN.meta.morfa_para('loa')
                 setTimeout(() => {
                     GN.resultado.esconde(true);
-                    GN.meta.esconde(true);
+                    //GN.meta.esconde(true);
                 }, 750);
                 
             } else {
@@ -1471,8 +1477,8 @@ const scroller = {
                 GN.resultado.esconde(false);
                 GN.resultado.morfa_para('reav');
                 setTimeout(() => {
-                    GN.meta.esconde(false);
-                    GN.meta.morfa_para('reav');
+                    //GN.meta.esconde(false);
+                    //GN.meta.morfa_para('reav');
                 }, 750);
 
 
@@ -1487,14 +1493,14 @@ const scroller = {
             if (voltando) {
 
                 GN.resultado.esconde(false);
-                GN.meta.esconde(false);
+                //GN.meta.esconde(false);
                 GN.despesa.move_para('centro');
                 GN.receita.move_para('centro');
                 
             } else {
 
                 GN.resultado.esconde(true);
-                GN.meta.esconde(true);
+               //GN.meta.esconde(true);
                 GN.despesa.move_para('direita');
                 GN.receita.move_para('esquerda');
             }
@@ -1649,7 +1655,7 @@ const scroller = {
                 // para garantir, caso o usuário role muito rápido
                 setTimeout(() => {
                     GN.resultado.esconde(true);
-                    GN.meta.esconde(true);
+                    //GN.meta.esconde(true);
                 }, 1000)
 
             }
